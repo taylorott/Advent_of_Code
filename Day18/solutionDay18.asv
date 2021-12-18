@@ -1,0 +1,45 @@
+function solutionDay18()
+
+%parse the input
+fid = fopen('InputDay18.txt');
+data = textscan(fid,'%s');
+fclose(fid);
+
+num_input_lines = length(data{1});
+
+
+mySnailfishNumber1 = SnailfishNumber();
+mySnailfishNumber1.UnpackString(data{1}{1});
+
+for i = 2:num_input_lines
+
+    input_string =  data{1}{i}
+    mySnailfishNumber2 = SnailfishNumber();
+    mySnailfishNumber2.UnpackString(input_string);
+    
+    mySnailfishNumber1 = mySnailfishNumber1.addOperation(mySnailfishNumber2);
+    
+%     mySnailfishNumber.compute_magnitude()
+% %    mySnailfishNumber.myTree
+%     [bit_code,red_type] = mySnailfishNumber.find_leftmost_reduction_target();
+%     mySnailfishNumber.print_reduction_target(bit_code,red_type);
+%     [found_flag,bit_code_left] = mySnailfishNumber.find_closest_left_number(bit_code);
+%     if found_flag
+%         'closest left number is:'
+%         mySnailfishNumber.print_regular_number(bit_code_left);
+%     else
+%         'no number to the left found!'
+%     end
+%     
+%     [found_flag,bit_code_right] = mySnailfishNumber.find_closest_right_number(bit_code);
+%     if found_flag
+%         'closest right number is:'
+%         mySnailfishNumber.print_regular_number(bit_code_right);
+%     else
+%         'no number to the right found!'
+%     end
+end
+
+
+
+end
