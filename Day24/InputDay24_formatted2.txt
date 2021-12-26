@@ -1,0 +1,277 @@
+inp w (repeated)
+mul x 0 (repeated)
+add x z (repeated)
+mod x 26 (repeated)
+div z 1 (repeated)
+add x 14
+eql x w (repeated)
+eql x 0 (repeated)
+mul y 0 (repeated)
+add y 25 (repeated)
+mul y x (repeated)
+add y 1 (repeated)
+mul z y (repeated)
+mul y 0 (repeated)
+add y w (repeated)
+add y 12
+mul y x (repeated)
+add z y (repeated)
+
+inp w (repeated)
+mul x 0 (repeated)
+add x z (repeated)
+mod x 26 (repeated)
+div z 1 (repeated)
+add x 10
+eql x w (repeated)
+eql x 0 (repeated)
+mul y 0 (repeated)
+add y 25 (repeated)
+mul y x (repeated)
+add y 1 (repeated)
+mul z y (repeated)
+mul y 0 (repeated)
+add y w (repeated)
+add y 9
+mul y x (repeated)
+add z y (repeated)
+
+inp w (repeated)
+mul x 0 (repeated)
+add x z (repeated)
+mod x 26 (repeated)
+div z 1 (repeated)
+add x 13
+eql x w (repeated)
+eql x 0 (repeated)
+mul y 0 (repeated)
+add y 25 (repeated)
+mul y x (repeated)
+add y 1 (repeated)
+mul z y (repeated)
+mul y 0 (repeated)
+add y w (repeated)
+add y 8
+mul y x (repeated)
+add z y (repeated)
+
+
+
+
+
+inp w (repeated)
+mul x 0 (repeated)
+add x z (repeated)
+mod x 26 (repeated)
+div z 26
+add x -8
+eql x w (repeated)
+eql x 0 (repeated)
+mul y 0 (repeated)
+add y 25 (repeated)
+mul y x (repeated)
+add y 1 (repeated)
+mul z y (repeated)
+mul y 0 (repeated)
+add y w (repeated)
+add y 3
+mul y x (repeated)
+add z y (repeated)
+
+
+
+inp w (repeated)
+mul x 0 (repeated)
+add x z (repeated)
+mod x 26 (repeated)
+div z 1 (repeated)
+add x 11
+eql x w (repeated)
+eql x 0 (repeated)
+mul y 0 (repeated)
+add y 25 (repeated)
+mul y x (repeated)
+add y 1 (repeated)
+mul z y (repeated)
+mul y 0 (repeated)
+add y w (repeated)
+add y 0
+mul y x (repeated)
+add z y (repeated)
+
+
+inp w (repeated)
+mul x 0 (repeated)
+add x z (repeated)
+mod x 26 (repeated)
+div z 1 (repeated)
+add x 11
+eql x w (repeated)
+eql x 0 (repeated)
+mul y 0 (repeated)
+add y 25 (repeated)
+mul y x (repeated)
+add y 1 (repeated)
+mul z y (repeated)
+mul y 0 (repeated)
+add y w (repeated)
+add y 11
+mul y x (repeated)
+add z y (repeated)
+
+inp w (repeated)
+mul x 0 (repeated)
+add x z (repeated)
+mod x 26 (repeated)
+div z 1 (repeated)
+add x 14
+eql x w (repeated)
+eql x 0 (repeated)
+mul y 0 (repeated)
+add y 25 (repeated)
+mul y x (repeated)
+add y 1 (repeated)
+mul z y (repeated)
+mul y 0 (repeated)
+add y w (repeated)
+add y 10
+mul y x (repeated)
+add z y (repeated)
+
+
+inp w (repeated)
+mul x 0 (repeated)
+add x z (repeated)
+mod x 26 (repeated)
+div z 26
+add x -11
+eql x w (repeated)
+eql x 0 (repeated)
+mul y 0 (repeated)
+add y 25 (repeated)
+mul y x (repeated)
+add y 1 (repeated)
+mul z y (repeated)
+mul y 0 (repeated)
+add y w (repeated)
+add y 13
+mul y x (repeated)
+add z y (repeated)
+
+
+inp w (repeated)
+mul x 0 (repeated)
+add x z (repeated)
+mod x 26 (repeated)
+div z 1 (repeated)
+add x 14
+eql x w (repeated)
+eql x 0 (repeated)
+mul y 0 (repeated)
+add y 25 (repeated)
+mul y x (repeated)
+add y 1 (repeated)
+mul z y (repeated)
+mul y 0 (repeated)
+add y w (repeated)
+add y 3
+mul y x (repeated)
+add z y (repeated)
+
+
+inp w (repeated)
+mul x 0 (repeated)
+add x z (repeated)
+mod x 26 (repeated)
+div z 26
+add x -1
+eql x w (repeated)
+eql x 0 (repeated)
+mul y 0 (repeated)
+add y 25 (repeated)
+mul y x (repeated)
+add y 1 (repeated)
+mul z y (repeated)
+mul y 0 (repeated)
+add y w (repeated)
+add y 10
+mul y x (repeated)
+add z y (repeated)
+inp w (repeated)
+mul x 0 (repeated)
+add x z (repeated)
+mod x 26 (repeated)
+div z 26
+add x -8
+eql x w (repeated)
+eql x 0 (repeated)
+mul y 0 (repeated)
+add y 25 (repeated)
+mul y x (repeated)
+add y 1 (repeated)
+mul z y (repeated)
+mul y 0 (repeated)
+add y w (repeated)
+add y 10
+mul y x (repeated)
+add z y (repeated)
+
+
+inp w (repeated)
+mul x 0 (repeated)
+add x z (repeated)
+mod x 26 (repeated)
+div z 26
+add x -5
+eql x w (repeated)
+eql x 0 (repeated)
+mul y 0 (repeated)
+add y 25 (repeated)
+mul y x (repeated)
+add y 1 (repeated)
+mul z y (repeated)
+mul y 0 (repeated)
+add y w (repeated)
+add y 14
+mul y x (repeated)
+add z y (repeated)
+
+
+inp w (repeated)
+mul x 0 (repeated)
+add x z (repeated)
+mod x 26 (repeated)
+div z 26
+add x -16
+eql x w (repeated)
+eql x 0 (repeated)
+mul y 0 (repeated)
+add y 25 (repeated)
+mul y x (repeated)
+add y 1 (repeated)
+mul z y (repeated)
+mul y 0 (repeated)
+add y w (repeated)
+add y 6
+mul y x (repeated)
+add z y (repeated)
+
+
+inp w (repeated)
+mul x 0 (repeated)
+add x z (repeated)
+mod x 26 (repeated)
+div z 26
+add x -6
+eql x w (repeated)
+eql x 0 (repeated)
+mul y 0 (repeated)
+add y 25 (repeated)
+mul y x (repeated)
+add y 1 (repeated)
+mul z y (repeated)
+mul y 0 (repeated)
+add y w (repeated)
+add y 5
+mul y x (repeated)
+add z y (repeated)
