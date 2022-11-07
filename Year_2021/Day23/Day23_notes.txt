@@ -1,0 +1,27 @@
+Room configuration is given by
+
+#############
+#...........#
+###.#.#.#.###
+  #.#.#.#.#
+  #########
+
+
+Game plan: each configuration of amphipods in spaces corresponds corresponds
+to a vertex on a graph, where the edge weights correspond to the transition 
+cost to get between two different configurations. Some transitions are infeasible.
+
+We need to construct the graph (or at least, given a state, be able to find adjacent states and edge weights)
+and need to come up with a way to map states to numbers (numeric labelling of vertices)
+
+once this is done, we can use Dijkstra to find shortest path from initial configuration to final configuration
+
+#############
+#12.3.4.5.67#
+###8#9#A#B###
+  #C#D#E#F#
+  #########
+
+There are 15 legal spots an amphipod can be in
+
+Total number of states: (15 choose 2)*(13 choose 2)*(11 choose 2)*(9 choose 2)

@@ -1,0 +1,71 @@
+function solutionDay22()
+
+    %parse the input
+    fid = fopen('InputDay22.txt');
+    %extract text, splitting it by line
+    data = textscan(fid,'%s','Delimiter','/');
+    data = data{1};
+    fclose(fid);
+
+    %number of lines of text in the file
+    file_length = length(data);
+    
+    for i = 1:file_length
+        command_str_list = strsplit(data{i},' ');
+        
+        coord_str = command_str_list{2};
+        coord_str = strrep(coord_str,'x=',' ');
+        coord_str = strrep(coord_str,'y=',' ');
+        coord_str = strrep(coord_str,'z=',' ');
+        coord_str = strrep(coord_str,'..',' ');
+        coord_str = strrep(coord_str,',',' ');
+        coord_vec = str2num(coord_str);
+
+        coord_vec = coord_vec + 51;
+        
+        command_list(i) = contains(command_str_list{1},'on');
+        
+        x_min_list(i) = coord_vec(1);
+        x_max_list(i) = coord_vec(2);
+        
+        y_min_list(i) = coord_vec(3);
+        y_max_list(i) = coord_vec(4);
+        
+        z_min_list(i) = coord_vec(5);
+        z_max_list(i) = coord_vec(6);
+        
+    end
+    
+    my_cube_size = 101;
+    my_cube_tracker = zeros(my_cube_size,my_cube_size,my_cube_size);
+    
+    
+    for i = 1:length(command_list)
+        
+        if 1<=x_max_list(i) && x_min_list(i)<=my_cube_size &&...
+           1<=y_max_list(i) && y_min_list(i)<=my_cube_size &&...
+           1<=z_max_list(i) && z_min_list(i)<=my_cube_size
+        
+            x_max_list(i) = min(max(1,x_max_list(i)),my_cube_size);
+            x_min_list(i) = min(max(1,x_min_list(i)),my_cube_size);
+            y_max_list(i) = min(max(1,y_max_list(i)),my_cube_size);
+            y_min_list(i) = min(max(1,y_min_list(i)),my_cube_size);
+            z_max_list(i) = min(max(1,z_max_list(i)),my_cube_size);
+            z_min_list(i) = min(max(1,z_min_list(i)),my_cube_size);
+            
+            my_cube_tracker(x_min_list(i):x_max_list(i),y_min_list(i):y_max_list(i),z_min_list(i):z_max_list(i))=command_list(i);
+        
+        end
+    end
+    
+    sum(sum(sum(my_cube_tracker)))
+%     [command_list',x_min_list',x_max_list',y_min_list',y_max_list',z_min_list',z_max_list']
+
+    
+
+end
+
+
+
+
+

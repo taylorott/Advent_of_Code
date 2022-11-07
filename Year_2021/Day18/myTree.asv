@@ -1,0 +1,23 @@
+classdef myTree < handle
+    properties
+        left_child;
+        right_child;
+    end
+    
+    methods
+        function obj = myTree(left_child,right_child)
+            obj.left_child = left_child;
+            obj.right_child = right_child;
+        end
+        
+        function setLeft(obj,left_child)
+            obj.left_child = left_child;
+        end
+        
+        function setRight(obj,right_child)
+            obj.right_child = right_child;
+        end
+        
+        function 
+    end
+end
