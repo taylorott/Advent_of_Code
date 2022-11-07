@@ -11,17 +11,25 @@ from math import gcd
 
 path = currentdir
 
-def solution01():
-    fname = 'Input01.txt'
-    # fname = 'Input02.txt'
-
+def parse_input01(fname):
     # num_list = bh.parse_num_column(path,fname)
     # data = bh.parse_split_by_emptylines(path,fname)
     # data = bh.parse_strings(path,fname)
 
+    return data
+
+def solution01():
+    fname = 'Input01.txt'
+    # fname = 'Input02.txt'
+
+    parse_input01(fname)
+
+
 def solution02():
     fname = 'Input01.txt'
     # fname = 'Input02.txt'
+
+    parse_input01(fname)
 
 if __name__ == '__main__':
     solution01()
