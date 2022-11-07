@@ -1,0 +1,79 @@
+class Digraph(object):
+    def canFinish(self, numCourses, prerequisites):
+        """
+        :type numCourses: int
+        :type prerequisites: List[List[int]]
+        :rtype: bool
+        """
+        
+        
+        
+        self.forward_adjacency = []
+        self.reverse_adjacency = []
+        
+        for i in range(numCourses):
+            self.forward_adjacency.append([])
+            self.reverse_adjacency.append([])
+            
+        for edge in prerequisites:
+            self.forward_adjacency[edge[0]].append(edge[1])
+            self.reverse_adjacency[edge[1]].append(edge[0])
+
+        
+       
+    #kosaraju's algorithm
+    def build_metagraph(self):
+        self.meta_forward_dict = []
+        self.meta_reverse_dict = []
+        
+        self.meta_forward_list = []
+        self.meta_reverse_list = []
+        
+        self.visited_list = [False]*self.numCourses
+        
+        self.L = []
+        
+        for i in range(self.numCourses):
+            self.visit_kosaj(i)
+        
+        self.assigned_list = [-1]*self.numCourses
+        self.component_size_list = []       
+        count = 0
+        while len(self.L)>0:
+            u = self.L.pop(-1)
+            
+            if self.assigned_list[u]==-1:
+                self.component_size_list.append(0)
+                
+                self.meta_forward_dict.append({})
+                self.meta_reverse_dict.append({})
+                self.meta_forward_list.append([])
+                self.meta_reverse_list.append([])
+            
+                self.assign(u,count)
+                count+=1
+        self.num_components = count
+        
+    def visit_kosaj(self,u):
+        if not self.visited_list[u]:
+            self.visited_list[u]=True
+            
+            
+            for v in self.forward_adjacency[u]:
+                self.visit_kosaj(v)
+            self.L.append(u)
+
+    def assign(self, u, root):
+        if self.assigned_list[u]==-1:
+            self.assigned_list[u]=root
+            self.component_size_list[root]+=1
+            for v in self.reverse_adjacency[u]:
+                self.assign(v,root)
+                
+                prev_component = self.assigned_list[v] 
+                if prev_component!=root and prev_component not in self.meta_reverse_dict[root]:
+                    self.meta_reverse_dict[root][prev_component]=None
+                    self.meta_reverse_list[root].append(prev_component)
+                    
+                    self.meta_forward_dict[prev_component][root]=None
+                    self.meta_forward_list[prev_component].append(root)
