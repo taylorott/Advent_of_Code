@@ -29,7 +29,7 @@ def solution02():
     fname = 'Input01.txt'
     # fname = 'Input02.txt'
 
-    parse_input01(fname)
+    # parse_input01(fname)
 
 if __name__ == '__main__':
     solution01()
