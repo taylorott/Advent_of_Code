@@ -80,6 +80,7 @@ class Digraph(object):
         
         self.visited_dict = {}
         self.assigned_dict = {}
+        self.assigned_lookup = {}
         for vertex in self.vertex_list:
             self.visited_dict[vertex]=False
             self.assigned_dict[vertex]=-1
@@ -107,8 +108,8 @@ class Digraph(object):
         self.num_components = count
         
     def visit_kosaj(self,u):
-        if not self.visited_list[u]:
-            self.visited_list[u]=True
+        if not self.visited_dict[u]:
+            self.visited_dict[u]=True
             
             for v in self.forward_adjacency[u]:
                 self.visit_kosaj(v)
@@ -117,6 +118,10 @@ class Digraph(object):
     def assign(self, u, root):
         if self.assigned_dict[u]==-1:
             self.assigned_dict[u]=root
+            if root not in self.assigned_lookup:
+                self.assigned_lookup[root]=[]
+            self.assigned_lookup[root].append(u)
+
             self.component_size_list[root]+=1
             for v in self.reverse_adjacency[u]:
                 self.assign(v,root)
