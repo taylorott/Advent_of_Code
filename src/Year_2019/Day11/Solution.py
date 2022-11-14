@@ -49,7 +49,7 @@ class IntcodeComputer(object):
         self.generate_instruction_dict()
         self.instruction_pointer = 0
         self.relative_base = 0
-        self.output_tape = []
+        self.status = None
 
     def generate_instruction_dict(self):
         self.current_instructions = {}
@@ -57,15 +57,15 @@ class IntcodeComputer(object):
             self.current_instructions[i] = self.base_instructions[i]
 
     def run_code(self,input_tape,silence_errors=False):
-
+        output_tape = []
         input_index = 0
-        self.instruction_pointer = 0
         while self.instruction_pointer<len(self.current_instructions):
             op_code,p_list = parse_op_code(self.current_instructions[self.instruction_pointer])
 
             if op_code is None:
                 if not silence_errors:
                     print('invalid op code')
+                self.status = 'invalid op code'
                 return None
 
             num_params = num_params_dict[op_code]
@@ -78,6 +78,7 @@ class IntcodeComputer(object):
                     if memory_address<0:
                         if not silence_errors:
                             print('invalid memory location')
+                        self.status = 'invalid memory location'
                         return None
                     elif memory_address not in self.current_instructions:
                         param_val_list.append(0)
@@ -94,6 +95,7 @@ class IntcodeComputer(object):
                     if memory_address<0:
                         if not silence_errors:
                             print('invalid memory location')
+                        self.status = 'invalid memory location'
                         return None
                     elif memory_address not in self.current_instructions:
                         param_val_list.append(0)
@@ -106,6 +108,7 @@ class IntcodeComputer(object):
                 if address_list[2]<0:
                     if not silence_errors:
                         print('invalid memory location')
+                    self.status = 'invalid memory location'
                     return None
                 self.current_instructions[address_list[2]]=param_val_list[0]+param_val_list[1]
                 self.instruction_pointer+=num_params+1
@@ -113,21 +116,23 @@ class IntcodeComputer(object):
                 if address_list[2]<0:
                     if not silence_errors:
                         print('invalid memory location')
+                    self.status = 'invalid memory location'
                     return None
                 self.current_instructions[address_list[2]]=param_val_list[0]*param_val_list[1]
                 self.instruction_pointer+=num_params+1
             elif op_code==3:
                 if input_index>=len(input_tape):
                     if not silence_errors:
-                        print('ran out of inputs!')
-                    return None
+                        print('waiting for input')
+                    self.status = 'waiting for input'
+                    return output_tape
                 self.current_instructions[address_list[0]]=input_tape[input_index]
                 input_index+=1
 
                 self.instruction_pointer+=num_params+1
             elif op_code==4:
                 # print('print command: '+str(param_val_list[0]))
-                self.output_tape.append(param_val_list[0])
+                output_tape.append(param_val_list[0])
                 self.instruction_pointer+=num_params+1
             elif op_code==5:
                 if param_val_list[0]!=0:
@@ -157,40 +162,103 @@ class IntcodeComputer(object):
                 self.instruction_pointer+=num_params+1
             elif op_code==99:
                 if not silence_errors:
-                    print('terminate program')
-                return self.output_tape
+                    print('program completed')
+                self.status = 'program completed'
+                return output_tape
 
+heading_dict = {0:np.array([-1,0]),1:np.array([0,-1]),2:np.array([1,0]),3:np.array([0,1])}
 def solution01():
-    # fname = 'Input01.txt'
     fname = 'Input02.txt'
-    # fname = 'Input03.txt'
-    # fname = 'Input04.txt'
-    
     data = parse_input01(fname)
     myComp = IntcodeComputer(data)
 
-    result = myComp.run_code([1],silence_errors=True)
-    
+    heading = 0
 
-    if len(result)==1:
-        result = result[0]
-    print(result)
+    paint_dict = {}
+    coords = np.array([0,0])
+
+    while myComp.status != 'program completed':
+        key = (int(coords[0]),int(coords[1]))
+        val = 0
+        if key in paint_dict:
+            val = paint_dict[key]
+
+        move = myComp.run_code([val],silence_errors=True)
+        
+        paint_dict[key]=move[0]
+
+        if move[1]==0:
+            heading+=1
+        elif move[1]==1:
+            heading-=1
+        heading%=4
+
+        coords+=heading_dict[heading]
+
+    total = 0
+    for key in paint_dict.keys():
+        total+=1
+    print(total)
 
 def solution02():
-    # fname = 'Input01.txt'
     fname = 'Input02.txt'
-    # fname = 'Input03.txt'
-    # fname = 'Input04.txt'
-    
     data = parse_input01(fname)
     myComp = IntcodeComputer(data)
 
-    result = myComp.run_code([2],silence_errors=True)
-    
-    if len(result)==1:
-        result = result[0]
+    heading = 0
 
-    print(result)
+    paint_dict = {(0,0):1}
+    coords = np.array([0,0])
+
+    min_i = 0
+    max_i = 0
+    min_j = 0
+    max_j = 0
+
+    while myComp.status != 'program completed':
+        min_i = int(min(min_i,coords[0]))
+        max_i = int(max(max_i,coords[0]))
+        min_j = int(min(min_j,coords[1]))
+        max_j = int(max(max_j,coords[1]))
+
+        key = (int(coords[0]),int(coords[1]))
+        val = 0
+        if key in paint_dict:
+            val = paint_dict[key]
+
+        move = myComp.run_code([val],silence_errors=True)
+        
+        paint_dict[key]=move[0]
+
+        if move[1]==0:
+            heading+=1
+        elif move[1]==1:
+            heading-=1
+        heading%=4
+
+        coords+=heading_dict[heading]
+
+    h = (max_i-min_i)+1
+    w = (max_j-min_j)+1
+
+    panel_mat = []
+    for i in range(h):
+        panel_mat.append([0]*w)
+
+    for key in paint_dict.keys():
+        panel_mat[key[0]-min_i][key[1]-min_j]=paint_dict[key]
+
+    str_list = []
+    for i in range(h):
+        str_list.append('')
+        for j in range(w):
+            if panel_mat[i][j]==0:
+                str_list[i]+=' '
+            else:    
+                str_list[i]+='I'
+
+    for item in str_list:
+        print(item)
 
 if __name__ == '__main__':
     solution01()
