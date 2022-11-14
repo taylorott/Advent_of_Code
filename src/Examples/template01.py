@@ -7,7 +7,7 @@ import numpy as np
 import re
 import Helpers.basic_helpers as bh
 from Helpers.DSA_helpers import Digraph
-from math import gcd
+from math import gcd, lcm
 
 path = currentdir
 
