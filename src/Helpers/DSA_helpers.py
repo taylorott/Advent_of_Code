@@ -1,3 +1,5 @@
+from collections import deque 
+
 class Graph(object):
     def __init__(self):
         pass
