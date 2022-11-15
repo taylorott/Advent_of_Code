@@ -2,6 +2,40 @@ from collections import deque
 
 class Graph(object):
     def __init__(self):
+        self.adjacency_list = {}
+        self.vertex_dict = {}
+        self.vertex_list = []
+        self.numVertices = 0
+        self.numEdges = 0
+        self.edge_dict = {}
+
+    def add_edge(self,v1,v2,w=None):
+        if v1 not in self.vertex_dict:
+            self.vertex_dict[v1] = None
+            self.vertex_list.append(v1)
+            self.adjacency_list[v1] = []
+            self.edge_dict[v1] = {}
+            self.numVertices+=1
+
+        if v2 not in self.vertex_dict:
+            self.vertex_dict[v2] = None
+            self.vertex_list.append(v2)
+            self.adjacency_list[v2] = []
+            self.edge_dict[v2] = {}
+            self.numVertices+=1
+
+        if v2 not in self.edge_dict[v1]:
+            self.adjacency_list[v1].append(v2)
+            self.adjacency_list[v2].append(v1)
+            self.edge_dict[v1][v2] = w
+            self.edge_dict[v2][v1] = w
+            self.numEdges += 1
+
+    #assuming edge weights of one
+    def findPathBFS(self,v_start,v_finish):
+        pass
+
+    def findPathDijkstra(self,v_start,v_finish):
         pass
 
 class Digraph(object):
