@@ -67,7 +67,7 @@ def parse_strings(path,fname,delimiters = None,type_lookup = None, allInt = Fals
         return list_out
     return None
 
-def parse_split_by_emptylines(path,fname):
+def parse_split_by_emptylines(path,fname,allInt = False, allFloat = False):
     list_out = []
     load_name = os.path.join(path,fname)
 
@@ -81,7 +81,12 @@ def parse_split_by_emptylines(path,fname):
                 new_item = []
 
             elif temp!= '':
-                new_item.append(temp)
+                if allInt:
+                    new_item.append(int(temp))
+                elif allFloat:
+                    new_item.append(float(temp))
+                else:
+                    new_item.append(temp)
 
         if len(new_item)>0:
             list_out.append(new_item)
