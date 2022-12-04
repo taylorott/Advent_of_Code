@@ -14,7 +14,7 @@ def parse_num_column(path,fname,isInt=True):
             if isInt:
                 list_out.append(int(line.strip('\n')))
             else:       
-                list_out.append(int(line.strip('\n')))
+                list_out.append(line.strip('\n'))
         f.close()
         return list_out
     return None
@@ -67,6 +67,10 @@ def parse_strings(path,fname,delimiters = None,type_lookup = None, allInt = Fals
         return list_out
     return None
 
+#parses a file that is just a single column of items that are sometimes separated by empty lines
+#returns as a list of lists where the outer list corresponds to a list of blocks 
+#where each block is separated by an empty line
+#and the inner list corresponds to a list of each item in a given block
 def parse_split_by_emptylines(path,fname,allInt = False, allFloat = False):
     list_out = []
     load_name = os.path.join(path,fname)
@@ -94,12 +98,17 @@ def parse_split_by_emptylines(path,fname,allInt = False, allFloat = False):
         return list_out
     return None
 
-
-
+#converts a list of dictionary formatted strings into a dictionary
+#best to just give an example:
+#the following list:
+#['pid:937877382 eyr:2029','ecl:amb hgt:187cm iyr:2019','byr:1933 hcl:#888785']
+#becomes the following dictionary:
+#{'pid':'937877382' , 'eyr':'2029' , 'ecl':'amb' , 'hgt':'187cm' , 'iyr':'2019' , 'byr':'1933' , 'hcl':'#888785'}
 def convert_strings_to_dict(data):
     data_dict = {}
 
     for line in data:
+        #split items by empty space or commas
         str_list = split(r'[ ,]',line)
 
         for key_val_str in str_list:
@@ -118,5 +127,16 @@ def build_char_freq_table(str_in):
             dict_out[my_char]+=1
         else:
             dict_out[my_char]=1
+
+    return dict_out
+
+def build_freq_table(list_in):
+    dict_out = {}
+
+    for item in list_in:
+        if item in dict_out:
+            dict_out[item]+=1
+        else:
+            dict_out[item]=1
 
     return dict_out
