@@ -50,8 +50,6 @@ def solution01():
             print(i+1)
             break
 
-    # print(data)
-
 def solution02():
     # fname = 'Input01.txt'
     fname = 'Input02.txt'
@@ -76,7 +74,6 @@ def solution02():
         more_than_two = False
 
         for key in freq_table.keys():
-            # print(key)
             if freq_table[key]>1:
                 more_than_two = True
 
