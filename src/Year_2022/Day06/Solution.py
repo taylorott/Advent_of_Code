@@ -6,7 +6,7 @@ sys.path.insert(0,os.path.dirname(os.path.dirname(currentdir)))
 import numpy as np
 import re
 import Helpers.basic_helpers as bh
-from Helpers.DSA_helpers import Digraph
+from Helpers.DSA_helpers import Digraph, frequency_table
 from math import gcd, lcm
 from collections import deque 
 
@@ -19,6 +19,22 @@ def parse_input01(fname):
 
     return data[0][0]
 
+def find_first_substring_unique_chars(str_in,substr_len):
+
+    freq_table = frequency_table()
+    for i in range(len(str_in)):
+        char_in = str_in[i]
+
+        freq_table.add_item(char_in)
+
+        if i>=substr_len:
+            char_out = str_in[i-substr_len]
+            freq_table.remove_item(char_out)
+
+        if i>=substr_len-1 and freq_table.max_frequency()==1:
+            print(i+1)
+            break
+
 def solution01():
     # fname = 'Input01.txt'
     fname = 'Input02.txt'
@@ -26,29 +42,8 @@ def solution01():
     a = 4
 
     data = parse_input01(fname)
+    find_first_substring_unique_chars(data,a)
 
-    freq_table = {}
-    for i in range(len(data)):
-        char_in = data[i]
-
-        if char_in in freq_table:
-            freq_table[char_in]+=1
-        else:
-            freq_table[char_in]=1
-
-        if i>=a:
-            char_out = data[i-a]
-            freq_table[char_out]-=1
-
-        more_than_two = False
-
-        for key in freq_table.keys():
-            if freq_table[key]>1:
-                more_than_two = True
-
-        if i>=a-1 and (not more_than_two):
-            print(i+1)
-            break
 
 def solution02():
     # fname = 'Input01.txt'
@@ -58,28 +53,8 @@ def solution02():
 
     data = parse_input01(fname)
 
-    freq_table = {}
-    for i in range(len(data)):
-        char_in = data[i]
-
-        if char_in in freq_table:
-            freq_table[char_in]+=1
-        else:
-            freq_table[char_in]=1
-
-        if i>=a:
-            char_out = data[i-a]
-            freq_table[char_out]-=1
-
-        more_than_two = False
-
-        for key in freq_table.keys():
-            if freq_table[key]>1:
-                more_than_two = True
-
-        if i>=a-1 and (not more_than_two):
-            print(i+1)
-            break
+    data = parse_input01(fname)
+    find_first_substring_unique_chars(data,a)
 
 if __name__ == '__main__':
     solution01()

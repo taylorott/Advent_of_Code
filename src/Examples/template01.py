@@ -6,7 +6,7 @@ sys.path.insert(0,os.path.dirname(os.path.dirname(currentdir)))
 import numpy as np
 import re
 import Helpers.basic_helpers as bh
-from Helpers.DSA_helpers import Digraph
+from Helpers.DSA_helpers import Digraph, frequency_table
 from math import gcd, lcm
 from collections import deque 
 

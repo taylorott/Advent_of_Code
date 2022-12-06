@@ -319,3 +319,71 @@ class AugmentedHeap(object):
                 self.index_dict[self.val_list[switch_index]]=switch_index
 
             current_index = switch_index
+
+class frequency_table(object):
+    def __init__(self,list_in=None):
+        self.freq_table = {}
+
+        if list_in is not None:
+            self.build_from_list(list_in)
+
+    def build_from_list(self,list_in):
+        for item in list_in:
+            self.add_item(item)
+
+    def add_item(self,item):
+        if item in self.freq_table:
+            self.freq_table[item]+=1
+        else:
+            self.freq_table[item]=1
+
+    def remove_item(self,item,allow_negative=False):
+        if item in self.freq_table:
+            if self.freq_table[item]>0 or allow_negative:
+                self.freq_table[item]-=1
+        elif allow_negative:
+            self.freq_table[item]=-1
+
+    def __getitem__(self, item):
+        if item in self.freq_table:
+            return self.freq_table[item]
+        else:
+            return 0
+
+    def __setitem__(self, item, freq):
+        self.freq_table[item] = freq
+
+    def __contains__(self, item):
+        return (item in self.freq_table)
+
+    def keys(self):
+        return self.freq_table.keys()
+
+    def __eq__(self, other):
+        for key in self.keys():
+            if key in other:
+                if self[key]!=other[key]:
+                    return False 
+            else:
+                if self[key]!=0:
+                    return False
+        for key in other.keys():
+            if key in self:
+                if self[key]!=other[key]:
+                    return False
+            else:
+                if other[key]!=0:
+                    return False
+
+        return True
+
+    def __str__(self):
+        return self.freq_table.__str__()
+
+    def max_frequency(self):
+        max_val = 0
+
+        for item in self.keys():
+            max_val = max(max_val,self[item])
+
+        return max_val
