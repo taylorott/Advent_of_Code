@@ -39,22 +39,16 @@ def solution01():
     # fname = 'Input01.txt'
     fname = 'Input02.txt'
 
-    a = 4
-
     data = parse_input01(fname)
-    find_first_substring_unique_chars(data,a)
+    find_first_substring_unique_chars(data,4)
 
 
 def solution02():
     # fname = 'Input01.txt'
     fname = 'Input02.txt'
 
-    a = 14
-
     data = parse_input01(fname)
-
-    data = parse_input01(fname)
-    find_first_substring_unique_chars(data,a)
+    find_first_substring_unique_chars(data,14)
 
 if __name__ == '__main__':
     solution01()
