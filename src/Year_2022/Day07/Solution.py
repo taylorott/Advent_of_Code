@@ -98,6 +98,7 @@ def build_directory(data):
                     current_dir.add_child_file(data[count][1],int(data[count][0]))
                 count+=1
 
+    root_dir.eval_total_size()         
     return root_dir
 
 def solution01():
@@ -106,9 +107,6 @@ def solution01():
 
     data = parse_input01(fname)
     root_dir = build_directory(data)
-    
-
-    root_dir.eval_total_size()
 
     print(eval_total_size1(root_dir))
 
@@ -118,8 +116,6 @@ def solution02():
 
     data = parse_input01(fname)
     root_dir = build_directory(data)
-    
-    root_dir.eval_total_size()
 
     size_dict = eval_total_size2(root_dir)
 
@@ -131,9 +127,8 @@ def solution02():
 
     for key in size_dict:
         folder_size = size_dict[key]
-        if folder_size>=need_to_free:
-            if min_size is None or folder_size<min_size:
-                min_size=folder_size
+        if folder_size>=need_to_free and (min_size is None or folder_size<min_size):
+            min_size=folder_size
 
     print(min_size)
 
