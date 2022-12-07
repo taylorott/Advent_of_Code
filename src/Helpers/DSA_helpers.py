@@ -105,6 +105,21 @@ class Digraph(object):
             for parent in self.reverse_adjacency[vertex]:
                 self.list_ancestors_recursive(parent,ancestors_list)
 
+    def set_vertex_val(self,vertex,val=None):
+        if vertex not in self.vertex_dict:
+            self.vertex_list.append(vertex)
+            self.forward_adjacency[vertex] = []
+            self.reverse_adjacency[vertex] = []
+            self.edge_dict[vertex] = {}
+            self.numVertices+=1
+            
+        self.vertex_dict[vertex]=val
+
+    def get_vertex_val(self,vertex):
+        return self.vertex_dict[vertex]
+
+    def contains_vertex(self,vertex):
+        return vertex in self.vertex_dict
 
     #kosaraju's algorithm
     def build_metagraph(self):
