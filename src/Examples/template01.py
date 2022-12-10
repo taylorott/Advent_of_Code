@@ -15,7 +15,7 @@ path = currentdir
 def parse_input01(fname):
     # data = bh.parse_num_column(path,fname)
     # data = bh.parse_split_by_emptylines(path,fname)
-    # data = bh.parse_strings(path,fname,delimiters = None,type_lookup = None, allInt = False, allFloat = False)
+    # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
 
     return data
 
@@ -24,13 +24,14 @@ def solution01():
     # fname = 'Input02.txt'
 
     data = parse_input01(fname)
-
+    print(data)
 
 def solution02():
     fname = 'Input01.txt'
     # fname = 'Input02.txt'
 
     # data = parse_input01(fname)
+
 
 if __name__ == '__main__':
     solution01()
