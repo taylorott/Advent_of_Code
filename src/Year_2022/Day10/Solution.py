@@ -82,12 +82,7 @@ def solution02():
         if abs(strength_list[i]-col)<=1:
             my_mat[row][col]='#'
 
-    for i in range(6):
-        str_out = ''
-        for j in range(40):
-            str_out+=my_mat[i][j]
-
-        print(str_out)
+    bh.print_char_matrix(my_mat)
 
 if __name__ == '__main__':
     solution01()

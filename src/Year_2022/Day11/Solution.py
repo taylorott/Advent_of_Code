@@ -18,52 +18,41 @@ def parse_input01(fname):
     # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
 
     monkeys_list = []
-    total_lcm = 1
+    lcm_divisors = 1
     for monkey in data:
         monkey_dict = {}
         for i in range(len(monkey)):
-            temp = monkey[i]
-            items = []
-            for item in temp:
-                if item!='':
-                    items.append(item)
+            items = monkey[i]
+                    
+            starting_items = []
+            for j in range(2,len(monkey[1])):
+                starting_items.append(int(monkey[1][j]))
+            monkey_dict['held_items'] = starting_items
 
-            if i ==1:
-                starting_items = []
-                for j in range(2,len(items)):
-                    starting_items.append(int(items[j]))
-                monkey_dict['held_items'] = starting_items
+            monkey_dict['operator'] = monkey[2][-2]
 
-            if i ==2:
-                monkey_dict['operator'] = items[-2]
+            left_operand = monkey[2][-3]
+            if left_operand.isnumeric():
+                left_operand = int(left_operand)
+            monkey_dict['left_operand'] = left_operand 
 
-                left_operand = items[-3]
-                if left_operand.isnumeric():
-                    left_operand = int(left_operand)
-                monkey_dict['left_operand'] = left_operand 
+            right_operand = monkey[2][-1]
+            if right_operand.isnumeric():
+                right_operand = int(right_operand)
+            monkey_dict['right_operand'] = right_operand 
 
-                right_operand = items[-1]
-                if right_operand.isnumeric():
-                    right_operand = int(right_operand)
-                monkey_dict['right_operand'] = right_operand 
+            monkey_dict['test'] =  int(monkey[3][-1])
+            lcm_divisors = lcm(lcm_divisors,monkey_dict['test'] )
 
-            if i ==3:
-                test = int(items[-1])
-                monkey_dict['test'] =  test
-                total_lcm = lcm(total_lcm,test)
-
-            if i ==4:
-                monkey_dict['true'] = int(items[-1])
-
-            if i ==5:
-                monkey_dict['false'] = int(items[-1])
+            monkey_dict['true'] = int(monkey[4][-1])
+            monkey_dict['false'] = int(monkey[5][-1])
 
             monkey_dict['num_inspections']=0
         monkeys_list.append(monkey_dict)
 
-    return monkeys_list,total_lcm
+    return monkeys_list,lcm_divisors
 
-def eval_monkey_round(monkeys_list,total_lcm=None):
+def eval_monkey_round(monkeys_list,lcm_divisors=None):
     
     for current_monkey in monkeys_list:
         held_items = current_monkey['held_items']
@@ -91,8 +80,8 @@ def eval_monkey_round(monkeys_list,total_lcm=None):
             if operator == '*':
                 result = left_operand*right_operand
 
-            if total_lcm is not None:
-                result%=total_lcm
+            if lcm_divisors is not None:
+                result%=lcm_divisors
             else:
                 result//=3
 
@@ -101,40 +90,33 @@ def eval_monkey_round(monkeys_list,total_lcm=None):
             else:
                 monkeys_list[current_monkey['false']]['held_items'].append(result)
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
-    monkeys_list, total_lcm = parse_input01(fname)
+def eval_inspections_score(monkeys_list,num_rounds,lcm_divisors=None):
     
-    for i in range(20):
-        eval_monkey_round(monkeys_list)
+    for i in range(num_rounds):
+        eval_monkey_round(monkeys_list, lcm_divisors)
     
     inspection_list = []
     for monkey in monkeys_list:
         inspection_list.append(monkey['num_inspections'])
 
     inspection_list.sort()
-
     print(inspection_list[-1]*inspection_list[-2])
+
+def solution01():
+    # fname = 'Input01.txt'
+    fname = 'Input02.txt'
+
+    monkeys_list, lcm_divisors = parse_input01(fname)
+    
+    eval_inspections_score(monkeys_list,20)
 
 def solution02():
     # fname = 'Input01.txt'
     fname = 'Input02.txt'
 
-    monkeys_list, total_lcm = parse_input01(fname)
+    monkeys_list, lcm_divisors = parse_input01(fname)
 
-    for i in range(10000):
-        eval_monkey_round(monkeys_list,total_lcm)
-
-    
-    inspection_list = []
-    for monkey in monkeys_list:
-        inspection_list.append(monkey['num_inspections'])
-
-    inspection_list.sort()
-
-    print(inspection_list[-1]*inspection_list[-2])
+    eval_inspections_score(monkeys_list,10000,lcm_divisors)
 
 if __name__ == '__main__':
     solution01()

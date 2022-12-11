@@ -14,6 +14,7 @@ path = currentdir
 
 def parse_input01(fname):
     # data = bh.parse_num_column(path,fname)
+    # data = bh.parse_digit_grid(path,fname)
     # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
     # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
 

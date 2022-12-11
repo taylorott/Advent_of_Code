@@ -19,6 +19,25 @@ def parse_num_column(path,fname,isInt=True):
         return list_out
     return None
 
+#parses a file that is a matrix of digits (not comma seperated)
+def parse_digit_grid(path,fname):
+    list_out = []
+    load_name = os.path.join(path,fname)
+    with open(load_name) as f:
+        for line in f.readlines():
+            temp = line.strip('\n')
+
+            row = []
+
+            for my_char in temp:
+                row.append(int(my_char))
+
+            list_out.append(row)
+
+        f.close()
+        return list_out
+    return None
+
 #parses a file that needs specific post-processing to interpret
 def parse_strings(path,fname,delimiters = None,type_lookup = None, allInt = False, allFloat = False):
     load_name = os.path.join(path,fname)
@@ -152,3 +171,37 @@ def build_freq_table(list_in):
             dict_out[item]=1
 
     return dict_out
+
+def print_char_matrix(mat_in,transpose = False,reverse_vert=False,reverse_horz=False):
+    i_list = []
+    j_list = []
+
+    l0 = len(mat_in)
+    l1 = len(mat_in[0])
+
+    if not reverse_vert:
+        for i in range(l0):
+            i_list.append(i)
+    else:
+        for i in range(l0-1,-1,-1):
+            i_list.append(i)
+
+    if not reverse_horz:
+        for j in range(l1):
+            j_list.append(j)
+    else:
+        for j in range(l1-1,-1,-1):
+            j_list.append(j)
+
+    if not transpose:
+        for i in i_list:
+            line = ''
+            for j in j_list:
+                line+=mat_in[i][j]
+            print(line)
+    else:
+        for j in j_list:
+            line = ''
+            for i in i_list:
+                line+=mat_in[i][j]
+            print(line)
