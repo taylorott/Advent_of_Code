@@ -21,7 +21,6 @@ def parse_num_column(path,fname,isInt=True):
 
 #parses a file that needs specific post-processing to interpret
 def parse_strings(path,fname,delimiters = None,type_lookup = None, allInt = False, allFloat = False):
-    list_out = []
     load_name = os.path.join(path,fname)
 
     pattern = None
@@ -33,70 +32,83 @@ def parse_strings(path,fname,delimiters = None,type_lookup = None, allInt = Fals
             pattern = r'|'.join(delimiters)
 
     with open(load_name) as f:
+        block = []
         for line in f.readlines():
+            block.append(line)
 
-            temp = line.strip('\n')
-            if delimiters is None:
-                list_out.append(temp)
-            else:
-                new_item = []
-                split_list = split(pattern, temp)
+        return parse_block(block,delimiters,type_lookup, allInt, allFloat)
 
-                for string in split_list:
-                    if string != '':
-                        new_item.append(string)
-
-                for i in range(len(new_item)):
-                    if allInt:
-                        new_item[i] = int(new_item[i])
-                    elif allFloat:
-                        new_item[i] = float(new_item[i])
-                    elif type_lookup is not None:
-                        if type(type_lookup) is list:
-                            if type_lookup[i]=='int':
-                                new_item[i] = int(new_item[i])
-                            elif type_lookup[i]=='float':
-                                new_item[i] = float(new_item[i])
-                        elif type(type_lookup) is dict:
-                            if i in type_lookup:
-                                if type_lookup[i]=='int':
-                                    new_item[i] = int(new_item[i])
-                                elif type_lookup[i]=='float':
-                                    new_item[i] = float(new_item[i])
-                list_out.append(new_item)
-        return list_out
     return None
 
 #parses a file that is just a single column of items that are sometimes separated by empty lines
 #returns as a list of lists where the outer list corresponds to a list of blocks 
 #where each block is separated by an empty line
 #and the inner list corresponds to a list of each item in a given block
-def parse_split_by_emptylines(path,fname,allInt = False, allFloat = False):
-    list_out = []
+def parse_split_by_emptylines(path,fname,delimiters = None,type_lookup = None, allInt = False, allFloat = False):
     load_name = os.path.join(path,fname)
 
+    list_out = []
     with open(load_name) as f:
         new_item = []
         for line in f.readlines():
             temp = line.strip('\n')
 
             if temp == '' and len(new_item)>0:
-                list_out.append(new_item)
+                list_out.append(parse_block(new_item,delimiters,type_lookup, allInt, allFloat))
                 new_item = []
 
             elif temp!= '':
-                if allInt:
-                    new_item.append(int(temp))
-                elif allFloat:
-                    new_item.append(float(temp))
-                else:
-                    new_item.append(temp)
+                new_item.append(temp)
 
         if len(new_item)>0:
-            list_out.append(new_item)
+            list_out.append(parse_block(new_item,delimiters,type_lookup, allInt, allFloat))
 
         return list_out
     return None
+
+def parse_block(block,delimiters = None,type_lookup = None, allInt = False, allFloat = False):
+    list_out = []
+
+    pattern = None
+    if delimiters is not None and len(delimiters)>0:
+        if type(delimiters) is str:
+            pattern = r'|'.join([delimiters])
+
+        elif type(delimiters) is list:
+            pattern = r'|'.join(delimiters)
+
+    for line in block:
+        temp = line.strip('\n')
+        if delimiters is None or len(delimiters)==0:
+            list_out.append(temp)
+        else:
+            new_item = []
+            split_list = split(pattern, temp)
+
+            for string in split_list:
+                if string != '':
+                    new_item.append(string)
+
+            for i in range(len(new_item)):
+                if allInt:
+                    new_item[i] = int(new_item[i])
+                elif allFloat:
+                    new_item[i] = float(new_item[i])
+                elif type_lookup is not None:
+                    if type(type_lookup) is list:
+                        if type_lookup[i]=='int':
+                            new_item[i] = int(new_item[i])
+                        elif type_lookup[i]=='float':
+                            new_item[i] = float(new_item[i])
+                    elif type(type_lookup) is dict:
+                        if i in type_lookup:
+                            if type_lookup[i]=='int':
+                                new_item[i] = int(new_item[i])
+                            elif type_lookup[i]=='float':
+                                new_item[i] = float(new_item[i])
+            list_out.append(new_item)
+
+    return list_out
 
 #converts a list of dictionary formatted strings into a dictionary
 #best to just give an example:
