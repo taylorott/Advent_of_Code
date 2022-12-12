@@ -21,6 +21,13 @@ def parse_num_column(path,fname,isInt=True):
 
 #parses a file that is a matrix of digits (not comma seperated)
 def parse_digit_grid(path,fname):
+    return parse_grid(path,fname,allInt=True)
+
+#parses a file that is a matrix of characters (not comma seperated)
+def parse_char_grid(path,fname):
+    return parse_grid(path,fname,allInt=False)
+
+def parse_grid(path,fname,allInt=False):
     list_out = []
     load_name = os.path.join(path,fname)
     with open(load_name) as f:
@@ -28,15 +35,18 @@ def parse_digit_grid(path,fname):
             temp = line.strip('\n')
 
             row = []
-
             for my_char in temp:
-                row.append(int(my_char))
+                if allInt:
+                    row.append(int(my_char))
+                else:
+                    row.append(my_char)
 
             list_out.append(row)
 
         f.close()
         return list_out
     return None
+
 
 #parses a file that needs specific post-processing to interpret
 def parse_strings(path,fname,delimiters = None,type_lookup = None, allInt = False, allFloat = False):

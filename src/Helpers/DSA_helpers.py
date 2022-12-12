@@ -31,16 +31,157 @@ class Graph(object):
             self.edge_dict[v2][v1] = w
             self.numEdges += 1
 
-    #assuming edge weights of one
-    def findPathBFS(self,v_start,v_finish):
-        pass
+    def compute_dist_dijkstra(self,start_vert,target_vert,return_path=False):
+        if start_vert not in self.vertex_dict or target_vert not in self.vertex_dict:
+            if return_path:
+                return None,None
+            else:
+                return None
 
-    def findPathDijkstra(self,v_start,v_finish):
-        pass
+        myHeap = AugmentedHeap()
+        myHeap.insert_item(0,start_vert)
+
+        dist_dict = {}
+        marked_dict = {}
+        predecessor_dict = {start_vert:None}
+
+        while not myHeap.isempty():
+            current_dist, current_vert =myHeap.pop()
+
+            if current_vert==target_vert:
+                if return_path:
+                    path_stack = [target_vert]
+                    while predecessor_dict[path_stack[-1]] is not None:
+                        path_stack.append(predecessor_dict[path_stack[-1]])
+
+                    path_out = []
+                    while len(path_stack)>0:
+                        path_out.append(path_stack.pop(-1))
+
+                    return current_dist,path_out
+                else:
+                    return current_dist
+                
+            dist_dict[current_vert]=current_dist
+
+            for neighbor_vert in self.adjacency_list[current_vert]:
+                if neighbor_vert not in dist_dict:
+
+                    edge_weight = self.edge_dict[current_vert][neighbor_vert]
+
+                    if edge_weight is None:
+                        edge_weight = 1
+
+                    neighbor_dist = current_dist+edge_weight
+
+                    if neighbor_vert not in marked_dict:
+                        myHeap.insert_item(neighbor_dist,neighbor_vert)
+                        marked_dict[neighbor_vert]=True
+                        predecessor_dict[neighbor_vert]=current_vert
+
+                    elif neighbor_dist<myHeap.index_dict[neighbor_vert]:
+                        myHeap.decrement_key(neighbor_dist,neighbor_vert)
+                        predecessor_dict[neighbor_vert]=current_vert
+
+        if return_path:
+            return None,None
+        else:
+            return None
+
+    def compute_dist_BFS(self,start_vert,target_vert,return_path=False):
+        if start_vert not in self.vertex_dict or target_vert not in self.vertex_dict:
+            if return_path:
+                return None,None
+            else:
+                return None
+
+        dist_dict = {start_vert:0}
+        predecessor_dict = {start_vert:None}
+        
+        to_visit = deque()
+        to_visit.append(start_vert)
+
+        while len(to_visit)!=0:
+            current_vert = to_visit.popleft()
+            current_dist = dist_dict[current_vert]
+
+            if current_vert == target_vert:
+                if return_path:
+                    path_stack = [target_vert]
+                    while predecessor_dict[path_stack[-1]] is not None:
+                        path_stack.append(predecessor_dict[path_stack[-1]])
+
+                    path_out = []
+                    while len(path_stack)>0:
+                        path_out.append(path_stack.pop(-1))
+
+                    return current_dist,path_out
+                else:
+                    return current_dist
+
+            next_dist = current_dist+1
+            for neighbor_vert in self.adjacency_list[current_vert]:
+                if neighbor_vert not in dist_dict:
+                    dist_dict[neighbor_vert] = next_dist
+                    to_visit.append(neighbor_vert)
+                    predecessor_dict[neighbor_vert]=current_vert
+
+        if return_path:
+            return None,None
+        else:
+            return None
+
+
+    #adjacency_criteria(grid_in,(i0,j0),(i1,j1)) returns True or False
+    #weight_func(grid_in,(i0,j0),(i1,j1)) returns edge weights
+    def build_graph_from_2D_grid(self,grid_in,adjacency_criteria=None,weight_func=None,diags_allowed=False,horz_wrap=False,vert_wrap=False, dir_array=None):
+        l0 = len(grid_in)
+        if l0==0:
+            return
+
+        l1 = len(grid_in[0])
+        if l1==0:
+            return
+
+        if dir_array is None:
+            dir_array = [[1,0],[-1,0],[0,1],[0,-1]]
+
+            if diags_allowed:
+                dir_array += [[1,1],[-1,-1],[1,-1],[-1,1]]
+
+        for i in range(l0):
+            for j in range(l1):
+
+                current_vert = (i,j)
+
+                for direction in dir_array:
+                    i_temp = i+direction[0]
+                    j_temp = j+direction[1]
+
+                    if vert_wrap:
+                        i_temp%=l0
+
+                    if horz_wrap:
+                        j_temp%=l1
+
+                    neighbor_vert = (i_temp,j_temp)
+
+                    if 0<=i_temp and i_temp<l0 and 0<=j_temp and j_temp<l1:
+                        add_edge_bool = True
+
+                        if adjacency_criteria is not None:
+                            add_edge_bool = adjacency_criteria(grid_in,current_vert,neighbor_vert)
+
+                        if add_edge_bool:
+                            edge_weight = None
+
+                            if weight_func is not None:
+                                edge_weight = weight_func(grid_in,current_vert,neighbor_vert)
+
+                            self.add_edge(current_vert,neighbor_vert,edge_weight)
 
 class Digraph(object):
     def __init__(self):
-        
         self.forward_adjacency = {}
         self.reverse_adjacency = {}
         self.adjacency_dict = {}
@@ -184,6 +325,154 @@ class Digraph(object):
                     
                     self.meta_forward_dict[prev_component][root]=None
                     self.meta_forward_list[prev_component].append(root)
+
+    def compute_dist_dijkstra(self,start_vert,target_vert,return_path=False):
+        if start_vert not in self.vertex_dict or target_vert not in self.vertex_dict:
+            if return_path:
+                return None,None
+            else:
+                return None
+
+        myHeap = AugmentedHeap()
+        myHeap.insert_item(0,start_vert)
+
+        dist_dict = {}
+        marked_dict = {}
+        predecessor_dict = {start_vert:None}
+
+        while not myHeap.isempty():
+            current_dist, current_vert =myHeap.pop()
+
+            if current_vert==target_vert:
+                if return_path:
+                    path_stack = [target_vert]
+                    while predecessor_dict[path_stack[-1]] is not None:
+                        path_stack.append(predecessor_dict[path_stack[-1]])
+
+                    path_out = []
+                    while len(path_stack)>0:
+                        path_out.append(path_stack.pop(-1))
+
+                    return current_dist,path_out
+                else:
+                    return current_dist
+                
+            dist_dict[current_vert]=current_dist
+
+            for neighbor_vert in self.forward_adjacency[current_vert]:
+                if neighbor_vert not in dist_dict:
+
+                    edge_weight = self.edge_dict[current_vert][neighbor_vert]
+
+                    if edge_weight is None:
+                        edge_weight = 1
+
+                    neighbor_dist = current_dist+edge_weight
+
+                    if neighbor_vert not in marked_dict:
+                        myHeap.insert_item(neighbor_dist,neighbor_vert)
+                        marked_dict[neighbor_vert]=True
+                        predecessor_dict[neighbor_vert]=current_vert
+
+                    elif neighbor_dist<myHeap.index_dict[neighbor_vert]:
+                        myHeap.decrement_key(neighbor_dist,neighbor_vert)
+                        predecessor_dict[neighbor_vert]=current_vert
+
+        if return_path:
+            return None,None
+        else:
+            return None
+
+    def compute_dist_BFS(self,start_vert,target_vert,return_path=False):
+        if start_vert not in self.vertex_dict or target_vert not in self.vertex_dict:
+            if return_path:
+                return None,None
+            else:
+                return None
+
+        dist_dict = {start_vert:0}
+        predecessor_dict = {start_vert:None}
+        
+        to_visit = deque()
+        to_visit.append(start_vert)
+
+        while len(to_visit)!=0:
+            current_vert = to_visit.popleft()
+            current_dist = dist_dict[current_vert]
+
+            if current_vert == target_vert:
+                if return_path:
+                    path_stack = [target_vert]
+                    while predecessor_dict[path_stack[-1]] is not None:
+                        path_stack.append(predecessor_dict[path_stack[-1]])
+
+                    path_out = []
+                    while len(path_stack)>0:
+                        path_out.append(path_stack.pop(-1))
+
+                    return current_dist,path_out
+                else:
+                    return current_dist
+
+            next_dist = current_dist+1
+            for neighbor_vert in self.forward_adjacency[current_vert]:
+                if neighbor_vert not in dist_dict:
+                    dist_dict[neighbor_vert] = next_dist
+                    to_visit.append(neighbor_vert)
+                    predecessor_dict[neighbor_vert]=current_vert
+
+        if return_path:
+            return None,None
+        else:
+            return None
+
+    #adjacency_criteria(grid_in,(i0,j0),(i1,j1)) returns True or False
+    #weight_func(grid_in,(i0,j0),(i1,j1)) returns edge weights
+    def build_graph_from_2D_grid(self,grid_in,adjacency_criteria=None,weight_func=None,diags_allowed=False,horz_wrap=False,vert_wrap=False, dir_array=None):
+        l0 = len(grid_in)
+        if l0==0:
+            return
+
+        l1 = len(grid_in[0])
+        if l1==0:
+            return
+
+        if dir_array is None:
+            dir_array = [[1,0],[-1,0],[0,1],[0,-1]]
+
+            if diags_allowed:
+                dir_array += [[1,1],[-1,-1],[1,-1],[-1,1]]
+
+        for i in range(l0):
+            for j in range(l1):
+
+                current_vert = (i,j)
+
+                for direction in dir_array:
+                    i_temp = i+direction[0]
+                    j_temp = j+direction[1]
+
+                    if vert_wrap:
+                        i_temp%=l0
+
+                    if horz_wrap:
+                        j_temp%=l1
+
+                    neighbor_vert = (i_temp,j_temp)
+
+                    if 0<=i_temp and i_temp<l0 and 0<=j_temp and j_temp<l1:
+                        add_edge_bool = True
+
+                        if adjacency_criteria is not None:
+                            add_edge_bool = adjacency_criteria(grid_in,current_vert,neighbor_vert)
+
+                        if add_edge_bool:
+                            edge_weight = None
+
+                            if weight_func is not None:
+                                edge_weight = weight_func(grid_in,current_vert,neighbor_vert)
+
+                            self.add_edge(current_vert,neighbor_vert,edge_weight)
 
 #a min heap by default
 #can change to a max heap if desired
