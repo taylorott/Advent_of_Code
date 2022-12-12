@@ -45,7 +45,7 @@ def adjacency_criteria(grid_in,current_vert,neighbor_vert):
     i_temp = neighbor_vert[0]
     j_temp = neighbor_vert[1]
 
-    return grid_in[i][j]+1>=grid_in[i_temp][j_temp]
+    return grid_in[i_temp][j_temp]+1>=grid_in[i][j]
 
 def solution01():
     # fname = 'Input01.txt'
@@ -55,7 +55,8 @@ def solution01():
     myGraph = Digraph()
     myGraph.build_graph_from_2D_grid(data,adjacency_criteria)
 
-    dist_out = myGraph.compute_dist_BFS(starting_vert,target_vert)
+    output_dict = myGraph.compute_dist_BFS(target_vert,starting_vert)
+    dist_out = output_dict['path_length']
     print(dist_out)
 
 def solution02():
@@ -66,19 +67,16 @@ def solution02():
     myGraph = Digraph()
     myGraph.build_graph_from_2D_grid(data,adjacency_criteria)
 
-    min_dist = None
+    min_dist = np.inf
+
+    output_dict = myGraph.compute_dist_BFS(target_vert)
+    dist_dict = output_dict['dist_dict']
 
     for i in range(len(data)):
         for j in range(len(data[0])):
-            if data[i][j]==0:
-                starting_vert = (i,j)
-
-                dist_out = myGraph.compute_dist_BFS(starting_vert,target_vert)
-
-                if min_dist is None:
-                    min_dist = dist_out
-                elif dist_out is not None:
-                    min_dist = min(min_dist,dist_out)
+            if data[i][j]==0 and (i,j) in dist_dict:
+                dist_out = dist_dict[(i,j)]
+                min_dist = min(min_dist,dist_out)
     print(min_dist)
 
 if __name__ == '__main__':

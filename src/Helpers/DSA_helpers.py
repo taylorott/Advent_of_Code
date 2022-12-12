@@ -31,36 +31,57 @@ class Graph(object):
             self.edge_dict[v2][v1] = w
             self.numEdges += 1
 
-    def compute_dist_dijkstra(self,start_vert,target_vert,return_path=False):
-        if start_vert not in self.vertex_dict or target_vert not in self.vertex_dict:
-            if return_path:
-                return None,None
-            else:
-                return None
+    #computes distance from start_vert to target_vert on the graph using dijkstra's algorithm
+
+    #return value is in form of a dictionary output_dict, where:
+
+    #output_dict['dist_dict'] is a dictionary of distances, 
+    #dist_dict[v] is distance from start_vert to v
+
+    #output_dict['predecessor_dict'] is a dictionary of predecessors, 
+    #predecessor_dict[v] is predecessor of v on path from start_vert to v
+
+    #output_dict['path_length'] is length of shortest path from start_vert to target_vert
+    #output_dict['path'] is the path from start_vert to target_vert
+
+    #a few caveats:
+    #once distance to target_vert has been computed, the function terminates
+    #if you want to evaluate the distance from start_vert to all vertices, either set
+    #target_vert to None, or don't use it as an input, in this case, 'path' and 'path_length'
+    #will not be in output dictionary, but the dist_dict and predecessor_dict will be complete
+    #the same also happens if no path exists from start_vert to target_vert
+    def compute_dist_dijkstra(self,start_vert,target_vert=None):
+        output_dict = {}
+
+        if start_vert not in self.vertex_dict:
+            return output_dict
 
         myHeap = AugmentedHeap()
         myHeap.insert_item(0,start_vert)
 
         dist_dict = {}
+        output_dict['dist_dict'] = dist_dict
+
         marked_dict = {}
         predecessor_dict = {start_vert:None}
+        output_dict['predecessor_dict'] = predecessor_dict
 
         while not myHeap.isempty():
             current_dist, current_vert =myHeap.pop()
 
             if current_vert==target_vert:
-                if return_path:
-                    path_stack = [target_vert]
-                    while predecessor_dict[path_stack[-1]] is not None:
-                        path_stack.append(predecessor_dict[path_stack[-1]])
+                path_stack = [target_vert]
+                while predecessor_dict[path_stack[-1]] is not None:
+                    path_stack.append(predecessor_dict[path_stack[-1]])
 
-                    path_out = []
-                    while len(path_stack)>0:
-                        path_out.append(path_stack.pop(-1))
+                path_out = []
+                while len(path_stack)>0:
+                    path_out.append(path_stack.pop(-1))
 
-                    return current_dist,path_out
-                else:
-                    return current_dist
+                output_dict['path_length'] = current_dist
+                output_dict['path'] = path_out
+
+                return output_dict
                 
             dist_dict[current_vert]=current_dist
 
@@ -83,20 +104,39 @@ class Graph(object):
                         myHeap.decrement_key(neighbor_dist,neighbor_vert)
                         predecessor_dict[neighbor_vert]=current_vert
 
-        if return_path:
-            return None,None
-        else:
-            return None
+        return output_dict
 
-    def compute_dist_BFS(self,start_vert,target_vert,return_path=False):
-        if start_vert not in self.vertex_dict or target_vert not in self.vertex_dict:
-            if return_path:
-                return None,None
-            else:
-                return None
+    #computes distance from start_vert to target_vert on the graph using BFS
+    #this implicity assumes that the graph is unweighted
+
+    #return value is in form of a dictionary output_dict, where:
+
+    #output_dict['dist_dict'] is a dictionary of distances, 
+    #dist_dict[v] is distance from start_vert to v
+
+    #output_dict['predecessor_dict'] is a dictionary of predecessors, 
+    #predecessor_dict[v] is predecessor of v on path from start_vert to v
+
+    #output_dict['path_length'] is length of shortest path from start_vert to target_vert
+    #output_dict['path'] is the path from start_vert to target_vert
+
+    #a few caveats:
+    #once distance to target_vert has been computed, the function terminates
+    #if you want to evaluate the distance from start_vert to all vertices, either set
+    #target_vert to None, or don't use it as an input, in this case, 'path' and 'path_length'
+    #will not be in output dictionary, but the dist_dict and predecessor_dict will be complete
+    #the same also happens if no path exists from start_vert to target_vert
+    def compute_dist_BFS(self,start_vert,target_vert=None):
+        output_dict = {}
+
+        if start_vert not in self.vertex_dict:
+            return output_dict
 
         dist_dict = {start_vert:0}
+        output_dict['dist_dict'] = dist_dict
+
         predecessor_dict = {start_vert:None}
+        output_dict['predecessor_dict'] = predecessor_dict
         
         to_visit = deque()
         to_visit.append(start_vert)
@@ -106,18 +146,18 @@ class Graph(object):
             current_dist = dist_dict[current_vert]
 
             if current_vert == target_vert:
-                if return_path:
-                    path_stack = [target_vert]
-                    while predecessor_dict[path_stack[-1]] is not None:
-                        path_stack.append(predecessor_dict[path_stack[-1]])
+                path_stack = [target_vert]
+                while predecessor_dict[path_stack[-1]] is not None:
+                    path_stack.append(predecessor_dict[path_stack[-1]])
 
-                    path_out = []
-                    while len(path_stack)>0:
-                        path_out.append(path_stack.pop(-1))
+                path_out = []
+                while len(path_stack)>0:
+                    path_out.append(path_stack.pop(-1))
 
-                    return current_dist,path_out
-                else:
-                    return current_dist
+                output_dict['path_length'] = current_dist
+                output_dict['path'] = path_out
+
+                return output_dict
 
             next_dist = current_dist+1
             for neighbor_vert in self.adjacency_list[current_vert]:
@@ -126,11 +166,7 @@ class Graph(object):
                     to_visit.append(neighbor_vert)
                     predecessor_dict[neighbor_vert]=current_vert
 
-        if return_path:
-            return None,None
-        else:
-            return None
-
+        return output_dict
 
     #adjacency_criteria(grid_in,(i0,j0),(i1,j1)) returns True or False
     #weight_func(grid_in,(i0,j0),(i1,j1)) returns edge weights
@@ -326,36 +362,57 @@ class Digraph(object):
                     self.meta_forward_dict[prev_component][root]=None
                     self.meta_forward_list[prev_component].append(root)
 
-    def compute_dist_dijkstra(self,start_vert,target_vert,return_path=False):
-        if start_vert not in self.vertex_dict or target_vert not in self.vertex_dict:
-            if return_path:
-                return None,None
-            else:
-                return None
+    #computes distance from start_vert to target_vert on the graph using dijkstra's algorithm
+
+    #return value is in form of a dictionary output_dict, where:
+
+    #output_dict['dist_dict'] is a dictionary of distances, 
+    #dist_dict[v] is distance from start_vert to v
+
+    #output_dict['predecessor_dict'] is a dictionary of predecessors, 
+    #predecessor_dict[v] is predecessor of v on path from start_vert to v
+
+    #output_dict['path_length'] is length of shortest path from start_vert to target_vert
+    #output_dict['path'] is the path from start_vert to target_vert
+
+    #a few caveats:
+    #once distance to target_vert has been computed, the function terminates
+    #if you want to evaluate the distance from start_vert to all vertices, either set
+    #target_vert to None, or don't use it as an input, in this case, 'path' and 'path_length'
+    #will not be in output dictionary, but the dist_dict and predecessor_dict will be complete
+    #the same also happens if no path exists from start_vert to target_vert
+    def compute_dist_dijkstra(self,start_vert,target_vert=None):
+        output_dict = {}
+
+        if start_vert not in self.vertex_dict:
+            return output_dict
 
         myHeap = AugmentedHeap()
         myHeap.insert_item(0,start_vert)
 
         dist_dict = {}
+        output_dict['dist_dict'] = dist_dict
+
         marked_dict = {}
         predecessor_dict = {start_vert:None}
+        output_dict['predecessor_dict'] = predecessor_dict
 
         while not myHeap.isempty():
             current_dist, current_vert =myHeap.pop()
 
             if current_vert==target_vert:
-                if return_path:
-                    path_stack = [target_vert]
-                    while predecessor_dict[path_stack[-1]] is not None:
-                        path_stack.append(predecessor_dict[path_stack[-1]])
+                path_stack = [target_vert]
+                while predecessor_dict[path_stack[-1]] is not None:
+                    path_stack.append(predecessor_dict[path_stack[-1]])
 
-                    path_out = []
-                    while len(path_stack)>0:
-                        path_out.append(path_stack.pop(-1))
+                path_out = []
+                while len(path_stack)>0:
+                    path_out.append(path_stack.pop(-1))
 
-                    return current_dist,path_out
-                else:
-                    return current_dist
+                output_dict['path_length'] = current_dist
+                output_dict['path'] = path_out
+
+                return output_dict
                 
             dist_dict[current_vert]=current_dist
 
@@ -378,20 +435,39 @@ class Digraph(object):
                         myHeap.decrement_key(neighbor_dist,neighbor_vert)
                         predecessor_dict[neighbor_vert]=current_vert
 
-        if return_path:
-            return None,None
-        else:
-            return None
+        return output_dict
 
-    def compute_dist_BFS(self,start_vert,target_vert,return_path=False):
-        if start_vert not in self.vertex_dict or target_vert not in self.vertex_dict:
-            if return_path:
-                return None,None
-            else:
-                return None
+    #computes distance from start_vert to target_vert on the graph using BFS
+    #this implicity assumes that the graph is unweighted
+
+    #return value is in form of a dictionary output_dict, where:
+
+    #output_dict['dist_dict'] is a dictionary of distances, 
+    #dist_dict[v] is distance from start_vert to v
+
+    #output_dict['predecessor_dict'] is a dictionary of predecessors, 
+    #predecessor_dict[v] is predecessor of v on path from start_vert to v
+
+    #output_dict['path_length'] is length of shortest path from start_vert to target_vert
+    #output_dict['path'] is the path from start_vert to target_vert
+
+    #a few caveats:
+    #once distance to target_vert has been computed, the function terminates
+    #if you want to evaluate the distance from start_vert to all vertices, either set
+    #target_vert to None, or don't use it as an input, in this case, 'path' and 'path_length'
+    #will not be in output dictionary, but the dist_dict and predecessor_dict will be complete
+    #the same also happens if no path exists from start_vert to target_vert
+    def compute_dist_BFS(self,start_vert,target_vert=None):
+        output_dict = {}
+
+        if start_vert not in self.vertex_dict:
+            return output_dict
 
         dist_dict = {start_vert:0}
+        output_dict['dist_dict'] = dist_dict
+
         predecessor_dict = {start_vert:None}
+        output_dict['predecessor_dict'] = predecessor_dict
         
         to_visit = deque()
         to_visit.append(start_vert)
@@ -401,18 +477,18 @@ class Digraph(object):
             current_dist = dist_dict[current_vert]
 
             if current_vert == target_vert:
-                if return_path:
-                    path_stack = [target_vert]
-                    while predecessor_dict[path_stack[-1]] is not None:
-                        path_stack.append(predecessor_dict[path_stack[-1]])
+                path_stack = [target_vert]
+                while predecessor_dict[path_stack[-1]] is not None:
+                    path_stack.append(predecessor_dict[path_stack[-1]])
 
-                    path_out = []
-                    while len(path_stack)>0:
-                        path_out.append(path_stack.pop(-1))
+                path_out = []
+                while len(path_stack)>0:
+                    path_out.append(path_stack.pop(-1))
 
-                    return current_dist,path_out
-                else:
-                    return current_dist
+                output_dict['path_length'] = current_dist
+                output_dict['path'] = path_out
+
+                return output_dict
 
             next_dist = current_dist+1
             for neighbor_vert in self.forward_adjacency[current_vert]:
@@ -421,10 +497,7 @@ class Digraph(object):
                     to_visit.append(neighbor_vert)
                     predecessor_dict[neighbor_vert]=current_vert
 
-        if return_path:
-            return None,None
-        else:
-            return None
+        return output_dict
 
     #adjacency_criteria(grid_in,(i0,j0),(i1,j1)) returns True or False
     #weight_func(grid_in,(i0,j0),(i1,j1)) returns edge weights
