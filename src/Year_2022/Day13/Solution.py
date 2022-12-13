@@ -115,14 +115,6 @@ def solution02():
     packet_list.append(packet_class([[6]]))
 
     packet_list.sort()
-    # myHeap = AugmentedHeap()
-
-    # while len(packet_list)>0:
-    #     myHeap.insert_item(packet_list.pop(-1),None)
-
-    # while not myHeap.isempty():
-    #     key,val = myHeap.pop()
-    #     packet_list.append(key)
 
     total = 1
     for i in range(len(packet_list)):
