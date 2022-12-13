@@ -28,42 +28,37 @@ def parse_char_grid(path,fname):
     return parse_grid(path,fname,allInt=False)
 
 def parse_grid(path,fname,allInt=False):
-    list_out = []
     load_name = os.path.join(path,fname)
+
     with open(load_name) as f:
+        block = []
         for line in f.readlines():
-            temp = line.strip('\n')
+            block.append(line.strip('\n'))
 
-            row = []
-            for my_char in temp:
-                if allInt:
-                    row.append(int(my_char))
-                else:
-                    row.append(my_char)
-
-            list_out.append(row)
-
-        f.close()
-        return list_out
+        return block_to_grid(block,allInt=allInt)
     return None
+
+def block_to_grid(block_in,allInt=False):
+    list_out = []
+    for line in block_in:
+        row = []
+        for my_char in line:
+            if allInt:
+                row.append(int(my_char))
+            else:
+                row.append(my_char)
+        list_out.append(row)
+    return list_out
 
 
 #parses a file that needs specific post-processing to interpret
 def parse_strings(path,fname,delimiters = None,type_lookup = None, allInt = False, allFloat = False):
     load_name = os.path.join(path,fname)
 
-    pattern = None
-    if delimiters is not None:
-        if type(delimiters) is str:
-            pattern = r'|'.join([delimiters])
-
-        elif type(delimiters) is list:
-            pattern = r'|'.join(delimiters)
-
     with open(load_name) as f:
         block = []
         for line in f.readlines():
-            block.append(line)
+            block.append(line.strip('\n'))
 
         return parse_block(block,delimiters,type_lookup, allInt, allFloat)
 
