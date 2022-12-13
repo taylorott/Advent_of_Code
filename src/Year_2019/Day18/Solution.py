@@ -24,8 +24,16 @@ def parse_input01(fname):
 
     for i in range(len(data)):
         data[i] = bh.block_to_grid(data[i])
-
+        number_entrances(data[i])
     return data
+
+def number_entrances(grid_in):
+    count = 0
+    for i in range(len(grid_in)):
+        for j in range(len(grid_in[0])):
+            if grid_in[i][j]=='@':
+                grid_in[i][j]=str(count)
+                count+=1
 
 def adjacency_criteria(grid_in,vert0,vert1):
     c0 = grid_in[vert0[0]][vert0[1]]
@@ -34,15 +42,18 @@ def adjacency_criteria(grid_in,vert0,vert1):
 
     return c0!='#' and c1!='#'
 
-def can_vist(next_char,current_set,doors_in_path_dict):
-    for door in doors_in_path_dict['@'][next_char]:
-        if door not in current_set:
-            return False
+def can_vist(next_char,current_key_set_set,doors_in_path_dict,entrance_tuple):
+    for entrance in entrance_tuple:
+        test_bool = True
+        for door in doors_in_path_dict[entrance][next_char]:
+            test_bool = test_bool and (door in current_key_set_set)
+        if test_bool:
+            return True
 
-    return True
+    return False
 
 
-def solve_grid_01(grid):
+def solve_grid(grid):
 
     myGraph = Graph()
     myGraph.build_graph_from_2D_grid(grid,adjacency_criteria=adjacency_criteria)
@@ -55,92 +66,106 @@ def solve_grid_01(grid):
     vertex_dict = {}
 
     dist_dict = {}
+    entrance_list = []
 
     for i in range(len(grid)):
         for j in range(len(grid[0])):
             my_char = grid[i][j]
             current_coord = (i,j)
             char_dict[current_coord]=my_char
-            if my_char!='.' and my_char!='#':
-                coord_dict[my_char]=current_coord
-                
-                path_data_dict[my_char] = myGraph.compute_dist_BFS(current_coord)
 
-            if my_char=='@' or ('a'<=my_char and my_char<='z'):
+            if ('0'<=my_char and my_char<='9') or ('a'<=my_char and my_char<='z'):
+                coord_dict[my_char]=current_coord
+                path_data_dict[my_char] = myGraph.compute_dist_BFS(current_coord)
                 vertex_dict[my_char]=None
 
             if 'A'<=my_char and my_char<='Z':
                 doors_dict[my_char]=None
 
+            if ('0'<=my_char and my_char<='9'):
+                entrance_list.append(my_char)
+    entrance_list.sort()
+    entrance_tuple = tuple(entrance_list)
 
     doors_in_path_dict = {}
-    num_doors_in_path = {}
     for key0 in vertex_dict.keys():
         dist_dict[key0] = {}
 
         doors_in_path_dict[key0]={}
-        num_doors_in_path[key0]={}
-        starting_vert = coord_dict[key0]
         for key1 in vertex_dict.keys():
             doors_in_path_dict[key0][key1]={}
-            num_doors_in_path[key0][key1]=0
 
             if key0!=key1:
                 temp_dict = {}
                 current_vert = coord_dict[key1]
-                dist_dict[key0][key1]=path_data_dict[key0]['dist_dict'][current_vert]
 
-                while current_vert is not None:
-                    current_char = char_dict[current_vert]
-                    if current_char in doors_dict:
-                        doors_in_path_dict[key0][key1][current_char.lower()]=None
-                        num_doors_in_path[key0][key1]+=1
+                if current_vert in path_data_dict[key0]['dist_dict']:
+                    dist_dict[key0][key1]=path_data_dict[key0]['dist_dict'][current_vert]
 
-                    current_vert = path_data_dict[key0]['predecessor_dict'][current_vert]
+                    while current_vert is not None:
+                        current_char = char_dict[current_vert]
+                        if current_char in doors_dict:
+                            doors_in_path_dict[key0][key1][current_char.lower()]=None
 
-    lookup_table = {}
+                        current_vert = path_data_dict[key0]['predecessor_dict'][current_vert]
+                else:
+                    dist_dict[key0][key1]=np.inf
+                    doors_in_path_dict[key0][key1]['*']=None
+
+    
     key_list = []
     for key in vertex_dict.keys():
-        lookup_table[key]={}
         key_list.append(key)
 
     key_list.sort()
     final_tuple = tuple(key_list)
 
-    lookup_table[('@')]['@']=0
+    lookup_table = {}
+    lookup_table[entrance_tuple] = {}
+    lookup_table[entrance_tuple][entrance_tuple]=0
+
     my_queue = deque()
-    my_queue.append(('@'))
+    my_queue.append(entrance_tuple)
 
     while len(my_queue)!=0:
-        current_tuple = my_queue.popleft()
-        current_list = list(current_tuple) 
-        current_set = set(current_list)
+        current_key_set_tuple = my_queue.popleft()
+        current_key_set_list = list(current_key_set_tuple) 
+        current_key_set_set = set(current_key_set_list)
 
         for next_char in vertex_dict.keys():
-            if next_char not in current_set and can_vist(next_char,current_set,doors_in_path_dict):
-                dist = np.inf
+            if next_char not in current_key_set_set and can_vist(next_char,current_key_set_set,doors_in_path_dict,entrance_tuple):
 
-                next_list = list(current_list)
+                next_list = list(current_key_set_list)
                 next_list.append(next_char)
                 next_list.sort()
                 next_tuple = tuple(next_list)
-
-                for start_char in current_list:
-                    if start_char in lookup_table[current_tuple]:
-                        temp_dist = lookup_table[current_tuple][start_char]+dist_dict[start_char][next_char]
-                        dist = min(dist,temp_dist)
 
                 if next_tuple not in lookup_table:
                     my_queue.append(next_tuple)
                     lookup_table[next_tuple] = {}
 
-                lookup_table[next_tuple][next_char]=dist
+                for start_state in lookup_table[current_key_set_tuple].keys():
+
+                    for i in range(len(start_state)):
+                        start_char = start_state[i]
+                        if dist_dict[start_char][next_char]<np.inf:
+
+                            next_state_list = list(start_state)
+                            next_state_list[i]=next_char
+                            next_state_tuple = tuple(next_state_list)
+
+                            dist = lookup_table[current_key_set_tuple][start_state]+dist_dict[start_char][next_char]
+
+                            if next_state_tuple not in lookup_table[next_tuple]:
+                                lookup_table[next_tuple][next_state_tuple]=dist
+                            else:
+                                lookup_table[next_tuple][next_state_tuple] = min(dist,lookup_table[next_tuple][next_state_tuple])
 
 
     min_dist = np.inf
 
-    for final_char in lookup_table[final_tuple]:
-        min_dist = min(min_dist,lookup_table[final_tuple][final_char])
+    for state_tuple in lookup_table[final_tuple]:
+        min_dist = min(min_dist,lookup_table[final_tuple][state_tuple])
 
 
     print(min_dist)
@@ -154,20 +179,21 @@ def solution01():
     data = parse_input01(fname)
 
     for grid in data:
-        solve_grid_01(grid)
+        solve_grid(grid)
 
 
 def solution02():
-    fname = 'Input01.txt'
-    # fname = 'Input02.txt'
+    # fname = 'Input03.txt'
+    fname = 'Input04.txt'
 
-    # data = parse_input01(fname)
+    data = parse_input01(fname)
+
+    for grid in data:
+        solve_grid(grid)
 
 
 if __name__ == '__main__':
     t0 = time.time()
     solution01()
     solution02()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
-    
-
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
