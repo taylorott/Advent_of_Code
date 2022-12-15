@@ -188,11 +188,6 @@ def solution02():
     x_intercept_right_diagonal_list = []
 
     for constraint in constraints_list:
-        x_intercept_right_diagonal_list.append(constraint[0])
-        x_intercept_right_diagonal_list.append(constraint[1])
-        x_intercept_left_diagonal_list.append(constraint[2])
-        x_intercept_left_diagonal_list.append(constraint[3])
-
         x_intercept_right_diagonal_list.append(constraint[0]-1)
         x_intercept_right_diagonal_list.append(constraint[1]+1)
         x_intercept_left_diagonal_list.append(constraint[2]-1)
