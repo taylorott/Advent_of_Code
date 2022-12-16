@@ -188,38 +188,41 @@ def solution02():
     x_intercept_right_diagonal_list = []
 
     for constraint in constraints_list:
-        x_intercept_left_diagonal_list.append(constraint[2])
-        x_intercept_left_diagonal_list.append(constraint[3])
-        x_intercept_right_diagonal_list.append(constraint[0])
-        x_intercept_right_diagonal_list.append(constraint[1])
+        x_intercept_right_diagonal_list.append(constraint[0]-1)
+        x_intercept_right_diagonal_list.append(constraint[1]+1)
+        x_intercept_left_diagonal_list.append(constraint[2]-1)
+        x_intercept_left_diagonal_list.append(constraint[3]+1)
+
 
     x_intercept_left_diagonal_list.sort()
     x_intercept_right_diagonal_list.sort()
 
-    for i in range(len(x_intercept_left_diagonal_list)-1):
-        for j in range(len(x_intercept_right_diagonal_list)-1):
-            xl0 = x_intercept_left_diagonal_list[i]
-            xl1 = x_intercept_left_diagonal_list[i+1]
-            xr0 = x_intercept_right_diagonal_list[j]
-            xr1 = x_intercept_right_diagonal_list[j+1]
+    temp_list = x_intercept_left_diagonal_list
+    x_intercept_left_diagonal_list = []
+    for item in temp_list:
+        if len(x_intercept_left_diagonal_list)==0 or item!=x_intercept_left_diagonal_list[-1]:
+            x_intercept_left_diagonal_list.append(item)
 
-            xl_test = (xl1+xl0)/2.0
-            xr_test = (xr1+xr0)/2.0
 
-            not_near_sensor = True
-            for constraint in constraints_list: 
-                if (constraint[0]<=xr_test and xr_test<=constraint[1]) and (constraint[2]<=xl_test and xl_test<=constraint[3]):
-                    not_near_sensor = False
+    temp_list = x_intercept_right_diagonal_list
+    x_intercept_right_diagonal_list = []
+    for item in temp_list:
+        if len(x_intercept_right_diagonal_list)==0 or item!=x_intercept_right_diagonal_list[-1]:
+            x_intercept_right_diagonal_list.append(item)
 
-            if not_near_sensor :
-                x = (xl_test+xr_test)/2.0
-                y = x-xr_test
-                if 0<=x and x<=x_max and 0<=y and y<=y_max:
-                    if abs(round(x)-x)<.5 and abs(round(y)-y)<.5:
-                        x=round(x)
-                        y=round(y)
-                        if test_point(x,y,item_list,dist_list):
-                            print(4000000*x+y)
+    for i in range(len(x_intercept_left_diagonal_list)):
+        for j in range(len(x_intercept_right_diagonal_list)):
+            xl_test = x_intercept_left_diagonal_list[i]
+            xr_test = x_intercept_right_diagonal_list[j]
+
+            x = (xl_test+xr_test)/2.0
+            y = x-xr_test
+            if 0<=x and x<=x_max and 0<=y and y<=y_max and x==round(x) and y==round(y):
+                x = round(x)
+                y = round(y)
+                if test_point(x,y,item_list,dist_list):
+                    print(4000000*x+y)
+                    break
 
 if __name__ == '__main__':
     t0 = time.time()
