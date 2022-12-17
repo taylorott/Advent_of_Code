@@ -41,7 +41,7 @@ class TetrisSim(object):
         self.current_shape_occupied_dict = None
         self.current_shape_id = None
 
-        self.max_height_list = np.array([-1]*self.width)
+        self.grid_skyline = np.array([-1]*self.width)
 
         if offset_vector is None:
             self.offset_vector = np.array([2,3])
@@ -83,10 +83,10 @@ class TetrisSim(object):
             self.occupied_dict[(grid_coords[0],grid_coords[1])]=False
 
 
-    def update_max_height_list(self):
+    def update_grid_skyline(self):
         for shape_coords in self.current_shape:
             grid_coords = shape_coords+self.current_coords
-            self.max_height_list[grid_coords[0]]=max(self.max_height_list[grid_coords[0]],grid_coords[1])
+            self.grid_skyline[grid_coords[0]]=max(self.grid_skyline[grid_coords[0]],grid_coords[1])
 
     def compute_current_shape_occupied_dict(self):
         self.current_shape_occupied_dict = {}
@@ -141,7 +141,7 @@ class TetrisSim(object):
 
         if not can_move_down:
             touched_down = True
-            self.update_max_height_list()
+            self.update_grid_skyline()
             self.add_current_shape_to_grid()
             self.max_rock_height = max(self.max_rock_height,self.compute_max_height_shape())
             # print(self.max_rock_height)
@@ -235,14 +235,14 @@ def test04():
     mySim.insert_new_shape(0)
 
     mySim.print_system_state()
-    print(mySim.max_height_list)
+    print(mySim.grid_skyline)
     print()
 
     for my_command in data:
         touched_down, prev_rock_height = mySim.evaluate_time_step(my_command,True)
 
         if touched_down:
-            print(mySim.max_height_list)
+            print(mySim.grid_skyline)
             print()
 
 
@@ -297,7 +297,7 @@ def solution02():
         if touched_down:
             num_touched_down+=1
 
-            height_array_out = np.array(mySim.max_height_list)
+            height_array_out = np.array(mySim.grid_skyline)
             height_array_out = height_array_out-min(height_array_out)
             height_tuple = tuple(height_array_out.tolist())
 
@@ -333,7 +333,7 @@ if __name__ == '__main__':
     # test02()
     # test03()
     # test04()
-    
+
     solution01()
     solution02()
     print('runtime in seconds: ','%.3f' % (time.time()-t0))
