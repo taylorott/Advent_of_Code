@@ -25,7 +25,7 @@ def parse_input01(fname):
     data = bh.parse_strings(path,fname,delimiters = [' ',':','\.','costs','robot','and','Blueprint'],type_lookup = None, allInt = False, allFloat = False)
 
     resource_lookup = {'ore':0,'clay':1,'obsidian':2,'geode':3}
-    
+
     blueprint_dict = {}
 
     for blueprint in data:
@@ -131,9 +131,6 @@ def compute_next_posssible_states(robots,resources,t,blueprint,max_consumption_r
             #the exception is geodes of course. keep all geodes
             for j in range(3):
                 resources_next[j]=min(resources_next[j],resource_limit[j])
-
-
-            
 
             if t_next<tmax:
 
