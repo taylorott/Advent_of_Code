@@ -92,7 +92,7 @@ def generate_monkey_graph(monkey_adjacency_dict):
 
     return monkeyDigraph
 
-def eval_monkey_chain(monkeyDigraph,operation_dict, monkey_adjacency_dict, monkey_value_dict):
+def eval_monkey_chain(operation_dict, monkey_adjacency_dict, monkey_value_dict):
     eval_stack = []
 
     eval_stack.append('root')
@@ -142,8 +142,7 @@ def solution01():
     fname = 'Input02.txt'
 
     operation_dict, monkey_adjacency_dict, monkey_value_dict = parse_input01(fname)
-    monkeyDigraph = generate_monkey_graph(monkey_adjacency_dict)
-    eval_monkey_chain(monkeyDigraph,operation_dict, monkey_adjacency_dict, monkey_value_dict)
+    eval_monkey_chain(operation_dict, monkey_adjacency_dict, monkey_value_dict)
 
     print(monkey_value_dict['root'])
 
@@ -158,7 +157,12 @@ def solution02():
     operation_dict['root']='=='
 
     monkeyDigraph = generate_monkey_graph(monkey_adjacency_dict)
-    eval_monkey_chain(monkeyDigraph,operation_dict, monkey_adjacency_dict, monkey_value_dict)
+    eval_monkey_chain(operation_dict, monkey_adjacency_dict, monkey_value_dict)
+
+    #one solution option is to go down the chain from root, and figure out what each node value needs to be to satisfy the equality
+    #what I decided to do instead was to start from humn on go upwards to generate the equation alpha*humn+beta = gamma, and solve from there
+    #note that this method doesn't always work: it would fail if humn in the denominator of a division operation
+    #however, assuming that they don't try to throw us for a loop (which they didn't), it will end up working
 
     #f(humn) = (a/b)*humn+(c/d)
     a = 1
@@ -242,8 +246,6 @@ def solution02():
         v_equality = v0
     else:
         v_equality = v1
-
-    
 
     ans = (v_equality*b*d-b*c)//(a*d)
 
