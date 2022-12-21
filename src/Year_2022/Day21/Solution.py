@@ -93,21 +93,22 @@ def generate_monkey_graph(monkey_adjacency_dict):
     return monkeyDigraph
 
 def eval_monkey_chain(monkeyDigraph,operation_dict, monkey_adjacency_dict, monkey_value_dict):
-    eval_queue = deque()
-    for monkey in monkey_adjacency_dict.keys():
-        if monkey_adjacency_dict[monkey] is None:
-            eval_queue.append(monkey)
+    eval_stack = []
 
-    while len(eval_queue)>0:
-        current_monkey = eval_queue.popleft()
+    eval_stack.append('root')
 
-        if monkey_value_dict[current_monkey] is not None:
-            for parent in monkeyDigraph.reverse_adjacency[current_monkey]:
-                eval_queue.append(parent)
+    #only give each node two attempts to evaluate
+    #the avoid an infinite loop when 'humn' is given as incomplete
+    has_attempted_before_dict = {}
 
-        elif operation_dict[current_monkey] is not None:
-            v0 = monkey_value_dict[monkey_adjacency_dict[current_monkey][0]]
-            v1 = monkey_value_dict[monkey_adjacency_dict[current_monkey][1]]
+    while len(eval_stack)>0:
+        current_monkey = eval_stack.pop(-1)
+
+        if operation_dict[current_monkey] is not None:
+            monkey_left = monkey_adjacency_dict[current_monkey][0]
+            monkey_right = monkey_adjacency_dict[current_monkey][1]
+            v0 = monkey_value_dict[monkey_left]
+            v1 = monkey_value_dict[monkey_right]
 
             if v0 is not None and v1 is not None:
                 operation = operation_dict[current_monkey]
@@ -124,11 +125,17 @@ def eval_monkey_chain(monkeyDigraph,operation_dict, monkey_adjacency_dict, monke
                     v_out = v0==v1
 
                 monkey_value_dict[current_monkey]=v_out
-                
-                for parent in monkeyDigraph.reverse_adjacency[current_monkey]:
-                    eval_queue.append(parent)
+            
+            else:
+                if current_monkey not in has_attempted_before_dict:
+                    eval_stack.append(current_monkey)
+                    has_attempted_before_dict[current_monkey]=True
 
+                if v0 is None:
+                    eval_stack.append(monkey_left)
 
+                if v1 is None:
+                    eval_stack.append(monkey_right)
 
 def solution01():
     # fname = 'Input01.txt'
@@ -236,7 +243,15 @@ def solution02():
     else:
         v_equality = v1
 
-    print((v_equality*b*d-b*c)//(a*d))
+    
+
+    ans = (v_equality*b*d-b*c)//(a*d)
+
+    str_out1 = str(a)+'/'+str(b)+' humn + '+str(c)+'/'+str(d)+' = '+str(v_equality)
+    str_out2 = 'humn = '+str(ans)
+
+    print(str_out1)
+    print(str_out2)
 
     # print_operation_chain('root',operation_dict,monkey_adjacency_dict,monkey_value_dict)
 
