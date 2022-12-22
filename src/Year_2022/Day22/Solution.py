@@ -72,7 +72,7 @@ def execute_step(coords,direction,board,adjacency_dict):
     next_coords = coords+direction_dict[direction]
     next_direction = direction
 
-    #move the naive motion would take us out of bounds of the map
+    #if the naive motion would take us out of bounds of the map
     if on_exterior(next_coords,board):
 
         #use the adjacency matrix to find where on the map (and in what direction)
@@ -120,7 +120,6 @@ def execute_command(coords,direction,command,board,boundary_dict):
 #then moving outwards, and this perimeter traversal will terminate before we hit another inner corner
 #As such, the only corners that will be "rounded" are outer corners, meaning that moving along the tangential
 #direction would bring us into the exterior of the pattern (not the case for inner corners)
-#note that, as with the rest of this algorithm, things will break if any dimension of the cube has length 1!
 def perimeter_step(coords,direction,board):
     #compute the nominal next grid coordinates after moving forward along the perimeter 1 step
     next_coords = coords+direction_dict[direction]
@@ -148,33 +147,25 @@ def perimeter_step(coords,direction,board):
 
 #checks for grid-points in the 2D pattern that are "inner corners"
 #these correspond to locations where a zipper starts on the cube
-#grid points who have all four north/east/south/west neighbors, but are missing 1 diagonal neighbor
+#grid points who are missing a diagonal neighbor, but also have both cardinal neighbors shared with the missing diagonal
 #are considered to the locations of inner corners. 
 #the location of the missing diagonal neighbor tells us which two cardinal directions to travel in
 #to leave th inner corner and travel along the perimeter
-#note that, as with the rest of this algorithm, things will break if any dimension of the cube has length 1!
 def check_if_inner_corner(coords,board):
     if on_exterior(coords,board):
         return False, None
 
-    diag_list = []
+    direction_pair_list = []
 
     for i in range(4):
-        if on_exterior(coords+diagonal_dict[i],board):
-            diag_list.append(i)
+        if (on_interior(coords+direction_dict[i],board) and on_interior(coords+direction_dict[(i+1)%4],board)
+            and on_exterior(coords+diagonal_dict[i],board)):
+            direction_pair_list.append([i,(i+1)%4])    
 
-    dir_list = []
-    for i in range(4):
-        if on_exterior(coords+direction_dict[i],board):
-            dir_list.append(i)
-
-    if len(diag_list)!=1 or len(dir_list)!=0:
+    if len(direction_pair_list)>0:
+        return True, direction_pair_list
+    else:
         return False, None
-
-    d0 = diag_list[0]
-    d1 = (diag_list[0]+1)%4
-
-    return True, [d0,d1]
 
 #starting from an inner corner, zip up the cube, generating the corresponding 
 #adjacency mapping of (coord,direction)<->(coord,direction) for seams of the cube
@@ -191,6 +182,7 @@ def zip_up_edges_from_corner(coords,direction_pair,board,dict_in):
 
     #travel along the perimeter of the 2D pattern in opposite directions
     #this process continues until 2 corners are rounded simultaneously during the traversal
+    #also terminate process if we hit another inner corner
     while direction0 == direction0_prev or direction1_prev == direction1:
         direction0_prev = direction0
         direction1_prev = direction1
@@ -215,6 +207,13 @@ def zip_up_edges_from_corner(coords,direction_pair,board,dict_in):
         coords0, direction0 = perimeter_step(coords0,direction0,board)
         coords1, direction1 = perimeter_step(coords1,direction1,board)
 
+        #terminate process if we hit another inner corner
+        bool0, dummy =check_if_inner_corner(coords0,board)
+        bool1, dummy =check_if_inner_corner(coords1,board)
+
+        if bool0 or bool1:
+            break
+
 #zip up the entire cube
 def generate_off_grid_adjacency_cube(board):
     dict_out = {}
@@ -226,9 +225,10 @@ def generate_off_grid_adjacency_cube(board):
 
             #if the grid point is an inner corner,
             #perform a single zip starting from that grid point
-            corner_bool, direction_pair = check_if_inner_corner(coords,board)
+            corner_bool, direction_pair_list = check_if_inner_corner(coords,board)
             if corner_bool:
-                zip_up_edges_from_corner(coords,direction_pair,board,dict_out)
+                for direction_pair in direction_pair_list:
+                    zip_up_edges_from_corner(coords,direction_pair,board,dict_out)
 
     return dict_out
 
