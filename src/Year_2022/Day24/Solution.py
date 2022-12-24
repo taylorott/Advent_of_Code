@@ -28,7 +28,6 @@ def parse_input01(fname):
         line = data[i]
         grid_out.append(line[1:(len(line)-1)])
 
-
     return grid_out
 
 def compute_occupied_times(i0,j0,grid_in):
@@ -128,6 +127,26 @@ def compute_forward_neighbors(key,board,t_period):
 
     return neighbor_list
 
+def run_BFS(board,period,t_start,start_coord,end_coord):
+    current_key = (start_coord,t_start)
+
+    visited_dict = {}
+    myQueue = deque()
+    myQueue.append(current_key)
+    visited_dict[current_key]=True
+
+    while len(myQueue)>0:
+        current_key = myQueue.popleft()
+
+        if current_key[0]==end_coord:
+            return current_key[1]
+
+        neighbor_list = compute_forward_neighbors(current_key,board,period)
+
+        for neighbor in neighbor_list:
+            if neighbor not in visited_dict:
+                myQueue.append(neighbor)
+                visited_dict[neighbor]=True
 
 def solution01():
     # fname = 'Input01.txt'
@@ -138,26 +157,8 @@ def solution01():
     board, start_coord, end_coord, period = construct_board(data)
 
     t = 0
-    current_key = (start_coord,t)
-
-    visited_dict = {}
-    myQueue = deque()
-    myQueue.append(current_key)
-    visited_dict[current_key]=True
-
-    while len(myQueue)>0:
-        current_key = myQueue.popleft()
-
-        if current_key[0]==end_coord:
-            print(current_key[1])
-            break
-
-        neighbor_list = compute_forward_neighbors(current_key,board,period)
-
-        for neighbor in neighbor_list:
-            if neighbor not in visited_dict:
-                myQueue.append(neighbor)
-                visited_dict[neighbor]=True
+    t_finish = run_BFS(board,period,t,start_coord,end_coord)
+    print(t_finish)
 
 def solution02():
     # fname = 'Input01.txt'
@@ -168,65 +169,12 @@ def solution02():
     board, start_coord, end_coord, period = construct_board(data)
 
     t = 0
-    current_key = (start_coord,t)
 
-    visited_dict = {}
-    myQueue = deque()
-    myQueue.append(current_key)
-    visited_dict[current_key]=True
+    t = run_BFS(board,period,t,start_coord,end_coord)
+    t = run_BFS(board,period,t,end_coord,start_coord)
+    t = run_BFS(board,period,t,start_coord,end_coord)
 
-    while len(myQueue)>0:
-        current_key = myQueue.popleft()
-
-        if current_key[0]==end_coord:
-            # print(current_key[1])
-            break
-
-        neighbor_list = compute_forward_neighbors(current_key,board,period)
-
-        for neighbor in neighbor_list:
-            if neighbor not in visited_dict:
-                myQueue.append(neighbor)
-                visited_dict[neighbor]=True
-
-    visited_dict = {}
-    myQueue = deque()
-    myQueue.append(current_key)
-    visited_dict[current_key]=True
-
-    while len(myQueue)>0:
-        current_key = myQueue.popleft()
-
-        if current_key[0]==start_coord:
-            # print(current_key[1])
-            break
-
-        neighbor_list = compute_forward_neighbors(current_key,board,period)
-
-        for neighbor in neighbor_list:
-            if neighbor not in visited_dict:
-                myQueue.append(neighbor)
-                visited_dict[neighbor]=True
-
-    visited_dict = {}
-    myQueue = deque()
-    myQueue.append(current_key)
-    visited_dict[current_key]=True
-
-    while len(myQueue)>0:
-        current_key = myQueue.popleft()
-
-        if current_key[0]==end_coord:
-            print(current_key[1])
-            break
-
-        neighbor_list = compute_forward_neighbors(current_key,board,period)
-
-        for neighbor in neighbor_list:
-            if neighbor not in visited_dict:
-                myQueue.append(neighbor)
-                visited_dict[neighbor]=True
-
+    print(t)
 
 if __name__ == '__main__':
     t0 = time.time()
