@@ -141,12 +141,12 @@ def solution01():
     current_key = (start_coord,t)
 
     visited_dict = {}
-    myHeap = AugmentedHeap()
-    myHeap.insert_item(t,current_key)
+    myQueue = deque()
+    myQueue.append(current_key)
     visited_dict[current_key]=True
 
-    while not myHeap.isempty():
-        t, current_key = myHeap.pop()
+    while len(myQueue)>0:
+        current_key = myQueue.popleft()
 
         if current_key[0]==end_coord:
             print(current_key[1])
@@ -156,10 +156,8 @@ def solution01():
 
         for neighbor in neighbor_list:
             if neighbor not in visited_dict:
-                myHeap.insert_item(t+1,neighbor)
+                myQueue.append(neighbor)
                 visited_dict[neighbor]=True
-
-
 
 def solution02():
     # fname = 'Input01.txt'
@@ -173,12 +171,12 @@ def solution02():
     current_key = (start_coord,t)
 
     visited_dict = {}
-    myHeap = AugmentedHeap()
-    myHeap.insert_item(t,current_key)
+    myQueue = deque()
+    myQueue.append(current_key)
     visited_dict[current_key]=True
 
-    while not myHeap.isempty():
-        t, current_key = myHeap.pop()
+    while len(myQueue)>0:
+        current_key = myQueue.popleft()
 
         if current_key[0]==end_coord:
             # print(current_key[1])
@@ -188,16 +186,16 @@ def solution02():
 
         for neighbor in neighbor_list:
             if neighbor not in visited_dict:
-                myHeap.insert_item(t+1,neighbor)
+                myQueue.append(neighbor)
                 visited_dict[neighbor]=True
 
     visited_dict = {}
-    myHeap = AugmentedHeap()
-    myHeap.insert_item(t,current_key)
+    myQueue = deque()
+    myQueue.append(current_key)
     visited_dict[current_key]=True
 
-    while not myHeap.isempty():
-        t, current_key = myHeap.pop()
+    while len(myQueue)>0:
+        current_key = myQueue.popleft()
 
         if current_key[0]==start_coord:
             # print(current_key[1])
@@ -207,16 +205,16 @@ def solution02():
 
         for neighbor in neighbor_list:
             if neighbor not in visited_dict:
-                myHeap.insert_item(t+1,neighbor)
+                myQueue.append(neighbor)
                 visited_dict[neighbor]=True
 
     visited_dict = {}
-    myHeap = AugmentedHeap()
-    myHeap.insert_item(t,current_key)
+    myQueue = deque()
+    myQueue.append(current_key)
     visited_dict[current_key]=True
 
-    while not myHeap.isempty():
-        t, current_key = myHeap.pop()
+    while len(myQueue)>0:
+        current_key = myQueue.popleft()
 
         if current_key[0]==end_coord:
             print(current_key[1])
@@ -226,7 +224,7 @@ def solution02():
 
         for neighbor in neighbor_list:
             if neighbor not in visited_dict:
-                myHeap.insert_item(t+1,neighbor)
+                myQueue.append(neighbor)
                 visited_dict[neighbor]=True
 
 
