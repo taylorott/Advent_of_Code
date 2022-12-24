@@ -34,68 +34,49 @@ def compute_occupied_times(i0,j0,grid_in):
     l0 = len(grid_in)
     l1 = len(grid_in[0])
 
-    t_rep = lcm(l0,l1)
-    occupied_times = set()
+    occupied_times_vertical = set()
+    occupied_times_horizontal = set()
 
     for i in range(l0):
-        period = None
-        t_offset = None
-
         if grid_in[i][j0]=='^':
-            period = l0
-            t_offset = (i-i0)%period
+            occupied_times_vertical.add((i-i0)%l0)
 
         elif grid_in[i][j0]=='v':
-            period = l0
-            t_offset = (i0-i)%period
-
-        if grid_in[i][j0]=='^' or grid_in[i][j0]=='v':
-            t = t_offset
-            while t<t_rep:
-                occupied_times.add(t)
-                t+=period
-
+            occupied_times_vertical.add((i0-i)%l0)
+                
     for j in range(l1):
-        period = None
-        t_offset = None
-
         if grid_in[i0][j]=='<':
-            period = l1
-            t_offset = (j-j0)%period
+            occupied_times_horizontal.add((j-j0)%l1)
 
         elif grid_in[i0][j]=='>':
-            period = l1
-            t_offset = (j0-j)%period
+            occupied_times_horizontal.add((j0-j)%l1)
 
-        if grid_in[i0][j]=='<' or grid_in[i0][j]=='>':
-            t = t_offset
-            while t<t_rep:
-                occupied_times.add(t)
-                t+=period
-
-    return occupied_times
+    return occupied_times_vertical, occupied_times_horizontal
 
 def construct_board(grid_in):
 
-    dict_out = {}
+    dict_out_vertical = {}
+    dict_out_horizontal = {}
 
     l0 = len(grid_in)
     l1 = len(grid_in[0])
 
     for i in range(l0):
         for j in range(l1):
-            occupied_times = compute_occupied_times(i,j,grid_in)
+            occupied_times_vertical, occupied_times_horizontal = compute_occupied_times(i,j,grid_in)
 
-            dict_out[(i,j)]=occupied_times
+            dict_out_vertical[(i,j)]=occupied_times_vertical
+            dict_out_horizontal[(i,j)]=occupied_times_horizontal
 
     start_coord = (-1,0)
     end_coord = (l0,l1-1)
-    period = lcm(l0,l1)
 
-    dict_out[start_coord]=set()
-    dict_out[end_coord]=set()
+    dict_out_vertical[start_coord]=set()
+    dict_out_vertical[end_coord]=set()
+    dict_out_horizontal[start_coord]=set()
+    dict_out_horizontal[end_coord]=set()
 
-    return dict_out, start_coord, end_coord, period
+    return dict_out_vertical, dict_out_horizontal, start_coord, end_coord, l0, l1
 
 direction_list = [np.array([0,1]),np.array([1,0]),np.array([0,-1]),np.array([-1,0]),np.array([0,0])]
 
@@ -108,12 +89,11 @@ def deserialize_state(key):
 
     return np.array(list(coords)),t
 
-def compute_forward_neighbors(key,board,t_period):
+def compute_forward_neighbors(key,board_v, board_h, height, width):
 
     coords,t = deserialize_state(key)
 
     t_next = t+1
-    t_check = t_next%t_period
 
     neighbor_list = []
 
@@ -122,12 +102,14 @@ def compute_forward_neighbors(key,board,t_period):
 
         adjacent_key = tuple(adjacent_coords.tolist())
 
-        if adjacent_key in board and t_check not in board[adjacent_key]:
+        if (adjacent_key in board_v and 
+            t_next%height not in board_v[adjacent_key] and t_next%width not in board_h[adjacent_key]):
+        
             neighbor_list.append(serialize_state(adjacent_coords,t_next))
 
     return neighbor_list
 
-def run_BFS(board,period,t_start,start_coord,end_coord):
+def run_BFS(board_v, board_h, height, width,t_start,start_coord,end_coord):
     current_key = (start_coord,t_start)
 
     visited_dict = {}
@@ -141,7 +123,7 @@ def run_BFS(board,period,t_start,start_coord,end_coord):
         if current_key[0]==end_coord:
             return current_key[1]
 
-        neighbor_list = compute_forward_neighbors(current_key,board,period)
+        neighbor_list = compute_forward_neighbors(current_key,board_v, board_h, height, width)
 
         for neighbor in neighbor_list:
             if neighbor not in visited_dict:
@@ -154,10 +136,10 @@ def solution01():
 
     data = parse_input01(fname)
 
-    board, start_coord, end_coord, period = construct_board(data)
+    board_v, board_h, start_coord, end_coord, height, width = construct_board(data)
 
     t = 0
-    t_finish = run_BFS(board,period,t,start_coord,end_coord)
+    t_finish = run_BFS(board_v, board_h, height, width,t,start_coord,end_coord)
     print(t_finish)
 
 def solution02():
@@ -166,13 +148,13 @@ def solution02():
 
     data = parse_input01(fname)
 
-    board, start_coord, end_coord, period = construct_board(data)
+    board_v, board_h, start_coord, end_coord, height, width = construct_board(data)
 
     t = 0
 
-    t = run_BFS(board,period,t,start_coord,end_coord)
-    t = run_BFS(board,period,t,end_coord,start_coord)
-    t = run_BFS(board,period,t,start_coord,end_coord)
+    t = run_BFS(board_v, board_h, height, width,t,start_coord,end_coord)
+    t = run_BFS(board_v, board_h, height, width,t,end_coord,start_coord)
+    t = run_BFS(board_v, board_h, height, width,t,start_coord,end_coord)
 
     print(t)
 
