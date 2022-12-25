@@ -9,16 +9,16 @@ import re
 import Helpers.basic_helpers as bh
 from Helpers.DSA_helpers import Graph, Digraph, frequency_table, AugmentedHeap
 from math import gcd, lcm
-from collections import deque 
+from collections import deque
+import matplotlib.pyplot as plt 
+from matplotlib.patches import Rectangle, Circle
 
 path = currentdir
 
 def parse_input01(fname):
-    data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
+    return bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
 
-    board = data[0]
-    instructions = data[1][0]
-
+def parse_board(board):
     height = len(board)
     width = 0
 
@@ -29,6 +29,9 @@ def parse_input01(fname):
     for i in range(height):
         board[i]=board[i]+[' ']*(width-len(board[i]))
 
+    return board
+
+def parse_instructions(instructions):
     instructions = instructions.replace('R',' R ')
     instructions = instructions.replace('L',' L ')
     instructions = instructions.split(' ')
@@ -39,12 +42,14 @@ def parse_input01(fname):
         if item!='':
             command_list.append(item)
 
-    return board, command_list
+    return command_list
 
 #directions are coded as integers 0: Right, 1: Down 2: Left, 3: Up
 
 #maps directions to vector representation
-direction_dict = {0:np.array([0,1]),1:np.array([1,0]),2:np.array([0,-1]),3:np.array([-1,0])}
+direction_dict_grid = {0:np.array([0,1]),1:np.array([1,0]),2:np.array([0,-1]),3:np.array([-1,0])}
+
+direction_dict_plot = {0:np.array([1,0]),1:np.array([0,-1]),2:np.array([-1,0]),3:np.array([0,1])}
 
 #maps left/right commands to corresponding increment in direction
 rotation_dict = {'L':-1,'R':1}
@@ -55,7 +60,9 @@ direction_character_dict = {0:'>',1:'v',2:'<',3:'^'}
 #diagonals are coded as 0: Down-Right, 1: Down-Left, 2: Up-Left, 3: Up-Right
 
 #maps diagonals to corresponding vectors
-diagonal_dict = {0:np.array([1,1]),1:np.array([1,-1]),2:np.array([-1,-1]),3:np.array([-1,1])}
+diagonal_dict_grid = {0:np.array([1,1]),1:np.array([1,-1]),2:np.array([-1,-1]),3:np.array([-1,1])}
+
+diagonal_dict_plot = {0:np.array([1,-1]),1:np.array([-1,-1]),2:np.array([-1,1]),3:np.array([1,1])}
 
 
 #returns True if a grid coordinate is out of bounds of the grid we've been provided
@@ -69,7 +76,7 @@ def on_interior(coords,board):
 #move one step along grid
 def execute_step(coords,direction,board,adjacency_dict):
     #compute nominal coordinates/direction after executing step
-    next_coords = coords+direction_dict[direction]
+    next_coords = coords+direction_dict_grid[direction]
     next_direction = direction
 
     #if the naive motion would take us out of bounds of the map
@@ -122,7 +129,7 @@ def execute_command(coords,direction,command,board,boundary_dict):
 #direction would bring us into the exterior of the pattern (not the case for inner corners)
 def perimeter_step(coords,direction,board):
     #compute the nominal next grid coordinates after moving forward along the perimeter 1 step
-    next_coords = coords+direction_dict[direction]
+    next_coords = coords+direction_dict_grid[direction]
 
     #if moving in the current direction would take us to the exterior of the 2D pattern
     if on_exterior(next_coords,board):
@@ -130,10 +137,10 @@ def perimeter_step(coords,direction,board):
         #as well as the adjacent grid points in these two directions
 
         directionL = (direction-1)%4
-        next_coordsL = coords+direction_dict[directionL]
+        next_coordsL = coords+direction_dict_grid[directionL]
 
         directionR = (direction+1)%4
-        next_coordsR = coords+direction_dict[directionR]
+        next_coordsR = coords+direction_dict_grid[directionR]
 
         #whichever of these directions would keep us on the interior of the map is the new direction
         #since we are rounding a corner, we keep the current coordinates, and just change the direction
@@ -158,9 +165,27 @@ def check_if_inner_corner(coords,board):
     direction_pair_list = []
 
     for i in range(4):
-        if (on_interior(coords+direction_dict[i],board) and on_interior(coords+direction_dict[(i+1)%4],board)
-            and on_exterior(coords+diagonal_dict[i],board)):
+        if (on_interior(coords+direction_dict_grid[i],board) and on_interior(coords+direction_dict_grid[(i+1)%4],board)
+            and on_exterior(coords+diagonal_dict_grid[i],board)):
             direction_pair_list.append([i,(i+1)%4])    
+
+    if len(direction_pair_list)>0:
+        return True, direction_pair_list
+    else:
+        return False, None
+
+#checks for grid-points in the 2D pattern that are "outer corners"
+#zippers can sometimes start at a pair of outer corners after all the inner corner zips have been performed
+#grid points on the interior who are missing two consecutive cardinal neighbors are considered outer corners
+def check_if_outer_corner(coords,board):
+    if on_exterior(coords,board):
+        return False, None
+
+    direction_pair_list = []
+
+    for i in range(4):
+        if on_exterior(coords+direction_dict_grid[i],board) and on_exterior(coords+direction_dict_grid[(i+1)%4],board):
+            direction_pair_list.append([(i-1)%4,(i+2)%4])  
 
     if len(direction_pair_list)>0:
         return True, direction_pair_list
@@ -170,16 +195,19 @@ def check_if_inner_corner(coords,board):
 #starting from an inner corner, zip up the cube, generating the corresponding 
 #adjacency mapping of (coord,direction)<->(coord,direction) for seams of the cube
 #we'll need to do this for several inner corners to get the complete map
-def zip_up_edges_from_corner(coords,direction_pair,board,dict_in):
+def zip_up_edges_from_corner(coords,direction_pair,board,dict_in,is_inner):
     direction0 = direction_pair[0]
     direction1 = direction_pair[1]
 
     direction0_prev = direction0
     direction1_prev = direction1
 
-    coords0 = coords+direction_dict[direction0]
-    coords1 = coords+direction_dict[direction1]
 
+    if is_inner:
+        coords0 = coords+direction_dict_grid[direction0]
+        coords1 = coords+direction_dict_grid[direction1]
+
+    
     #travel along the perimeter of the 2D pattern in opposite directions
     #this process continues until 2 corners are rounded simultaneously during the traversal
     #also terminate process if we hit another inner corner
@@ -189,19 +217,25 @@ def zip_up_edges_from_corner(coords,direction_pair,board,dict_in):
 
         #identify the inner/outer normal directions for both line segments we are currently looking at
         normal_direction_outer0 = (direction0+1)%4
-        if on_interior(coords0+direction_dict[normal_direction_outer0],board):
+        if on_interior(coords0+direction_dict_grid[normal_direction_outer0],board):
             normal_direction_outer0 = (direction0-1)%4
 
         normal_direction_outer1 = (direction1+1)%4
-        if on_interior(coords1+direction_dict[normal_direction_outer1],board):
+        if on_interior(coords1+direction_dict_grid[normal_direction_outer1],board):
             normal_direction_outer1 = (direction1-1)%4
 
         normal_direction_inner0 = (normal_direction_outer0+2)%4
         normal_direction_inner1 = (normal_direction_outer1+2)%4
 
+        key0 = (tuple(coords0.tolist()),normal_direction_outer0)
+        key1 = (tuple(coords1.tolist()),normal_direction_outer1)
+
+        if key0 in dict_in or key1 in dict_in:
+            break
+
         #update the adjacency map using current coords and inner/outer normals
-        dict_in[(tuple(coords0.tolist()),normal_direction_outer0)]=(tuple(coords1.tolist()),normal_direction_inner1)
-        dict_in[(tuple(coords1.tolist()),normal_direction_outer1)]=(tuple(coords0.tolist()),normal_direction_inner0)
+        dict_in[key0]=(tuple(coords1.tolist()),normal_direction_inner1)
+        dict_in[key1]=(tuple(coords0.tolist()),normal_direction_inner0)
 
         #move along the perimeter in each direction by one step
         coords0, direction0 = perimeter_step(coords0,direction0,board)
@@ -213,6 +247,8 @@ def zip_up_edges_from_corner(coords,direction_pair,board,dict_in):
 
         if bool0 or bool1:
             break
+
+
 
 #zip up the entire cube
 def generate_off_grid_adjacency_cube(board):
@@ -228,7 +264,7 @@ def generate_off_grid_adjacency_cube(board):
             corner_bool, direction_pair_list = check_if_inner_corner(coords,board)
             if corner_bool:
                 for direction_pair in direction_pair_list:
-                    zip_up_edges_from_corner(coords,direction_pair,board,dict_out)
+                    zip_up_edges_from_corner(coords,direction_pair,board,dict_out,is_inner=True)
 
     return dict_out
 
@@ -263,6 +299,156 @@ def generate_off_grid_adjacency_wrap(board):
 
     return dict_out
 
+cell_palette = {'A':'red','B':'cyan','C':'forestgreen','D':'yellow','E':'orange','F':'pink'}
+arrow_palette = {0:'orange',1:'teal',2:'grey',3:'brown'}
+
+
+def visualize_grid(board,ax):
+    right_vector = np.array([1,0])
+    down_vector = np.array([0,-1])
+
+    for i in range(len(board)):
+        for j in range(len(board[0])):
+            if board[i][j]!=' ':
+                top_left_coord = j*right_vector+i*down_vector
+
+                ax.add_patch(Rectangle((top_left_coord[0], top_left_coord[1]-1), 1, 1,
+                            edgecolor = 'black',
+                            facecolor = cell_palette[board[i][j]],
+                            fill=True,))
+
+def plot_inner_corner(coords,direction_pair,ax):
+    right_vector = np.array([1,0])
+    down_vector = np.array([0,-1])
+
+    i = coords[0]
+    j = coords[1]
+
+    corner_coord = (j+.5)*right_vector+(i+.5)*down_vector+diagonal_dict_plot[direction_pair[0]]/2
+                    
+    ax.add_patch(Circle((corner_coord[0], corner_coord[1]), .2,
+            edgecolor = 'black',
+            facecolor = 'black',
+            fill=True,))
+
+def plot_all_inner_corners(board,ax):
+    adjacency_dict = {}
+    count = 0
+    for i in range(len(board)):
+        for j in range(len(board[0])):
+            coords = np.array([i,j])
+            corner_bool, direction_pair_list = check_if_inner_corner(coords,board)
+            if corner_bool:
+                for direction_pair in direction_pair_list:
+                    plot_inner_corner(coords,direction_pair,ax)
+                    visualize_zip(coords,direction_pair,board,adjacency_dict,ax,count)
+                    count+=1
+
+def plot_edge_vector(coords,normal_outer,direction,ax,color_code):
+    right_vector = np.array([1,0])
+    down_vector = np.array([0,-1])
+
+    i = coords[0]
+    j = coords[1]
+
+    arrow_vector = direction_dict_plot[direction]
+    cell_centroid_ = (j+.5)*right_vector+(i+.5)*down_vector
+    boundary_midpoint = cell_centroid_+.5*direction_dict_plot[normal_outer]
+    tail_location = boundary_midpoint-.5*arrow_vector
+
+    color = arrow_palette[color_code]
+
+    ax.arrow(tail_location[0],tail_location[1],arrow_vector[0],arrow_vector[1],
+            head_width=0.15, head_length=0.2, length_includes_head = True ,fc = color, color = color)
+
+
+def plot_zip_step(coords0,coords1,direction0,direction1,board,dict_in,ax,color_code):
+
+    direction0_prev = direction0
+    direction1_prev = direction1
+
+    #identify the inner/outer normal directions for both line segments we are currently looking at
+    normal_direction_outer0 = (direction0+1)%4
+    if on_interior(coords0+direction_dict_grid[normal_direction_outer0],board):
+        normal_direction_outer0 = (direction0-1)%4
+
+    normal_direction_outer1 = (direction1+1)%4
+    if on_interior(coords1+direction_dict_grid[normal_direction_outer1],board):
+        normal_direction_outer1 = (direction1-1)%4
+
+    normal_direction_inner0 = (normal_direction_outer0+2)%4
+    normal_direction_inner1 = (normal_direction_outer1+2)%4
+
+
+    #update the adjacency map using current coords and inner/outer normals
+    dict_in[(tuple(coords0.tolist()),normal_direction_outer0)]=(tuple(coords1.tolist()),normal_direction_inner1)
+    dict_in[(tuple(coords1.tolist()),normal_direction_outer1)]=(tuple(coords0.tolist()),normal_direction_inner0)
+
+
+    plot_edge_vector(coords0,normal_direction_outer0,direction0,ax,color_code)
+    plot_edge_vector(coords1,normal_direction_outer1,direction1,ax,color_code)
+
+    #move along the perimeter in each direction by one step
+    coords0, direction0 = perimeter_step(coords0,direction0,board)
+    coords1, direction1 = perimeter_step(coords1,direction1,board)
+
+    #terminate process if we hit another inner corner
+    bool0, dummy =check_if_inner_corner(coords0,board)
+    bool1, dummy =check_if_inner_corner(coords1,board)
+    bool2 = direction0 != direction0_prev and direction1_prev != direction1
+
+    termination_condition = bool0 or bool1 or bool2
+
+    return coords0,coords1,direction0,direction1,termination_condition
+
+
+def visualize_zip(coords,direction_pair,board,dict_in,ax,color_code):
+    direction0 = direction_pair[0]
+    direction1 = direction_pair[1]
+
+    direction0_prev = direction0
+    direction1_prev = direction1
+
+    coords0 = coords+direction_dict_grid[direction0]
+    coords1 = coords+direction_dict_grid[direction1]
+
+    #identify the inner/outer normal directions for both line segments we are currently looking at
+    normal_direction_outer0 = (direction0+1)%4
+    if on_interior(coords0+direction_dict_grid[normal_direction_outer0],board):
+        normal_direction_outer0 = (direction0-1)%4
+
+    normal_direction_outer1 = (direction1+1)%4
+    if on_interior(coords1+direction_dict_grid[normal_direction_outer1],board):
+        normal_direction_outer1 = (direction1-1)%4
+
+    key0 = (tuple(coords0.tolist()),normal_direction_outer0)
+    key1 = (tuple(coords1.tolist()),normal_direction_outer1)
+
+    if key0 in dict_in or key1 in dict_in:
+        return None
+
+
+    termination_condition = False
+
+    while not termination_condition:
+        coords0,coords1,direction0,direction1, termination_condition = plot_zip_step(coords0,coords1,direction0,direction1,board,dict_in,ax,color_code)
+        plot_inner_corner(coords,direction_pair,ax)
+
+def run_visualization():
+    fname = 'Input03.txt'
+
+    data = parse_input01(fname)
+    board = parse_board(data[7])
+
+    fig, ax = plt.subplots()
+
+    visualize_grid(board,ax)
+    plot_all_inner_corners(board,ax)
+
+    
+    ax.axis('off')
+    ax.axis('equal')
+    plt.show()
 
 #only difference between solution01/solution02 is the
 #adjacency map used for gridpoints that are out of bounds
@@ -272,7 +458,9 @@ def solution01():
     # fname = 'Input01.txt'
     fname = 'Input02.txt'
 
-    board, command_list = parse_input01(fname)
+    data = parse_input01(fname)
+    board = parse_board(data[0])
+    command_list = parse_instructions(data[1][0])
 
     adjacency_dict = generate_off_grid_adjacency_wrap(board)
 
@@ -288,12 +476,15 @@ def solution01():
     code = 1000*(coords[0]+1)+4*(coords[1]+1)+direction
     print(code)
 
+
 #runs part 2
 def solution02():
     # fname = 'Input01.txt'
     fname = 'Input02.txt'
 
-    board, command_list = parse_input01(fname)
+    data = parse_input01(fname)
+    board = parse_board(data[0])
+    command_list = parse_instructions(data[1][0])
 
     adjacency_dict = generate_off_grid_adjacency_cube(board)
 
@@ -316,5 +507,7 @@ if __name__ == '__main__':
     solution01()
     solution02()
     print('runtime in seconds: ','%.3f' % (time.time()-t0))
+
+    # run_visualization()
     
 
