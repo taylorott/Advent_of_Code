@@ -153,38 +153,30 @@ def solution01():
     # fname = 'Input01.txt'
     fname = 'Input02.txt'
 
-    data = parse_input01(fname)
+    almanac_dict = build_dictionaries(parse_input01(fname))
 
-    almanac_dict = build_dictionaries(data)
-
-    starting_vals = almanac_dict['starting_vals']
-
-    starting_ranges = []
+    starting_intervals = []
 
     starting_val_list = almanac_dict['starting_vals']
-    for val in starting_vals:
-        starting_ranges.append([val,val])
+    for val in starting_val_list:
+        starting_intervals.append([val,val])
 
-    ranges_out = compute_final_intervals(starting_ranges,'seed',almanac_dict)
+    ranges_out = compute_final_intervals(starting_intervals,'seed',almanac_dict)
     print(ranges_out[0][0])
 
 def solution02():
     # fname = 'Input01.txt'
     fname = 'Input02.txt'
 
-    data = parse_input01(fname)
+    almanac_dict = build_dictionaries(parse_input01(fname))
 
-    almanac_dict = build_dictionaries(data)
-
-    starting_ranges = []
+    starting_intervals = []
 
     starting_val_list = almanac_dict['starting_vals']
     for i in range(len(starting_val_list)//2):
-        q0 = starting_val_list[2*i]
-        q1 = starting_val_list[2*i] + starting_val_list[2*i+1]-1
-        starting_ranges.append([q0,q1])
+        starting_intervals.append([starting_val_list[2*i],starting_val_list[2*i] + starting_val_list[2*i+1]-1])
 
-    ranges_out = compute_final_intervals(starting_ranges,'seed',almanac_dict)
+    ranges_out = compute_final_intervals(starting_intervals,'seed',almanac_dict)
     print(ranges_out[0][0])
 
 
