@@ -48,8 +48,8 @@ def count_ways_to_win_fast(t,d):
     return max(a-b+1,0)
 
 def count_ways_to_win(t,d):
-    # return count_ways_to_win_fast(t,d)
-    return count_ways_to_win_slow(t,d)    
+    return count_ways_to_win_fast(t,d)
+    # return count_ways_to_win_slow(t,d)    
 
 def solution01():
     # fname = 'Input01.txt'
