@@ -24,7 +24,16 @@ def parse_input01(fname):
 
     return data
 
-def count_ways_to_win(t,d):
+def count_ways_to_win_slow(t,d):
+    total = 0
+
+    for i in range(t+1):
+        if i*(t-i)>d:
+            total+=1
+
+    return total
+
+def count_ways_to_win_fast(t,d):
     #(t-n)*n > d  
     #n^2-t*n+d <0
 
@@ -37,6 +46,10 @@ def count_ways_to_win(t,d):
         b+=1
 
     return max(a-b+1,0)
+
+def count_ways_to_win(t,d):
+    # return count_ways_to_win_fast(t,d)
+    return count_ways_to_win_slow(t,d)    
 
 def solution01():
     # fname = 'Input01.txt'
