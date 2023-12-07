@@ -23,9 +23,6 @@ def parse_input01(fname):
     # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
     data = bh.parse_strings(path,fname,delimiters = [' '],type_lookup = None, allInt = False, allFloat = False)
 
-    for item in data:
-        item[1]=int(item[1])
-
     return data
 
 #converts a hand string to a sorted list of card frequencies
@@ -109,7 +106,7 @@ def compare_hands(hand1,hand2,with_jokers=False):
 def eval_score(sorted_hands):
     total = 0
     for i in range(len(sorted_hands)):
-        total+=(i+1)*sorted_hands[i][1]
+        total+=(i+1)*int(sorted_hands[i][1])
     return total
 
 def solution01():
@@ -117,7 +114,7 @@ def solution01():
     fname = 'Input02.txt'
 
     data = parse_input01(fname)
-    sorted_hands = sorted(data, key=cmp_to_key(lambda x,y: compare_hands(x[0],y[0],with_jokers=False) ) )
+    sorted_hands = sorted(data, key=cmp_to_key(lambda x,y: compare_hands(x[0],y[0],with_jokers=False)))
 
     print(eval_score(sorted_hands))
 
@@ -126,7 +123,7 @@ def solution02():
     fname = 'Input02.txt'
 
     data = parse_input01(fname)
-    sorted_hands = sorted(data, key=cmp_to_key(lambda x,y: compare_hands(x[0],y[0],with_jokers=True) ) )
+    sorted_hands = sorted(data, key=cmp_to_key(lambda x,y: compare_hands(x[0],y[0],with_jokers=True)))
 
     print(eval_score(sorted_hands))
 
