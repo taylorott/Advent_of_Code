@@ -1,6 +1,6 @@
 #!/usr/bin/env python 
 import os,sys,inspect
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+currentdir = os.path.abspath(inspect.getfile(inspect.currentframe()))
 sys.path.insert(0,os.path.dirname(os.path.dirname(currentdir)))
 
 import numpy as np
