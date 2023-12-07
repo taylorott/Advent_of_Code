@@ -210,3 +210,17 @@ def print_char_matrix(mat_in,transpose = False,reverse_vert=False,reverse_horz=F
             for i in i_list:
                 line+=mat_in[i][j]
             print(line)
+
+def lexicographic_comparison(key1,key2):
+    for i in range(min(len(key1),len(key2))):
+        if key1[i]>key2[i]:
+            return 1
+        if key1[i]<key2[i]:
+            return -1
+
+    if len(key1)>len(key2):
+        return 1
+    if len(key1)<len(key2):
+        return -1
+
+    return 0

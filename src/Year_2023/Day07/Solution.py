@@ -57,6 +57,9 @@ def hand_to_freq_list(hand_str,with_jokers=False):
     #add the number of jokers to the highest frequency in the sorted list
     freq_list[0]+=NJ
 
+    while freq_list[-1]==0:
+        freq_list.pop(-1)
+
     return freq_list
 
 card_to_int = {'A':14,'K':13,'Q':12,'J':11,'T':10,'9':9,'8':8,'7':7,'6':6,'5':5,'4':4,'3':3,'2':2}
@@ -71,11 +74,9 @@ def compare_hands(hand1,hand2,with_jokers=False):
     freq_list1 = hand_to_freq_list(hand1,with_jokers)
     freq_list2 = hand_to_freq_list(hand2,with_jokers)
 
-    for i in range(min(len(freq_list1),len(freq_list2))):
-        if freq_list1[i]>freq_list2[i]:
-            return 1
-        if freq_list1[i]<freq_list2[i]:
-            return -1
+    compare_out = bh.lexicographic_comparison(freq_list1,freq_list2)
+    if compare_out!=0:
+        return compare_out
 
     #apply the tiebreaker
 
