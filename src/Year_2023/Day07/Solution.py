@@ -28,8 +28,6 @@ def parse_input01(fname):
 
     return data
 
-card_to_int = {'A':14,'K':13,'Q':12,'J':11,'T':10,'9':9,'8':8,'7':7,'6':6,'5':5,'4':4,'3':3,'2':2}
-
 #converts a hand string to a sorted list of card frequencies
 #if there are jokers, the frequency of jokers is combined with the highest frequency value in the list
 def hand_to_freq_list(hand_str,with_jokers=False):
@@ -38,21 +36,20 @@ def hand_to_freq_list(hand_str,with_jokers=False):
     freq_table = {}
 
     for card_char in hand_str:
-        card_val = card_to_int[card_char]
-        if card_val in freq_table:
-            freq_table[card_val]+=1
+        if card_char in freq_table:
+            freq_table[card_char]+=1
         else:
-            freq_table[card_val]=1
+            freq_table[card_char]=1
 
     NJ=0 #number of jokers
 
     #if we are playing with jokers and there are jokers in the hand
-    if with_jokers and 11 in freq_table:
+    if with_jokers and 'J' in freq_table:
         #set NJ to number of jokers
-        NJ=freq_table[11]
+        NJ=freq_table['J']
 
-        #set corresponding val in frequency table to 0
-        freq_table[11]=0
+        #set frequency of jokers in table to 0
+        freq_table['J']=0
 
     #build a list of card frequencies, sorted in reverse order
     freq_list = []
@@ -64,6 +61,8 @@ def hand_to_freq_list(hand_str,with_jokers=False):
     freq_list[0]+=NJ
 
     return freq_list
+
+card_to_int = {'A':14,'K':13,'Q':12,'J':11,'T':10,'9':9,'8':8,'7':7,'6':6,'5':5,'4':4,'3':3,'2':2}
 
 #compares hand1 to hand2
 #hand1>hand2  : 1
@@ -91,10 +90,10 @@ def compare_hands(hand1,hand2,with_jokers=False):
         card_val2 = card_to_int[hand2[i]]
 
         #if jokers are being applied, set value of joker to 0
-        if with_jokers and card_val1==11:
+        if with_jokers and hand1[i]=='J':
             card_val1=0
 
-        if with_jokers and card_val2==11:
+        if with_jokers and hand2[i]=='J':
             card_val2=0
 
         #compare cards
