@@ -28,14 +28,12 @@ def parse_input01(fname):
 def test_all_zero(array_in):
     return (array_in != 0).sum()==0
 
-def extract_diagonal_list(current_array,target_index):
-    list_out = []
-
+def compute_val(current_array):
+    total = 0
     while len(current_array)>0 and not test_all_zero(current_array):
-        list_out.append(current_array[target_index])
+        total+=current_array[-1]
         current_array = current_array[1:len(current_array)]-current_array[0:(len(current_array)-1)]
-
-    return np.array(list_out)
+    return total
 
 def solution01():
     # fname = 'Input01.txt'
@@ -45,8 +43,7 @@ def solution01():
 
     total = 0
     for row in data:
-        diagonal_list = extract_diagonal_list(row,-1)
-        total+=diagonal_list.sum()
+        total+=compute_val(row)
 
     print(total)
 
@@ -58,12 +55,8 @@ def solution02():
 
     total = 0
     for row in data:
-        diagonal_list = extract_diagonal_list(row,0)
+        total+=compute_val(np.flip(row))
 
-        temp_val = 0
-        for i in range(len(diagonal_list)-1,-1,-1):
-            temp_val = diagonal_list[i]-temp_val
-        total+=temp_val
     print(total)
 
 if __name__ == '__main__':
@@ -71,5 +64,3 @@ if __name__ == '__main__':
     solution01()
     solution02()
     print('runtime in seconds: ','%.3f' % (time.time()-t0))
-    
-
