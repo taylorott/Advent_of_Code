@@ -147,16 +147,22 @@ def test_enclosed(start_coord,grid_in,dist_dict):
     return on_interior
 
 def findLoop(grid_in):
-    s_coord = None
+    #builds a graph from the character grid given the adjacency criteria
     myGraph = Graph()
     myGraph.build_graph_from_2D_grid(grid_in,adjacency_criteria=adjacency_criteria)
 
+    #find the coordinates of the 'S' character in the graph 
+    s_coord = None
     for i in range(len(grid_in)):
         for j in range(len(grid_in[0])):
             if grid_in[i][j] == 'S':
                 s_coord = (i,j)
 
     replace_s_char(s_coord,grid_in)
+
+    #dist_dict is a dictionary that maps coordinates (i,j) to their distance along the pipe loop from the coordinate of 'S' character, (i_s,j_s)
+    #note that coordinates are keys in dist_dict iff they are part of the pipe loop
+    #this is computed using breadth first search (BFS)
     dist_dict = myGraph.compute_dist_BFS(s_coord)['dist_dict']
 
     return dist_dict
@@ -166,7 +172,7 @@ def solution01():
     fname = 'Input02.txt'
     data = parse_input01(fname)
     
-    dist_dict= findLoop(data)
+    dist_dict = findLoop(data)
   
     max_dist = 0
 
