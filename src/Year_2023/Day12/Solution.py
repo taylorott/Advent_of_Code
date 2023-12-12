@@ -51,10 +51,10 @@ def expand_problem(spring_str,grouping):
 #grouping is a list of integers describing the size of each contiguous group of damaged springs
 #memo_dict is our memoization table
 #we will be recursing on suffixes of spring_str and grouping
-def num_valid_arrangements(spring_str,grouping,memo_dict={}):
+def num_valid_arrangements(spring_str,grouping,memo_dict):
     
-    #serialize the input into a hashable dictionary key (tuples are static and therefore hashable)
-    key = (spring_str,tuple(grouping))
+    #hash the input as a tuple of its lengths
+    key = (len(spring_str),len(grouping))
 
     #if we've already seen this input before, return the stored value
     if key in memo_dict:
@@ -124,7 +124,7 @@ def solution01():
     
     total = 0
     for i in range(len(spring_str_list)):
-        total+= num_valid_arrangements(spring_str_list[i],grouping_list[i])
+        total+= num_valid_arrangements(spring_str_list[i],grouping_list[i],{})
     print(total)
 
 def solution02():
@@ -136,7 +136,7 @@ def solution02():
     total = 0
     for i in range(len(spring_str_list)):
         spring_str,grouping = expand_problem(spring_str_list[i],grouping_list[i])
-        total+= num_valid_arrangements(spring_str,grouping)
+        total+= num_valid_arrangements(spring_str,grouping,{})
     print(total)
 
 
