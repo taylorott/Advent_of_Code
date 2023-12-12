@@ -69,7 +69,7 @@ def num_valid_arrangements(spring_str,grouping,memo_dict):
         if len(grouping)==0:
             memo_dict[key] = 1
        
-   #base case #2, no more broken spring groups
+    #base case #2, no more broken spring groups
     elif len(grouping)==0:
         #check the spring_string to make sure there are no more guaranteed broken springs 
         #(i.e. string doesn't contain '#' characters)
