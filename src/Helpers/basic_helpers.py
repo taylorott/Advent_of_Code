@@ -3,6 +3,7 @@ import os,sys,inspect
 
 import numpy as np
 from re import split
+from copy import deepcopy
 
 #parses a file that is just a single column of numbers
 #returns as a list
@@ -224,3 +225,17 @@ def lexicographic_comparison(key1,key2):
         return -1
 
     return 0
+
+def rotate_grid(grid_in,rotation_num):
+    if rotation_num%4==0:
+        return deepcopy(grid_in)
+
+    if rotation_num%4==1:
+        return deepcopy(reversed(list(map(list, zip(*grid_in)))))
+
+    if rotation_num%4==2:
+        temp = list(map(list, zip(*reversed(grid_in))))
+        return deepcopy(list(map(list, zip(*reversed(temp)))))
+
+    if rotation_num%4==3:
+        return deepcopy(list(map(list, zip(*reversed(grid_in)))))
