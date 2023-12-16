@@ -25,69 +25,33 @@ def parse_input01(fname):
 
     return data
 
-north = (-1, 0)
-south = ( 1, 0)
-east = ( 0, 1)
-west = ( 0,-1)
+north, south, east, west = (-1, 0), ( 1, 0), ( 0, 1), ( 0,-1)
 
-empty_space_rule = {
-    north:[north],
-    south:[south],
-    east:[east],
-    west:[west]
-}
+empty_space_rule = {north:[north], south:[south],
+                    east:[east],   west:[west]}
 
-vertical_splitter_rule = {
-    north:[north],
-    south:[south],
-    east:[north,south],
-    west:[north,south]
-}
+vertical_splitter_rule = {north:[north], south:[south],
+                          east:[north,south], west:[north,south]}
 
-horizontal_splitter_rule = {
-    north:[east,west],
-    south:[east,west],
-    east:[east],
-    west:[west]
-}
+horizontal_splitter_rule = {north:[east,west], south:[east,west],
+                            east:[east], west:[west]}
 
-fwdslash_rule = {
-    north:[east],
-    south:[west],
-    east:[north],
-    west:[south]
-}
+fwdslash_rule = {north:[east], east:[north], 
+                 south:[west], west:[south]}
 
-backslash_rule = {
-    north:[west],
-    south:[east],
-    east:[south],
-    west:[north]
-}
+backslash_rule = {north:[west], west:[north],
+                  south:[east], east:[south]}
 
-beam_rule_dict = {
-    '.':empty_space_rule,
-    '|':vertical_splitter_rule,
-    '-':horizontal_splitter_rule,
-    '/':fwdslash_rule,
-    '\\':backslash_rule
-}
-
-direction_char_dict = {
-    north:'^',
-    south:'v',
-    east:'>',
-    west:'<'
-}
+beam_rule_dict = {'.':empty_space_rule,
+    '|':vertical_splitter_rule, '-':horizontal_splitter_rule,
+    '/':fwdslash_rule, '\\':backslash_rule}
 
 
-def check_coord_in_bounds(grid_in,current_coord):
-    return 0<=current_coord[0] and current_coord[0]<len(grid_in) and 0<=current_coord[1] and current_coord[1]<len(grid_in[0])
 
 def single_beam_step(grid_in,coord_in,dir_in):
     coord_out = (coord_in[0]+dir_in[0],coord_in[1]+dir_in[1])
 
-    in_bounds = check_coord_in_bounds(grid_in,coord_out)
+    in_bounds = 0<=coord_out[0] and coord_out[0]<len(grid_in) and 0<=coord_out[1] and coord_out[1]<len(grid_in[0])
     dir_out_list = []
 
     if in_bounds:
@@ -118,7 +82,7 @@ def compute_energy(grid_in,start_item):
     for i in range(len(grid_in)):
         energize_mat.append([0]*len(grid_in[0]))
 
-    beam_set = {start_item}
+    beam_set = set()
 
     run_sim(grid_in,energize_mat,beam_set,[start_item])
 
@@ -129,6 +93,9 @@ def compute_energy(grid_in,start_item):
                 total+=1
     return total, energize_mat, beam_set
 
+direction_char_dict = {north:'^', south:'v',
+    east:'>', west:'<'}
+    
 def print_beam_grid(grid_in,energize_mat,beam_set):
     grid_out = []
     for i in range(len(grid_in)):
@@ -140,7 +107,7 @@ def print_beam_grid(grid_in,energize_mat,beam_set):
     for item in beam_set:
         current_coord = item[0]
         current_dir = item[1]
-        if check_coord_in_bounds(grid_in,current_coord) and grid_out[current_coord[0]][current_coord[1]]=='.':
+        if grid_out[current_coord[0]][current_coord[1]]=='.':
             if energize_mat[current_coord[0]][current_coord[1]]==1:
                 grid_out[current_coord[0]][current_coord[1]]=direction_char_dict[current_dir]
             else:
