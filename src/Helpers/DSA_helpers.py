@@ -70,22 +70,20 @@ class Graph(object):
             current_dist, current_vert =myHeap.pop()
             dist_dict[current_vert]=current_dist
 
-            if current_vert==target_vert:
-                path_stack = [target_vert]
-                while predecessor_dict[path_stack[-1]] is not None:
-                    path_stack.append(predecessor_dict[path_stack[-1]])
 
-                path_out = []
-                while len(path_stack)>0:
-                    path_out.append(path_stack.pop(-1))
+
+            if current_vert==target_vert:
+                path_out = [target_vert]
+                while predecessor_dict[path_out[-1]] is not None:
+                    path_out.append(predecessor_dict[path_out[-1]])
+
+                path_out.reverse()
 
                 output_dict['path_length'] = current_dist
                 output_dict['path'] = path_out
 
                 return output_dict
                 
-            
-
             for neighbor_vert in self.adjacency_list[current_vert]:
                 if neighbor_vert not in dist_dict:
 
@@ -403,13 +401,11 @@ class Digraph(object):
             dist_dict[current_vert]=current_dist
 
             if current_vert==target_vert:
-                path_stack = [target_vert]
-                while predecessor_dict[path_stack[-1]] is not None:
-                    path_stack.append(predecessor_dict[path_stack[-1]])
+                path_out = [target_vert]
+                while predecessor_dict[path_out[-1]] is not None:
+                    path_out.append(predecessor_dict[path_out[-1]])
 
-                path_out = []
-                while len(path_stack)>0:
-                    path_out.append(path_stack.pop(-1))
+                path_out.reverse()
 
                 output_dict['path_length'] = current_dist
                 output_dict['path'] = path_out
