@@ -74,7 +74,6 @@ def build_trench(command_list):
 
     current_coord = start_coord
 
-
     for i in range(len(command_list)):
         command = command_list[i]
         dist = command[1]
