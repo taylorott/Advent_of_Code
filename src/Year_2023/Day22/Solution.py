@@ -31,15 +31,11 @@ def lower_brick(height_dict,brick_graph,brick):
     j = brick[1]
     count = 0
     num_cubes = abs(brick[0]-brick[3])+abs(brick[1]-brick[4])+1
-
     supporting_height = 0
     supporting_block_set = set()
 
-
-
-    while count<num_cubes or i!=brick[3] or j!=brick[4]:
+    while count<num_cubes:
         if (i,j) in height_dict:
-
             top_cube = height_dict[(i,j)]
             candidate_height = top_cube[0]
             cube_label = top_cube[1]
@@ -77,7 +73,7 @@ def lower_brick(height_dict,brick_graph,brick):
     j = brick[1]
     count = 0
 
-    while count<num_cubes or i!=brick[3] or j!=brick[4]:
+    while count<num_cubes:
         height_dict[(i,j)]=[new_supporting_height,brick[6]]
 
         if i<brick[3]:
@@ -109,10 +105,8 @@ def construct_brick_graph(brick_list):
 
 
 def find_supported_bricks(brick_graph,starting_brick):
-
     if starting_brick not in brick_graph.forward_adjacency:
         return 0
-
     total = 0
 
     moved_brick_set = set()
@@ -137,7 +131,6 @@ def find_supported_bricks(brick_graph,starting_brick):
 
             for item in brick_graph.forward_adjacency[current_brick]:
                 brick_queue.append(item)
-
     return total
 
 
@@ -163,23 +156,15 @@ def solution():
                     can_remove = False   
             if can_remove:
                 total+=1
-
     print(total) 
 
     #part 2
     total = 0
     for i in range(len(brick_list)):
         total+=find_supported_bricks(brick_graph,i)
-
     print(total)
-
-
-
-
 
 if __name__ == '__main__':
     t0 = time.time()
     solution()
     print('runtime in seconds: ','%.3f' % (time.time()-t0))
-    
-
