@@ -132,7 +132,7 @@ def solution02():
     vel/=float(len(data))
 
     Y = None
-    while Y is None or max(Y)>.5 or min(Y)<-.5:
+    while Y is None or max(Y)>.25 or min(Y)<-.25:
         Y,Jacobian = compute_error(data, pos,vel,t_list)
      
         X = np.hstack([t_list,pos,vel])
@@ -145,13 +145,13 @@ def solution02():
         pos = np.array(X_new[len(data):3+len(data)])
         vel = np.array(X_new[len(data)+3:])
 
-    result = int(pos[0]+pos[1]+pos[2])
+    result = round(pos[0]+pos[1]+pos[2])
     print(result)
 
 if __name__ == '__main__':
     t0 = time.time()
-    # solution01()
+    solution01()
     solution02()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 
