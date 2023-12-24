@@ -148,10 +148,50 @@ def solution02():
     result = round(pos[0]+pos[1]+pos[2])
     print(result)
 
+def solution03():
+    # fname = 'Input01.txt'
+    fname = 'Input02.txt'
+
+    data = parse_input01(fname)
+
+    M = np.zeros((0,6))
+    Y = np.array([])
+    for i in range(len(data)-1):
+        item0 = data[i]
+        item1 = data[i+1]
+
+        p0 = np.array(item0[:3])
+        v0 = np.array(item0[3:])
+
+        p1 = np.array(item1[:3])
+        v1 = np.array(item1[3:])
+
+        y = np.cross(p1,v1)-np.cross(p0,v0)
+        a = v0-v1
+        b = p1-p0
+
+        A = np.array([[    0,-a[2], a[1]],
+                      [ a[2],    0,-a[0]],
+                      [-a[1], a[0],    0]])
+
+        B = np.array([[    0,-b[2], b[1]],
+                      [ b[2],    0,-b[0]],
+                      [-b[1], b[0],    0]])        
+
+        sub_mat = np.hstack([A,B])
+        M = np.vstack([M,sub_mat])
+        Y = np.hstack([Y,y])
+
+    result = np.linalg.solve(np.dot(M.T,M),np.dot(M.T,Y))
+
+    pos_sum = round(np.sum(result[:3]))
+    print(pos_sum)
+
 if __name__ == '__main__':
     t0 = time.time()
     solution01()
     solution02()
+    solution03()
     print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 
