@@ -34,10 +34,9 @@ def check_safety(list_in):
     for i in range(len(list_in)-1):
         diff_val = list_in[i+1]-list_in[i]
         
-
         change_is_bounded&=(abs(diff_val)>=1 and abs(diff_val)<=3)
-        does_increase= does_increase or diff_val>0
-        does_decrease= does_decrease or diff_val<0
+        does_increase|= diff_val>0
+        does_decrease|= diff_val<0
 
     return change_is_bounded and not(does_increase and does_decrease)
 
@@ -49,7 +48,7 @@ def check_loose_safety(list_in):
         temp_list = list_in[0:i]+list_in[i+1:len(list_in)]
         if check_safety(temp_list):
             return True
-            
+
     return False
 
 def solution01():
