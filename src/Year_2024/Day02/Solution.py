@@ -25,6 +25,7 @@ def parse_input01(fname):
     data = bh.parse_strings(path,fname,delimiters = [' '],type_lookup = None, allInt = True, allFloat = False)
 
     return data
+    
 def check_safety(list_in):
     change_is_bounded = True
 
