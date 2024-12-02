@@ -1,5 +1,78 @@
 from collections import deque 
 
+class LinkedList(object):
+    def __init__(self,val=None):
+        self.next = None
+        self.prev = None
+        self.val = val
+
+    def insert_next_val(self,val=None):
+        next_item = LinkedList(val)
+        if self.next is None:
+            self.next = next_item
+            next_item.prev = self
+        else:
+            next_next_item = self.next
+
+            self.next = next_item
+            next_item.prev = self
+
+            next_item.next = next_next_item
+            next_next_item.prev = next_item
+
+
+    def insert_prev_val(self,val=None):
+        prev_item = LinkedList(val)
+
+        if self.prev is None:
+            self.prev = prev_item
+            prev_item.next = self
+        else:
+            prev_prev_item = self.prev
+
+            self.prev = prev_item
+            prev_item.next = self
+
+            prev_item.prev = prev_prev_item
+            prev_prev_item.next = prev_item
+
+    def delete_self(self):
+        next_item = self.next
+        prev_item = self.prev
+
+        if next_item is not None:
+            next_item.prev = prev_item
+
+        if prev_item is not None:
+            prev_item.next = next_item
+
+        return [next_item,prev_item]
+
+    def __getitem__(self, key):
+        if key == 0:
+            return self
+
+        current_node = self
+
+        count = 0
+
+        if key>0:
+            count = 0
+            while current_node is not None and count<key:
+                current_node = current_node.next
+                count+=1
+
+
+        if key<0:
+                    
+            while current_node is not None and count>key:
+                current_node = current_node.prev
+                count-=1
+
+        return current_node
+
+
+
 class Graph(object):
     def __init__(self):
         self.adjacency_set = {}

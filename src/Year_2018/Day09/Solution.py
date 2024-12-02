@@ -26,12 +26,45 @@ def parse_input01(fname):
 
     return data
 
+def play_game(num_players,max_marble):
+    score_list = [0]*num_players
+
+    myList = LinkedList(0)
+    myList.next = myList
+    myList.prev = myList
+
+    for i in range(1,max_marble+1):
+     
+        if i%23==0:
+            score_list[i%num_players]+=i
+            myList = myList[-7]
+
+            score_list[i%num_players]+=myList.val
+
+            temp = myList.next
+   
+            myList.delete_self()
+            myList = temp
+
+        else:
+            myList = myList.next
+            myList.insert_next_val(i)
+            myList = myList.next
+    return max(score_list)
+
 def solution01():
     fname = 'Input01.txt'
     # fname = 'Input02.txt'
 
-    data = parse_input01(fname)
-    print(data)
+    # num_players = 9
+    # max_marble = 25
+
+    num_players = 476
+    max_marble1 = 71431
+    max_marble2 = 7143100
+
+    print(play_game(num_players,max_marble1))
+    print(play_game(num_players,max_marble2))
 
 def solution02():
     fname = 'Input01.txt'
