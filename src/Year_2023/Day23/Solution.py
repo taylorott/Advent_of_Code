@@ -137,7 +137,7 @@ def solution01():
 def compute_next_steps_list_part2(myGraph,vertex_set,current_vertex):
     next_step_list = []
 
-    for next_vertex in myGraph.adjacency_list[current_vertex]:
+    for next_vertex in myGraph.adjacency_set[current_vertex]:
         if next_vertex not in vertex_set:
             next_step_list.append(next_vertex)
     return next_step_list
@@ -200,15 +200,15 @@ def contract_graph(original_graph):
 
     visited_set = set()
 
-    for vertex in original_graph.vertex_list:
-        if vertex not in visited_set and len(original_graph.adjacency_list[vertex])<=2:
+    for vertex in original_graph.vertex_set:
+        if vertex not in visited_set and len(original_graph.adjacency_set[vertex])<=2:
             contract_edge(contracted_graph,original_graph,visited_set,vertex)
 
     return contracted_graph
 
 def find_longest_path_recursive_part2(myGraph,path_stack,visited_dict,destination):
     max_length_remaining = 0
-    for next_vertex in myGraph.adjacency_list[path_stack[-1]]:
+    for next_vertex in myGraph.adjacency_set[path_stack[-1]]:
         edge_length = myGraph.edge_dict[path_stack[-1]][next_vertex]
         if next_vertex == destination:
             max_length_remaining = max(max_length_remaining,edge_length)
@@ -239,7 +239,7 @@ def solution02():
     myGraph = contract_graph(myGraph)
 
     visited_dict = {}
-    for vertex in myGraph.vertex_list:
+    for vertex in myGraph.vertex_set:
         visited_dict[vertex]=False
 
     path_stack = [starting_vertex]

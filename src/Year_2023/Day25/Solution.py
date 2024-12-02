@@ -61,7 +61,7 @@ def compute_dist_BFS(myGraph,start_vert,target_vert,used_edge_set):
             return output_dict
 
         next_dist = current_dist+1
-        for neighbor_vert in myGraph.adjacency_list[current_vert]:
+        for neighbor_vert in myGraph.adjacency_set[current_vert]:
             edge_tuple = (min(current_vert,neighbor_vert),max(current_vert,neighbor_vert))
 
             if neighbor_vert not in dist_dict and edge_tuple not in used_edge_set:
@@ -102,14 +102,12 @@ def solution01():
     vertex_set = set()
 
     vertex_lookup = {}
-    vertex_list = []
 
     num_vertices = 0
     for item in data:
         for vertex in item:
             if vertex not in vertex_lookup:
                 vertex_lookup[vertex] = num_vertices
-                vertex_list.append(vertex)
                 num_vertices+=1
 
     for item in data:

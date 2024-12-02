@@ -14,7 +14,7 @@ path = currentdir
     
 # def find_hamiltonian_path_via_backtracking(my_graph,v0,vf):
 #     visited_dict = {}
-#     for vertex in my_graph.vertex_list:
+#     for vertex in my_graph.vertex_set:
 #         visited_dict[vertex] = False
 
 #     hamiltonian_path = []
@@ -29,7 +29,7 @@ path = currentdir
 #         hamiltonian_path.append(v_current)
         
 #         if v_current == vf:
-#             if len(hamiltonian_path)==len(my_graph.vertex_list):
+#             if len(hamiltonian_path)==len(my_graph.vertex_set):
 #                 return True
 #             else:
 #                 hamiltonian_path.pop(-1)

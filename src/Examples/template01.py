@@ -6,6 +6,7 @@ sys.path.insert(0,os.path.dirname(os.path.dirname(currentdir)))
 import time
 import numpy as np
 import re
+import heapq as hq
 import Helpers.basic_helpers as bh
 from Helpers.DSA_helpers import Graph, Digraph, frequency_table, AugmentedHeap
 from math import gcd, lcm

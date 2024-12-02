@@ -2,34 +2,75 @@ from collections import deque
 
 class Graph(object):
     def __init__(self):
-        self.adjacency_list = {}
+        self.adjacency_set = {}
         self.vertex_dict = {}
-        self.vertex_list = []
+        self.vertex_set = set()
         self.numVertices = 0
         self.numEdges = 0
         self.edge_dict = {}
+        self.degree = {}
 
     def add_edge(self,v1,v2,w=None):
         if v1 not in self.vertex_dict:
             self.vertex_dict[v1] = None
-            self.vertex_list.append(v1)
-            self.adjacency_list[v1] = []
+            self.vertex_set.add(v1)
+            self.adjacency_set[v1] = set()
             self.edge_dict[v1] = {}
+            self.degree[v1] = 0
             self.numVertices+=1
 
         if v2 not in self.vertex_dict:
             self.vertex_dict[v2] = None
-            self.vertex_list.append(v2)
-            self.adjacency_list[v2] = []
+            self.vertex_set.add(v2)
+            self.adjacency_set[v2] = set()
             self.edge_dict[v2] = {}
+            self.degree[v2] = 0
             self.numVertices+=1
 
         if v2 not in self.edge_dict[v1]:
-            self.adjacency_list[v1].append(v2)
-            self.adjacency_list[v2].append(v1)
+            self.adjacency_set[v1].add(v2)
+            self.adjacency_set[v2].add(v1)
             self.edge_dict[v1][v2] = w
             self.edge_dict[v2][v1] = w
+            self.degree[v1]+=1
+            self.degree[v2]+=1
             self.numEdges += 1
+
+    def adjacency_list(self,v):
+        if v not in self.adjacency_set:
+            return None
+        return list(self.adjacency_set[v])
+
+    def remove_edge(self,v1,v2):
+        if v1 not in self.vertex_dict:
+            return None
+        if v2 not in self.vertex_dict:
+            return None
+        if v2 not in self.edge_dict[v1]:
+            return None
+
+        self.adjacency_set[v1].remove(v2)
+        self.adjacency_set[v2].remove(v1)
+        self.numEdges-=1
+        self.edge_dict[v1].pop(v2)
+        self.edge_dict[v2].pop(v1)
+        self.degree[v1]-=1
+        self.degree[v2]-=1
+
+    def remove_vertex(self,v1):
+        if v1 not in self.vertex_dict:
+            return None
+
+        remove_list = self.adjacency_list(v1)
+        for v2 in remove_list:
+            self.remove_edge(v2)
+
+        self.adjacency_set.pop(v1)
+        self.vertex_dict.pop(v1)
+        self.vertex_set.remove(v1)
+        self.numVertices-=1
+        self.edge_dict.pop(v1)
+        self.degree.pop(v1)
 
     #computes distance from start_vert to target_vert on the graph using dijkstra's algorithm
 
@@ -85,7 +126,7 @@ class Graph(object):
                 
             dist_dict[current_vert]=current_dist
 
-            for neighbor_vert in self.adjacency_list[current_vert]:
+            for neighbor_vert in self.adjacency_set[current_vert]:
                 if neighbor_vert not in dist_dict:
 
                     edge_weight = self.edge_dict[current_vert][neighbor_vert]
@@ -160,7 +201,7 @@ class Graph(object):
                 return output_dict
 
             next_dist = current_dist+1
-            for neighbor_vert in self.adjacency_list[current_vert]:
+            for neighbor_vert in self.adjacency_set[current_vert]:
                 if neighbor_vert not in dist_dict:
                     dist_dict[neighbor_vert] = next_dist
                     to_visit.append(neighbor_vert)
@@ -220,35 +261,96 @@ class Digraph(object):
     def __init__(self):
         self.forward_adjacency = {}
         self.reverse_adjacency = {}
-        self.adjacency_dict = {}
         self.vertex_dict = {}
-        self.vertex_list = []
+        self.vertex_set = set()
         self.numVertices = 0
         self.numEdges = 0
         self.edge_dict = {}
+        self.in_degree = {}
+        self.out_degree = {}
 
     def add_edge(self,v1,v2,w=None):
         if v1 not in self.vertex_dict:
             self.vertex_dict[v1] = None
-            self.vertex_list.append(v1)
-            self.forward_adjacency[v1] = []
-            self.reverse_adjacency[v1] = []
+            self.vertex_set.add(v1)
+            self.forward_adjacency[v1] = set()
+            self.reverse_adjacency[v1] = set()
             self.edge_dict[v1] = {}
+            self.in_degree[v1] = 0
+            self.out_degree[v1] = 0
             self.numVertices+=1
 
         if v2 not in self.vertex_dict:
             self.vertex_dict[v2] = None
-            self.vertex_list.append(v2)
-            self.forward_adjacency[v2] = []
-            self.reverse_adjacency[v2] = []
+            self.vertex_set.add(v2)
+            self.forward_adjacency[v2] = set()
+            self.reverse_adjacency[v2] = set()
             self.edge_dict[v2] = {}
+            self.in_degree[v2] = 0
+            self.out_degree[v2] = 0
             self.numVertices+=1
 
         if v2 not in self.edge_dict[v1]:
-            self.forward_adjacency[v1].append(v2)
+            self.forward_adjacency[v1].add(v2)
+            self.out_degree[v1]+=1
             self.edge_dict[v1][v2] = w
-            self.reverse_adjacency[v2].append(v1)
+            self.reverse_adjacency[v2].add(v1)
+            self.in_degree[v2]+=1
             self.numEdges += 1
+
+    def forward_adjacency_list(self,v):
+        if v in self.forward_adjacency:
+            return list(self.forward_adjacency[v])
+        return None
+
+    def reverse_adjacency_list(self,v):
+        if v in self.reverse_adjacency:
+            return list(self.reverse_adjacency[v])
+        return None
+
+    def remove_edge(self,v1,v2):
+        if v1 not in self.vertex_dict:
+            return None
+        if v2 not in self.vertex_dict:
+            return None
+        if v2 not in self.edge_dict[v1]:
+            return None
+
+        self.forward_adjacency[v1].remove(v2)
+        self.out_degree[v1]-=1
+        self.reverse_adjacency[v2].remove(v1)
+        self.edge_dict[v1].pop(v2)
+        self.in_degree[v2]-=1
+        self.numEdges-=1
+
+        return None
+
+    def remove_vertex(self,v1):
+        if v1 not in self.vertex_dict:
+            return None
+
+        forward_list = self.forward_adjacency_list(v1)
+        reverse_list = self.reverse_adjacency_list(v1)
+
+        for v2 in forward_list:
+            self.remove_edge(v1,v2)
+        self.forward_adjacency.pop(v1)
+
+        for v2 in reverse_list:
+            self.remove_edge(v2,v1)
+        self.reverse_adjacency.pop(v1)
+
+        self.vertex_dict.pop(v1)
+        self.vertex_set.remove(v1)
+        self.edge_dict.pop(v1)
+        self.in_degree.pop(v1)
+        self.out_degree.pop(v1)
+
+        self.numVertices -=1
+
+        return None
+
+        
 
     def list_descendents(self,vertex):
         descendents_list = []
@@ -284,10 +386,12 @@ class Digraph(object):
 
     def set_vertex_val(self,vertex,val=None):
         if vertex not in self.vertex_dict:
-            self.vertex_list.append(vertex)
-            self.forward_adjacency[vertex] = []
-            self.reverse_adjacency[vertex] = []
+            self.vertex_set.add(vertex)
+            self.forward_adjacency[vertex] = set()
+            self.reverse_adjacency[vertex] = set()
             self.edge_dict[vertex] = {}
+            self.in_degree[vertex] = 0
+            self.out_degree[vertex] = 0
             self.numVertices+=1
             
         self.vertex_dict[vertex]=val
@@ -309,12 +413,12 @@ class Digraph(object):
         self.visited_dict = {}
         self.assigned_dict = {}
         self.assigned_lookup = {}
-        for vertex in self.vertex_list:
+        for vertex in self.vertex_set:
             self.visited_dict[vertex]=False
             self.assigned_dict[vertex]=-1
         self.L = []
         
-        for vertex in self.vertex_list:
+        for vertex in self.vertex_set:
             self.visit_kosaj(vertex)
         
         

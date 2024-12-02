@@ -58,7 +58,7 @@ def solution02():
     current_vertex = 'YOU'
 
     while current_vertex != 'COM':
-        current_vertex = myGraph.reverse_adjacency[current_vertex][0]
+        current_vertex = myGraph.reverse_adjacency_list(current_vertex)[0]
         vertex_list1.append(current_vertex)
 
 
@@ -66,7 +66,7 @@ def solution02():
     current_vertex = 'SAN'
 
     while current_vertex != 'COM':
-        current_vertex = myGraph.reverse_adjacency[current_vertex][0]
+        current_vertex = myGraph.reverse_adjacency_list(current_vertex)[0]
         vertex_list2.append(current_vertex)
 
 

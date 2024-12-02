@@ -226,6 +226,12 @@ def lexicographic_comparison(key1,key2):
 
     return 0
 
+def manhattan_distance(coord1,coord2):
+    dist = 0
+    for i in range(min(len(coord1),len(coord2))):
+        dist+=abs(coord2[i]-coord1[i])
+    return dist
+
 def rotate_grid(grid_in,rotation_num):
     if rotation_num%4==0:
         return deepcopy(grid_in)
