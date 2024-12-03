@@ -53,10 +53,28 @@ path = currentdir
 #
 #           \      used to escape special characters
 #
+#           Examples include:  \'   \(   \)   \[   \]
+#
 #        [^...]    matches any single character not in brackets
 #
 #         (...)    matches whatever regular expression is inside the parentheses
 #
+#
+#                   CONSTRUCTING A REGEX
+#           my_regex = r'type up your regex here'
+#                
+#                   USING A REGEX
+#           match_iter =  re.finditer(my_regex,str_in)  Returns a iterator of MATCH objects
+#
+#           for my_match in match_iter:
+#               my_match.group()  generates string of the entire match
+#               my_match.group(n)  generates string of whatever is contained in
+#                                  the nth parentheses of the match
+#
+#           match_list = re.findall(my_regex,str_in) Returns a list of matches (list of list)
+#           for my_match in match_list:
+#               print(my_match)     my_match[n] is the string of whatever is contained in
+#                                               in the nth parentheses of the match 
 
 def example01():
     # byr (Birth Year) - four digits; at least 1920 and at most 2002.

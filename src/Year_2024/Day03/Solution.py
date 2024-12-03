@@ -32,28 +32,18 @@ def solution01():
     # fname = 'Input03.txt'
 
     data = parse_input01(fname)
-    my_regex1 = r'mul\(([0-9]{1,3}),([0-9]{1,3})\)'
-    my_regex2 = r'mul\(([0-9]{1,3}),([0-9]{1,3})\)|do\(\)|don\'t\(\)'
+    my_regex = r'mul\((\d{1,3}),(\d{1,3})\)|do\(\)|don\'t\(\)'
 
-    total1 = 0
-    total2 = 0
+    total1, total2, is_enabled = 0, 0, True
 
-    is_enabled = True
-
-    for item in data:
-        match_list =  re.finditer(my_regex2,item)
-
-        for q in match_list:
-            if q.group()=='do()':
-                is_enabled = True
-            if q.group()=='don\'t()':
-                is_enabled = False
-            if q.group()[0:3]=='mul':
-                q2 = re.findall(my_regex1,q.group())[0]
-                temp = int(q2[0])*int(q2[1])
+    for line_str in data: 
+        for regex_match in re.finditer(my_regex,line_str):
+            if regex_match.group()=='do()': is_enabled = True
+            if regex_match.group()=='don\'t()': is_enabled = False
+            if regex_match.group()[0:3]=='mul':
+                temp = int(regex_match.group(1))*int(regex_match.group(2))
                 total1+=temp
-                if is_enabled:
-                    total2+=temp
+                if is_enabled: total2+=temp
     print(total1)
     print(total2)
 
