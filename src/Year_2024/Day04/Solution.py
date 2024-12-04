@@ -59,7 +59,6 @@ def solution01():
 
     data = parse_input01(fname)
 
-
     total = 0
 
     for i in range(4):
