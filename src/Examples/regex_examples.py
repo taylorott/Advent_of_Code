@@ -10,6 +10,9 @@ import Helpers.basic_helpers as bh
 
 path = currentdir
 
+#                   USEFUL RESOURCE: REGEX EXPLAINER
+#                   https://regexr.com/                   
+#
 #                   REGEX GUIDE
 #
 #           \d     whole numbers( 0-9 )(single digit)  

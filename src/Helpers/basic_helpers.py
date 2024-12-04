@@ -178,6 +178,81 @@ def build_freq_table(list_in):
 
     return dict_out
 
+def grid_diagonals_down_right(mat_in):
+    h = len(mat_in)
+    w = len(mat_in[0])
+
+    grid_out = []
+
+    for i in range(w-1,0,-1):
+        temp = []
+        y = 0
+        x = i
+
+        while x<w and y<h:
+            temp.append(mat_in[y][x])
+            x+=1
+            y+=1
+
+        grid_out.append(temp)
+
+    for j in range(0,h):
+        temp = []
+        y = j
+        x = 0
+
+        while x<w and y<h:
+            temp.append(mat_in[y][x])
+            x+=1
+            y+=1
+
+        grid_out.append(temp)
+
+    return grid_out
+
+def grid_diagonals_down_left(mat_in):
+    h = len(mat_in)
+    w = len(mat_in[0])
+
+    grid_out = []
+
+    for i in range(0,w):
+        temp = []
+        y = 0
+        x = i
+
+        while x>=0 and y<h:
+            temp.append(mat_in[y][x])
+            x-=1
+            y+=1
+
+        grid_out.append(temp)
+
+    for j in range(1,h):
+        temp = []
+        y=j
+        x=w-1
+
+        while x>=0 and y<h:
+            temp.append(mat_in[y][x])
+            x-=1
+            y+=1
+
+        grid_out.append(temp)
+
+    return grid_out
+
+def list_to_str(list_in):
+    return ''.join(list_in)
+
+def listlist_to_str_list(list_in):
+    list_out = []
+    for item in list_in:
+        list_out.append(''.join(item))
+
+    return list_out
+
+
 def print_char_matrix(mat_in,transpose = False,reverse_vert=False,reverse_horz=False):
     i_list = []
     j_list = []
@@ -232,16 +307,53 @@ def manhattan_distance(coord1,coord2):
         dist+=abs(coord2[i]-coord1[i])
     return dist
 
+#Rotates grid counterclockwise rotation_num number of times
+#assuming the grid is a list of lists
+#first index goes from top to bottom
+#second index goes from left to right
+#
+#From python documentation
+#zip()
+#Make an iterator that aggregates elements from each of the iterables.
+# zip('ABCD', 'xy') --> Ax By
+#
+#Very Useful Explanation I found on Stack Overflow
+#https://stackoverflow.com/questions/6473679/transpose-list-of-lists
+#There are two important things to understand here:
+#The signature of zip: zip(*iterables) This means zip expects an arbitrary 
+#number of arguments each of which must be iterable. 
+#E.g. zip([1, 2], [3, 4], [5, 6])
+#
+#Unpacked argument lists: Given a sequence of arguments args, 
+#f(*args) will call f such that each element in args is a 
+#separate positional argument of f. 
+#Given l = [[1, 2, 3], [4, 5, 6], [7, 8, 9]], 
+#zip(*l) would be equivalent to zip([1, 2, 3], [4, 5, 6], [7, 8, 9]).
 def rotate_grid(grid_in,rotation_num):
-    if rotation_num%4==0:
-        return deepcopy(grid_in)
+
+    result = deepcopy(grid_in)
 
     if rotation_num%4==1:
-        return deepcopy(reversed(list(map(list, zip(*grid_in)))))
+        #transpose
+        result = list(map(list, zip(*result)))
+
+        #then reverse (from top to bottom)
+        result.reverse()
 
     if rotation_num%4==2:
-        temp = list(map(list, zip(*reversed(grid_in))))
-        return deepcopy(list(map(list, zip(*reversed(temp)))))
+        #reverse horizontally
+        for item in result:
+            item.reverse()
+
+        #then reverse vertically
+        result.reverse()
 
     if rotation_num%4==3:
-        return deepcopy(list(map(list, zip(*reversed(grid_in)))))
+        #reverse (from top to bottom)
+        result.reverse()
+
+        #then transpose
+        result = list(map(list, zip(*result)))
+        
+
+    return result
