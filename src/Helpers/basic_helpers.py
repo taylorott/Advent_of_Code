@@ -39,6 +39,44 @@ def parse_grid(path,fname,allInt=False):
         return block_to_grid(block,allInt=allInt)
     return None
 
+def pad_list(list_in,n=1,item=None):
+    return (n*[item])+list_in+(n*[item])
+
+def pad_str(str_in,n=1,item=' '):
+    return (n*item)+str_in+(n*item)
+
+def pad_str_grid(grid_in,n=1,item=' '):
+    w = len(grid_in[0])
+
+    grid_out = []
+
+    for i in range(n):
+        grid_out.append((2*n+w)*item)
+
+    for my_str in grid_in:
+        grid_out.append(pad_str(my_str,n=n,item=item))
+
+    for i in range(n):
+        grid_out.append((2*n+w)*item)
+
+    return grid_out
+
+def pad_grid(grid_in,n=1,item=None):
+    w = len(grid_in[0])
+
+    grid_out = []
+
+    for i in range(n):
+        grid_out.append((2*n+w)*[item])
+
+    for my_list in grid_in:
+        grid_out.append(pad_list(my_list,n=n,item=item))
+
+    for i in range(n):
+        grid_out.append((2*n+w)*[item])
+
+    return grid_out
+
 def block_to_grid(block_in,allInt=False):
     list_out = []
     for line in block_in:

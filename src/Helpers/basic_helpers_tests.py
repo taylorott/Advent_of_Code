@@ -73,5 +73,82 @@ def freq_table_tests():
 	test_count+=1
 	print_test_result(test_type,test_count,test)
 
+def padding_tests():
+	print('Padding Tests:')
+	print('')
+
+	str1 = 'abdefg'
+	item1 = 'z'
+	n1 = 3
+	print('Original String:')
+	print(str1)
+	print('n = '+str(n1)+', padding with: \''+item1+'\'')
+	print(bh.pad_str(str1,n1,item1))
+	print('')
+
+	list2 = [1,2,3,5]
+	item2 = 0
+	n2 = 2
+	print('Original List:')
+	print(list2)
+	print('n = '+str(n2)+', padding with: '+str(item2))
+	print(bh.pad_list(list2,n2,item2))
+	print('')
+
+	grid3 = [[1,2,3],[4,5,6]]
+	item3 = 0
+	n3 = 2
+	print('Original Grid')
+	for temp in grid3:
+		print(temp)
+	print('n = '+str(n3)+', padding with: '+str(item3))
+	temp_grid = bh.pad_grid(grid3,n3,item3)
+	for temp in temp_grid:
+		print(temp)
+	print('')
+
+	list4 = ['abc','def']
+	item4 = '.'
+	n4 = 4
+
+	print('Original str grid')
+	for temp in list4:
+		print(temp)
+	print('n = '+str(n4)+', padding with: \''+item4+'\'')
+	temp_list = bh.pad_str_grid(list4,n4,item4)
+	for temp in temp_list:
+		print(temp)
+
+def rotate_grid_test():
+	my_grid0 = [[1,2,3],[4,5,6]]
+	my_grid1 = bh.rotate_grid(my_grid0,1)
+	my_grid2 = bh.rotate_grid(my_grid0,2)
+	my_grid3 = bh.rotate_grid(my_grid0,3)
+
+
+	print('Rotate Grid Test:')
+	print('')
+
+	print('Original Grid:')
+	for item in my_grid0:
+		print(item)
+
+	print('')
+	print('Rotated 90 deg counter-clockwise')
+	for item in my_grid1:
+		print(item)
+
+	print('')
+	print('Rotated 180 deg')
+	for item in my_grid2:
+		print(item)
+
+	print('')
+	print('Rotated 90 deg clockwise')
+	for item in my_grid3:
+		print(item)
+
 if __name__ == '__main__':
-	freq_table_tests()
+	# freq_table_tests()
+	# rotate_grid_test()
+	padding_tests()
