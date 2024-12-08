@@ -52,34 +52,34 @@ def check_loose_safety(list_in):
 
     return False
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+def solution01(show_result=True, fname='Input02.txt'):
 
     data = parse_input01(fname)
     total = 0
     for item in data:
         if check_safety(item):
             total+=1
-    print(total)
+    if show_result: print(total)
+
+    return total
+
+
+def solution02(show_result=True, fname='Input02.txt'):
+    data = parse_input01(fname)
 
     total = 0
     for item in data:
         if check_loose_safety(item):
             total+=1
-    print(total)
+    if show_result: print(total)
 
-def solution02():
-    fname = 'Input01.txt'
-    # fname = 'Input02.txt'
-
-    # data = parse_input01(fname)
+    return total
 
 
 if __name__ == '__main__':
     t0 = time.time()
     solution01()
     solution02()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

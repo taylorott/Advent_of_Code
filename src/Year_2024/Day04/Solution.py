@@ -16,13 +16,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
     data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
 
     return data
 
@@ -52,15 +46,10 @@ def match_xmas2(grid_in,i,j):
         return 1
     return 0
 
-
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     total = 0
-
     for i in range(4):
         str_list1 = bh.listlist_to_str_list(data)
         str_list2 = bh.listlist_to_str_list(bh.grid_diagonals_down_left(data))
@@ -70,7 +59,12 @@ def solution01():
 
         data = bh.rotate_grid(data,1)
 
-    print(total)
+    if show_result: print(total)
+
+    return total
+
+def solution02(show_result=True, fname='Input02.txt'):
+    data = parse_input01(fname)
 
     total = 0
     h = len(data)
@@ -79,19 +73,14 @@ def solution01():
         for j in range(1,w-1):
             total+=match_xmas2(data,i,j)
 
-    print(total)
+    if show_result: print(total)
 
-
-def solution02():
-    fname = 'Input01.txt'
-    # fname = 'Input02.txt'
-
-    # data = parse_input01(fname)
+    return total
 
 if __name__ == '__main__':
     t0 = time.time()
     solution01()
     solution02()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

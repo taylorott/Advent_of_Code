@@ -41,79 +41,104 @@ from Year_2023.Day25 import Solution as Day25
 path = currentdir
 
 def Day01_test():
-    return None
+    current_day = Day01
+    day_label = 'Day01'
 
 def Day02_test():
-    return None
+    current_day = Day02
+    day_label = 'Day02'
 
 def Day03_test():
-    return None
+    current_day = Day03
+    day_label = 'Day03'
 
 def Day04_test():
-    return None
+    current_day = Day04
+    day_label = 'Day04'
 
 def Day05_test():
-    return None
+    current_day = Day05
+    day_label = 'Day05'
 
 def Day06_test():
-    return None
+    current_day = Day06
+    day_label = 'Day06'
 
 def Day07_test():
-    return None
+    current_day = Day07
+    day_label = 'Day07'
 
 def Day08_test():
-    return None
+    current_day = Day08
+    day_label = 'Day08'
 
 def Day09_test():
-    return None
+    current_day = Day09
+    day_label = 'Day09'
 
 def Day10_test():
-    return None
+    current_day = Day10
+    day_label = 'Day10'
 
 def Day11_test():
-    return None
+    current_day = Day11
+    day_label = 'Day11'
 
 def Day12_test():
-    return None
+    current_day = Day12
+    day_label = 'Day12'
 
 def Day13_test():
-    return None
+    current_day = Day13
+    day_label = 'Day13'
 
 def Day14_test():
-    return None
+    current_day = Day14
+    day_label = 'Day14'
 
 def Day15_test():
-    return None
+    current_day = Day15
+    day_label = 'Day15'
 
 def Day16_test():
-    return None
+    current_day = Day16
+    day_label = 'Day16'
 
 def Day17_test():
-    return None
+    current_day = Day17
+    day_label = 'Day17'
 
 def Day18_test():
-    return None
+    current_day = Day18
+    day_label = 'Day18'
 
 def Day19_test():
-    return None
+    current_day = Day19
+    day_label = 'Day19'
 
 def Day20_test():
-    return None
+    current_day = Day20
+    day_label = 'Day20'
 
 def Day21_test():
-    return None
+    current_day = Day21
+    day_label = 'Day21'
 
 def Day22_test():
-    return None
+    current_day = Day22
+    day_label = 'Day22'
 
 def Day23_test():
-    return None
+    current_day = Day23
+    day_label = 'Day23'
 
 def Day24_test():
-    return None
+    current_day = Day24
+    day_label = 'Day24'
 
 def Day25_test():
-    return None
+    current_day = Day25
+    day_label = 'Day25'
 
 def run_all_tests():
     Day01_test()

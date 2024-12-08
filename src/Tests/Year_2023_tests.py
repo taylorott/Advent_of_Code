@@ -41,106 +41,133 @@ from Year_2023.Day25 import Solution as Day25
 path = currentdir
 
 def Day01_test():
+    current_day = Day01
+    day_label = 'Day01'
 
     fname = 'Input03.txt'
-    v1 = Day01.solution01(show_result=False, fname=fname)
+    v1 = current_day.solution01(show_result=False, fname=fname)
     v1_true = 142
-    assert v1==v1_true, "Day01, Part 1 Failed, Input: "+fname+'\n Output: '+str(v1)+'\n Correct Output'+str(v1_true)
+    assert v1==v1_true, day_label+", Part 1 Failed, Input: "+fname
 
     fname = 'Input02.txt'
-    v2 = Day01.solution02(show_result=False, fname=fname)
-    assert v2==281, "Day01, Part 2 Failed, Input: "+fname
+    v2 = current_day.solution02(show_result=False, fname=fname)
+    assert v2==281, day_label+", Part 2 Failed, Input: "+fname
 
     fname = 'Input01.txt'
-    v1 = Day01.solution01(show_result=False, fname=fname)
-    v2 = Day01.solution02(show_result=False, fname=fname)
+    v1 = current_day.solution01(show_result=False, fname=fname)
+    v2 = current_day.solution02(show_result=False, fname=fname)
 
-    assert v1==53974, "Day01, Part 1 Failed, Input: "+fname
-    assert v2==52840, "Day01, Part 2 Failed, Input: "+fname
+    assert v1==53974, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==52840, day_label+", Part 2 Failed, Input: "+fname
 
 def Day02_test():
+    current_day = Day02
+    day_label = 'Day02'
+
     fname = 'Input01.txt'
-    v1 = Day02.solution01(show_result=False, fname=fname)
-    v2 = Day02.solution02(show_result=False, fname=fname)
-    assert v1==8, "Day02, Part 1 Failed, Input: "+fname
-    assert v2==2286, "Day02, Part 2 Failed, Input: "+fname
+    v1 = current_day.solution01(show_result=False, fname=fname)
+    v2 = current_day.solution02(show_result=False, fname=fname)
+    assert v1==8, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==2286, day_label+", Part 2 Failed, Input: "+fname
 
     fname = 'Input02.txt'
-    v1 = Day02.solution01(show_result=False, fname=fname)
-    v2 = Day02.solution02(show_result=False, fname=fname)
+    v1 = current_day.solution01(show_result=False, fname=fname)
+    v2 = current_day.solution02(show_result=False, fname=fname)
 
-    assert v1==2545, "Day02, Part 1 Failed, Input: "+fname
-    assert v2==78111, "Day02, Part 2 Failed, Input: "+fname
-
+    assert v1==2545, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==78111, day_label+", Part 2 Failed, Input: "+fname
 
 def Day03_test():
-    return None
+    current_day = Day03
+    day_label = 'Day03'
 
 def Day04_test():
-    return None
+    current_day = Day04
+    day_label = 'Day04'
 
 def Day05_test():
-    return None
+    current_day = Day05
+    day_label = 'Day05'
 
 def Day06_test():
-    return None
+    current_day = Day06
+    day_label = 'Day06'
 
 def Day07_test():
-    return None
+    current_day = Day07
+    day_label = 'Day07'
 
 def Day08_test():
-    return None
+    current_day = Day08
+    day_label = 'Day08'
 
 def Day09_test():
-    return None
+    current_day = Day09
+    day_label = 'Day09'
 
 def Day10_test():
-    return None
+    current_day = Day10
+    day_label = 'Day10'
 
 def Day11_test():
-    return None
+    current_day = Day11
+    day_label = 'Day11'
 
 def Day12_test():
-    return None
+    current_day = Day12
+    day_label = 'Day12'
 
 def Day13_test():
-    return None
+    current_day = Day13
+    day_label = 'Day13'
 
 def Day14_test():
-    return None
+    current_day = Day14
+    day_label = 'Day14'
 
 def Day15_test():
-    return None
+    current_day = Day15
+    day_label = 'Day15'
 
 def Day16_test():
-    return None
+    current_day = Day16
+    day_label = 'Day16'
 
 def Day17_test():
-    return None
+    current_day = Day17
+    day_label = 'Day17'
 
 def Day18_test():
-    return None
+    current_day = Day18
+    day_label = 'Day18'
 
 def Day19_test():
-    return None
+    current_day = Day19
+    day_label = 'Day19'
 
 def Day20_test():
-    return None
+    current_day = Day20
+    day_label = 'Day20'
 
 def Day21_test():
-    return None
+    current_day = Day21
+    day_label = 'Day21'
 
 def Day22_test():
-    return None
+    current_day = Day22
+    day_label = 'Day22'
 
 def Day23_test():
-    return None
+    current_day = Day23
+    day_label = 'Day23'
 
 def Day24_test():
-    return None
+    current_day = Day24
+    day_label = 'Day24'
 
 def Day25_test():
-    return None
+    current_day = Day25
+    day_label = 'Day25'
 
 def run_all_tests():
     Day01_test()

@@ -15,20 +15,12 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
+
     data = bh.parse_split_by_emptylines(path,fname,delimiters = [' '],type_lookup = None, allInt = True, allFloat = False)
-    # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
 
     return data
 
-def solution01():
-    fname = 'Input01.txt'
-    # fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input01.txt'):
     data = parse_input01(fname)
     data = np.transpose(data[0])
 
@@ -42,12 +34,11 @@ def solution01():
     for i in range(len(l1)):
         total += abs(l1[i]-l2[i])
 
-    print(total)
+    if show_result: print(total)
 
-def solution02():
-    fname = 'Input01.txt'
-    # fname = 'Input02.txt'
+    return total
 
+def solution02(show_result=True, fname='Input01.txt'):
     data = parse_input01(fname)
     data = np.transpose(data[0])
 
@@ -60,7 +51,9 @@ def solution02():
         if item in freq_table:
             total+=item*freq_table[item]
 
-    print(total) 
+    if show_result: print(total) 
+
+    return total
 
 
 if __name__ == '__main__':
