@@ -726,20 +726,34 @@ class Digraph(object):
 
 #a min heap by default
 #can change to a max heap if desired
+#if compare_func is being used, then it should have the form:
+#compare_func(a,b) = 1 if a>b
+#compare_func(a,b) = 0 if a==b
+#compare_func(a,b) = -1 if a<b
 class AugmentedHeap(object):
-    def __init__(self,useIndex_dict=True,isMaxHeap = False):
+    def __init__(self,useIndex_dict=True,isMaxHeap = False, compare_func = None):
         self.isMinHeap = not isMaxHeap
         self.key_list = []
         self.val_list = []
         self.useIndex_dict = useIndex_dict
+        self.compare_func = compare_func
         if self.useIndex_dict:
             self.index_dict = {}
 
     def key_less_than(self,a,b):
-        return (self.isMinHeap and a<b) or (not self.isMinHeap and a>b)
+        if self.compare_func is None:
+            return (self.isMinHeap and a<b) or (not self.isMinHeap and a>b)
+
+        compare_val = compare_func(a,b)
+        return (self.isMinHeap and compare_val==-1) or (not self.isMinHeap and compare_val==1)
+
 
     def key_greater_than(self,a,b):
-        return (self.isMinHeap and a>b) or (not self.isMinHeap and a<b) 
+        if self.compare_func is None:
+            return (self.isMinHeap and a>b) or (not self.isMinHeap and a<b) 
+
+        compare_val = compare_func(a,b)
+        return (self.isMinHeap and compare_val==1) or (not self.isMinHeap and compare_val==-1) 
 
     def insert_item(self,key,val):
         self.key_list.append(key)

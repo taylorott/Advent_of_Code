@@ -51,7 +51,7 @@ def decode_list(string_list,digit_dict,max_len):
     return total
                     
 
-def solution01():
+def solution01(show_result=True, fname='Input01.txt'):
     digit_dict = {  '0':0,
                     '1':1,
                     '2':2,
@@ -63,14 +63,17 @@ def solution01():
                     '8':8,
                     '9':9}
 
-    fname = 'Input01.txt'
+    # fname = 'Input01.txt'
     # fname = 'Input02.txt'
 
     data = parse_input01(fname)
     total = decode_list(data,digit_dict,1)
-    print(total)
 
-def solution02():
+    if show_result: print(total)
+
+    return total
+
+def solution02(show_result=True, fname='Input01.txt'):
     digit_dict = {  '0':0,
                     '1':1,
                     '2':2,
@@ -92,12 +95,14 @@ def solution02():
                     'eight':8,
                     'nine':9}
 
-    fname = 'Input01.txt'
+    # fname = 'Input01.txt'
     # fname = 'Input02.txt'
 
     data = parse_input01(fname)
     total = decode_list(data,digit_dict,5)
-    print(total)
+    if show_result: print(total)
+    
+    return total
 
 
 if __name__ == '__main__':

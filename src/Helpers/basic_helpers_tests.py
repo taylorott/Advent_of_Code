@@ -148,7 +148,30 @@ def rotate_grid_test():
 	for item in my_grid3:
 		print(item)
 
+def int_to_digit_list_test():
+	test_nums = [0, 153530, 96231, 1, 391]
+
+	print('\n int_to_digit_list test \n')
+	
+	for num in test_nums:
+		print('n='+str(num))
+		print(bh.int_to_digit_list(num))
+		print('')
+
+def digit_list_to_in_test():
+	test_lists = [[0,1,2,7,0],[0],[9,3,2,7],[4,7,2,3,1] ]
+
+	print('\n digit_list_to_in test \n')
+	
+	for my_list in test_lists:
+		print('list='+str(my_list))
+		print(bh.digit_list_to_int(my_list))
+		print('')
+
+
 if __name__ == '__main__':
 	# freq_table_tests()
 	# rotate_grid_test()
-	padding_tests()
+	# padding_tests()
+	# int_to_digit_list_test()
+	digit_list_to_in_test()

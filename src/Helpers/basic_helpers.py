@@ -280,6 +280,10 @@ def grid_diagonals_down_left(mat_in):
 
     return grid_out
 
+def digit_list_to_str(list_in):
+    temp_list = list(map(str,list_in))
+    return list_to_str(temp_list)
+
 def list_to_str(list_in):
     return ''.join(list_in)
 
@@ -395,3 +399,23 @@ def rotate_grid(grid_in,rotation_num):
         
 
     return result
+
+def int_to_digit_list(n):
+    
+    if n == 0: return [0]
+        
+    list_out = []
+
+    while n>0:
+        list_out.append(n%10)
+        n//=10
+
+    list_out.reverse()
+    return list_out
+
+def digit_list_to_int(list_in):
+    n = 0
+
+    for item in list_in: n = 10*n+item
+
+    return n

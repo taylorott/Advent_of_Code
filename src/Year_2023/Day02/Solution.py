@@ -47,9 +47,7 @@ def parse_input01(fname):
             
     return data_out
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+def solution01(show_result=True, fname='Input02.txt'):
 
     max_dict = {'red':12,'green':13,'blue':14}
 
@@ -70,11 +68,11 @@ def solution01():
         if is_possible:
             total+=game_id
             
-    print(total)
+    if show_result: print(total)
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+    return total
+
+def solution02(show_result=True, fname='Input02.txt'):
 
     data = parse_input01(fname)
 
@@ -96,7 +94,9 @@ def solution02():
 
         total+=power
 
-    print(total)
+    if show_result: print(total)
+
+    return total
 
 
 if __name__ == '__main__':
