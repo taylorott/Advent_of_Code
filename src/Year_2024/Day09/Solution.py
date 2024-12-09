@@ -107,42 +107,71 @@ def solution02b():
     fname = 'Input02.txt'
     data = parse_input01(fname)
 
+    #initialize list of priority queues
+    #for empty memory blocks
     empty_block_table = []
-
     for i in range(10): empty_block_table.append([])
 
+    #initialize list of occupied memory blocks
+    #each element will be of form:
+    #[index of first element, block size, block id]
     occupied_block_list = []
+
+    #index of first element of a block
     block_index = 0
+
+    #iterate through each memory block
     for i in range(len(data)):
-        if data[i]!=0:
-            if i%2==0: 
+        if data[i]!=0: #if block size is greater than 0...
+            if i%2==0: #if block is occupied...
+                #update the block list
                 occupied_block_list.append([block_index, data[i], i//2])
-            else: 
+            else: #if block is empty...
+                #add to corresponding priority queue of empty blocks
                 hq.heappush(empty_block_table[data[i]], block_index)
+            #increment the index
             block_index+=data[i]
 
-    total = 0
+    total = 0 #return value
+
+    #iterate through each occupied block from right to left
     while len(occupied_block_list)>0:
+        #get memory block to potentially move
         item = occupied_block_list.pop(-1)
 
+        #unpack memory block
         block_index, block_size, block_id = item[0], item[1], item[2]
 
+        #index and block size of leftmost memory block that fits
         swap_index, swap_size = block_index, None
 
+        #find the leftmost empty block that is large enough to fit occupied block
+        #(and that is to the left of the empty block)
         for i in range(block_size,10):
             if len(empty_block_table[i])>0 and (swap_index is None or  empty_block_table[i][0]<swap_index):
                 swap_index = empty_block_table[i][0]
                 swap_size = i
 
+        #if there is an empty block that exists
         if swap_size is not None:
+            #pop it off the queue
             hq.heappop(empty_block_table[swap_size])
+
+            #update index of occupied block (since we are moving it)
             block_index = swap_index
     
+            #if the empty block is bigger than the block moving into it
+            #then, a portion of the empty block will remain
             if swap_size > block_size:
+                #compute the new size and index, update corresponding prio queue
                 remaining_size = swap_size-block_size
                 hq.heappush(empty_block_table[remaining_size],swap_index+block_size)
 
+        #since we won't touch any occupied block we've seen again, compute the score
+        #add it to the total, and discard it
         total+= (block_id*block_size*(2*block_index+block_size-1))//2
+        
+    #print the result
     print(total)
 
 if __name__ == '__main__':
