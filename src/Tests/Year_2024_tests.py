@@ -20,9 +20,9 @@ from Year_2024.Day05 import Solution as Day05
 from Year_2024.Day06 import Solution as Day06
 from Year_2024.Day07 import Solution as Day07
 from Year_2024.Day08 import Solution as Day08
-# from Year_2024.Day09 import Solution as Day09
-# from Year_2024.Day10 import Solution as Day10
-# from Year_2024.Day11 import Solution as Day11
+from Year_2024.Day09 import Solution as Day09
+from Year_2024.Day10 import Solution as Day10
+from Year_2024.Day11 import Solution as Day11
 # from Year_2024.Day12 import Solution as Day12
 # from Year_2024.Day13 import Solution as Day13
 # from Year_2024.Day14 import Solution as Day14
@@ -116,29 +116,116 @@ def Day05_test():
     current_day = Day05
     day_label = 'Day05'
 
+    fname = 'Input01.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
+
+    assert v1==143, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==123, day_label+", Part 2 Failed, Input: "+fname
+
+    fname = 'Input02.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
+
+    assert v1==4774, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==6004, day_label+", Part 2 Failed, Input: "+fname
+
 def Day06_test():
     current_day = Day06
     day_label = 'Day06'
+
+    fname = 'Input01.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
+
+    assert v1==41, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==6, day_label+", Part 2 Failed, Input: "+fname
+
+    fname = 'Input02.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
+
+    assert v1==5177, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==1686, day_label+", Part 2 Failed, Input: "+fname
 
 def Day07_test():
     current_day = Day07
     day_label = 'Day07'
 
+    fname = 'Input01.txt'
+    v1, v2 = current_day.solution02(show_result=False, fname=fname)
+
+    assert v1==3749, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==11387, day_label+", Part 2 Failed, Input: "+fname
+
+    fname = 'Input02.txt'
+    v1, v2 = current_day.solution02(show_result=False, fname=fname)
+
+    assert v1==1038838357795, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==254136560217241, day_label+", Part 2 Failed, Input: "+fname
+
 def Day08_test():
     current_day = Day08
     day_label = 'Day08'
 
-# def Day09_test():
-#     current_day = Day09
-#     day_label = 'Day09'
+    fname = 'Input01.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
 
-# def Day10_test():
-#     current_day = Day10
-#     day_label = 'Day10'
+    assert v1==14, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==34, day_label+", Part 2 Failed, Input: "+fname
 
-# def Day11_test():
-#     current_day = Day11
-#     day_label = 'Day11'
+    fname = 'Input02.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
+
+    assert v1==265, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==962, day_label+", Part 2 Failed, Input: "+fname
+
+def Day09_test():
+    current_day = Day09
+    day_label = 'Day09'
+
+    fname = 'Input01.txt'
+    v1 = current_day.solution01(show_result=False, fname=fname)
+    v2 = current_day.solution02b(show_result=False, fname=fname)
+
+    assert v1==1928, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==2858, day_label+", Part 2 Failed, Input: "+fname
+
+    fname = 'Input02.txt'
+    v1 = current_day.solution01(show_result=False, fname=fname)
+    v2 = current_day.solution02b(show_result=False, fname=fname)
+
+    assert v1==6323641412437, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==6351801932670, day_label+", Part 2 Failed, Input: "+fname
+
+def Day10_test():
+    current_day = Day10
+    day_label = 'Day10'
+
+    fname = 'Input01.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
+
+    assert v1==36, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==81, day_label+", Part 2 Failed, Input: "+fname
+
+    fname = 'Input02.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
+
+    assert v1==611, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==1380, day_label+", Part 2 Failed, Input: "+fname
+
+
+def Day11_test():
+    current_day = Day11
+    day_label = 'Day11'
+
+    fname = 'Input01.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
+
+    assert v1==55312, day_label+", Part 1 Failed, Input: "+fname
+
+    fname = 'Input02.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
+
+    assert v1==189092, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==224869647102559, day_label+", Part 2 Failed, Input: "+fname
+
 
 # def Day12_test():
 #     current_day = Day12
@@ -205,9 +292,9 @@ def run_all_tests():
     Day06_test()
     Day07_test()
     Day08_test()
-    # Day09_test()
-    # Day10_test()
-    # Day11_test()
+    Day09_test()
+    Day10_test()
+    Day11_test()
     # Day12_test()
     # Day13_test()
     # Day14_test()
@@ -224,7 +311,9 @@ def run_all_tests():
     # Day25_test()
 
 if __name__ == '__main__':
+    t0 = time.time()
     print('Running Year 2024 Tests:')
     run_all_tests()
+    print('total runtime in seconds: ','%.3f' % (time.time()-t0))
     
     

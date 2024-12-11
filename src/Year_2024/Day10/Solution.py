@@ -16,8 +16,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = bh.parse_digit_grid(path,fname)
-    return data
+    return bh.parse_digit_grid(path,fname)
 
 adj_list = [(-1,0),(1,0),(0,-1),(0,1)]
 
@@ -45,10 +44,7 @@ def compute_score(vertex1,grid,num_path_dict):
     num_path_dict[vertex1] = total2
     return total1, total2
 
-def solution():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution(show_result=True, fname='Input02.txt'):
     grid = parse_input01(fname)
 
     total1, total2 = 0, 0
@@ -57,14 +53,16 @@ def solution():
             if grid[i][j]==0: 
                 temp1,temp2 =compute_score((i,j),grid,dict())
                 total1, total2 = total1+temp1, total2+temp2
-    print(total1)
-    print(total2)
+    if show_result:
+        print(total1)
+        print(total2)
+    return total1, total2
 
 
 
 if __name__ == '__main__':
     t0 = time.time()
     solution()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

@@ -16,9 +16,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = bh.parse_char_grid(path,fname)
-
-    return data
+    return bh.parse_char_grid(path,fname)
 
 def match_xmas1(list_in):
     total = 0

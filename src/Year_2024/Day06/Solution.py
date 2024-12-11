@@ -210,12 +210,7 @@ def test_obs_placement(guard_coord,guard_dir,obs_set,extra_obs,skip_dict,grid_di
         #update the current position and direction (exploiting the skip table)
         guard_coord, guard_dir = update_state_with_skip(guard_coord,guard_dir,obs_set,extra_obs,skip_dict,grid_dim)
         
-
-
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution(show_result=True, fname='Input02.txt'):
     #guard_coord are the (i,j) coords of the guard (tuple)
     #obs_set is a set of the (i,j) coords of all obstacles in input
     #grid_dim are the dimensions of the character grid (height,width)
@@ -256,12 +251,14 @@ def solution01():
         if test_obs_placement(guard_coord,guard_dir,obs_set,path_coord,skip_dict,grid_dim): total2+=1
 
     #print results
-    print(total1)
-    print(total2)
+    if show_result:
+        print(total1)
+        print(total2)
+    return total1, total2
 
 if __name__ == '__main__':
     t0 = time.time()
-    solution01()
+    solution()
     print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

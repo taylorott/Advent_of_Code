@@ -16,20 +16,9 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
+    return bh.parse_digit_grid(path,fname)[0]
 
-    return data[0]
-
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     val_list = []
 
     data = parse_input01(fname)
@@ -51,7 +40,10 @@ def solution01():
             val_list[index1]=val_list[index2]
             val_list[index2]=None
 
-    print(compute_score(val_list))
+    v = compute_score(val_list)
+    if show_result: print(v)
+
+    return v
 
 def compute_score(val_list):
     total = 0
@@ -76,10 +68,7 @@ def move_file_block(block_list,index1):
         index2+=1
     return False
 
-def solution02a():
-    fname = 'Input01.txt'
-    # fname = 'Input02.txt'
-
+def solution02a(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     block_list = []
@@ -98,13 +87,12 @@ def solution02a():
     val_list = []
     for item in block_list: val_list+=[item[1]]*item[0]
 
-    print(compute_score(val_list))
+    v = compute_score(val_list)
+    if show_result: print(v)
 
+    return v
 
-
-def solution02b():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+def solution02b(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     #initialize list of priority queues
@@ -172,11 +160,14 @@ def solution02b():
         total+= (block_id*block_size*(2*block_index+block_size-1))//2
         
     #print the result
-    print(total)
+    if show_result: print(total)
+
+    return total
 
 if __name__ == '__main__':
     t0 = time.time()
     solution01()
+    # solution02a()
     solution02b()
     print('runtime in seconds: ','%.3f' % (time.time()-t0))
     

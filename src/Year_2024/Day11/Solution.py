@@ -16,12 +16,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-
-    data = bh.parse_strings(path,fname,delimiters = [' '],type_lookup = None, allInt = True, allFloat = False)
-
-    return data[0]
-
+    return bh.parse_strings(path,fname,delimiters = [' '],type_lookup = None, allInt = True, allFloat = False)[0]
 
 def update(table_in):
     table_out = dict()
@@ -44,10 +39,7 @@ def update(table_in):
         else: table_out[key1]=table_in[stone]
     return table_out
 
-def solution():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
     
     table = dict()
@@ -61,20 +53,20 @@ def solution():
     total1 = 0
     for item in table: total1+=table[item]
 
-    print(total1)
-
     for i in range(50):
         table = update(table)
 
     total2 = 0
     for item in table: total2+=table[item]
 
-    print(total2)
+    if show_result:
+        print(total1)
+        print(total2)
+    return total1, total2
 
 if __name__ == '__main__':
     t0 = time.time()
     solution()
- 
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

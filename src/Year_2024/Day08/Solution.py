@@ -63,11 +63,9 @@ def is_in_bounds(pos,l,w):
     return 0<=pos[0] and pos[0]<l and 0<=pos[1] and pos[1]<w
 
 def solution(show_result=True, fname='Input02.txt'):
-
     pos_dict, l, w = parse_input01(fname)
 
-    node_set1 = set()
-    node_set2 = set()
+    node_set1, node_set2 = set(), set()
     for key in pos_dict:
         coord_list = pos_dict[key]
         for i in range(len(coord_list)):

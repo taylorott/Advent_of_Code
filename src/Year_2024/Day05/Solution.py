@@ -16,21 +16,10 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    data = bh.parse_split_by_emptylines(path,fname,delimiters = [',','\|'],type_lookup = None, allInt = True, allFloat = False)
-    # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-
-    return data
+    return bh.parse_split_by_emptylines(path,fname,delimiters = [',','\|'],type_lookup = None, allInt = True, allFloat = False)
 
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     order_set = {}
@@ -47,21 +36,15 @@ def solution01():
 
         if list1==list2: total1+=list2[len(list2)//2]
         else: total2+=list2[len(list2)//2]
-    print(total1)
-    print(total2)
-
-
-def solution02():
-    fname = 'Input01.txt'
-    # fname = 'Input02.txt'
-
-    # data = parse_input01(fname)
+    if show_result:
+        print(total1)
+        print(total2)
+    return total1, total2
 
 
 if __name__ == '__main__':
     t0 = time.time()
-    solution01()
-    solution02()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    solution()
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

@@ -16,15 +16,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    data = bh.parse_strings(path,fname,delimiters = [' '],type_lookup = None, allInt = True, allFloat = False)
-
-    return data
+    return bh.parse_strings(path,fname,delimiters = [' '],type_lookup = None, allInt = True, allFloat = False)
     
 def check_safety(list_in):
     change_is_bounded = True
@@ -53,7 +45,6 @@ def check_loose_safety(list_in):
     return False
 
 def solution01(show_result=True, fname='Input02.txt'):
-
     data = parse_input01(fname)
     total = 0
     for item in data:
@@ -66,7 +57,6 @@ def solution01(show_result=True, fname='Input02.txt'):
 
 def solution02(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
-
     total = 0
     for item in data:
         if check_loose_safety(item):

@@ -15,10 +15,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-
-    data = bh.parse_split_by_emptylines(path,fname,delimiters = [' '],type_lookup = None, allInt = True, allFloat = False)
-
-    return data
+    return bh.parse_split_by_emptylines(path,fname,delimiters = [' '],type_lookup = None, allInt = True, allFloat = False)
 
 def solution01(show_result=True, fname='Input01.txt'):
     data = parse_input01(fname)
@@ -60,6 +57,6 @@ if __name__ == '__main__':
     t0 = time.time()
     solution01()
     solution02()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 
