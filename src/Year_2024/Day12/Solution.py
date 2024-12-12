@@ -15,8 +15,6 @@ from functools import cmp_to_key
 
 path = currentdir
 
-
-
 up, down, left, right = (-1,0), (1,0), (0,-1), (0,1)
 traversal_dict = {up:[left,right],down:[left,right],left:[up,down],right:[up,down]}
 
