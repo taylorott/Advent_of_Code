@@ -14,15 +14,7 @@ from collections import deque
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-
-    return data
+    return bh.parse_char_grid(path,fname)
 
 def is_digit(char_in):
     return '0'<=char_in and char_in<='9'
@@ -67,9 +59,7 @@ def add_gear_coords(char_dict,gear_coords,i,j):
             if key in char_dict and char_dict[key]=='*':
                 gear_coords.add(key)
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+def solution01(show_result=True, fname='Input02.txt'):
 
     data = parse_input01(fname)
 
@@ -103,11 +93,11 @@ def solution01():
                 current_number = None
                 is_valid = False
 
-    print(total)
+    if show_result: print(total)
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+    return total
+
+def solution02(show_result=True, fname='Input02.txt'):
 
     data = parse_input01(fname)
 
@@ -151,11 +141,12 @@ def solution02():
         if len(gear_dict[gear])==2:
             total+=gear_dict[gear][0]*gear_dict[gear][1]
 
-    print(total)
+    if show_result: print(total)
 
+    return total
 
 if __name__ == '__main__':
     t0 = time.time()
     solution01()
     solution02()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))

@@ -15,15 +15,8 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    data = bh.parse_strings(path,fname,delimiters = [' '],type_lookup = None, allInt = False, allFloat = False)
+    return bh.parse_strings(path,fname,delimiters = [' '],type_lookup = None, allInt = False, allFloat = False)
 
-    return data
 
 #converts a hand string to a sorted list of card frequencies
 #if there are jokers, the frequency of jokers is combined with the highest frequency value in the list
@@ -110,23 +103,23 @@ def eval_score(sorted_hands):
         total+=(i+1)*int(sorted_hands[i][1])
     return total
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
     sorted_hands = sorted(data, key=cmp_to_key(lambda x,y: compare_hands(x[0],y[0],with_jokers=False)))
+    result = eval_score(sorted_hands)
 
-    print(eval_score(sorted_hands))
+    if show_result: print(result)
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+    return result
 
+def solution02(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
     sorted_hands = sorted(data, key=cmp_to_key(lambda x,y: compare_hands(x[0],y[0],with_jokers=True)))
+    result = eval_score(sorted_hands)
 
-    print(eval_score(sorted_hands))
+    if show_result: print(result)
+
+    return result
 
 
 if __name__ == '__main__':

@@ -14,15 +14,7 @@ from collections import deque
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    data = bh.parse_strings(path,fname,delimiters = [' '],type_lookup = None, allInt = False, allFloat = False)
-
-    return data
+    return bh.parse_strings(path,fname,delimiters = [' '],type_lookup = None, allInt = False, allFloat = False)
 
 def count_ways_to_win_slow(t,d):
     total = 0
@@ -51,10 +43,7 @@ def count_ways_to_win(t,d):
     return count_ways_to_win_fast(t,d)
     # return count_ways_to_win_slow(t,d)    
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     time_list = []
@@ -69,12 +58,12 @@ def solution01():
     total=1
     for i in range(len(time_list)):
         total*=count_ways_to_win(time_list[i],distance_list[i])
-    print(total)
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+    if show_result: print(total)
 
+    return total
+
+def solution02(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     str1 = ''
@@ -89,7 +78,11 @@ def solution02():
     t = int(str1)
     d = int(str2)
 
-    print(count_ways_to_win(t,d))
+    result = count_ways_to_win(t,d)
+
+    if show_result: print(result)
+
+    return result
 
 if __name__ == '__main__':
     t0 = time.time()

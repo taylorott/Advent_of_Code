@@ -15,15 +15,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-
-    return data
+    return bh.parse_char_grid(path,fname)
 
 def is_row_empty(grid_in,row_num):
     for i in range(len(grid_in[row_num])):
@@ -90,21 +82,23 @@ def get_pairwise_distances(grid_in,multiplier):
             total+=galaxy_dist(galaxy_list[i],galaxy_list[j],row_list,col_list,multiplier)
     return total
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
    
-    print(get_pairwise_distances(data,2))
+    result = get_pairwise_distances(data,2)
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+    if show_result: print(result)
 
+    return result
+
+def solution02(show_result=True, fname='Input02.txt',mult_val = 1000000):
     data = parse_input01(fname)
 
-    print(get_pairwise_distances(data,1000000))
+    result = get_pairwise_distances(data, mult_val)
+
+    if show_result: print(result)
+
+    return result
 
 if __name__ == '__main__':
     t0 = time.time()

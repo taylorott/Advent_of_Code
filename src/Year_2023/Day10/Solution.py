@@ -15,13 +15,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
     data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
 
     #pad the grid with a ring of '.'
     data = [['.']*len(data[0])] + data + [['.']*len(data[0])]
@@ -167,9 +161,7 @@ def findLoop(grid_in):
 
     return dist_dict
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+def solution01(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
     
     dist_dict = findLoop(data)
@@ -179,23 +171,24 @@ def solution01():
     for key in dist_dict:
         max_dist = max(max_dist,dist_dict[key])
 
-    print(max_dist)
+    if show_result: print(max_dist)
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+    return max_dist
+
+def solution02(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
     
     dist_dict= findLoop(data)
 
-    
     enclosed_area = 0
     for i in range(len(data)):
         for j in range(len(data[0])):
             if (i,j) not in dist_dict and test_enclosed((i,j),data,dist_dict):
                 enclosed_area+=1
 
-    print(enclosed_area)
+    if show_result: print(enclosed_area)
+
+    return enclosed_area
 
 if __name__ == '__main__':
     t0 = time.time()

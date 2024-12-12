@@ -14,12 +14,6 @@ from collections import deque
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
     data = bh.parse_strings(path,fname,delimiters = [':',';'],type_lookup = None, allInt = False, allFloat = False)
 
     data_out = []
@@ -48,7 +42,6 @@ def parse_input01(fname):
     return data_out
 
 def solution01(show_result=True, fname='Input02.txt'):
-
     max_dict = {'red':12,'green':13,'blue':14}
 
     data = parse_input01(fname)
@@ -73,7 +66,6 @@ def solution01(show_result=True, fname='Input02.txt'):
     return total
 
 def solution02(show_result=True, fname='Input02.txt'):
-
     data = parse_input01(fname)
 
     total = 0
@@ -103,6 +95,6 @@ if __name__ == '__main__':
     t0 = time.time()
     solution01()
     solution02()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

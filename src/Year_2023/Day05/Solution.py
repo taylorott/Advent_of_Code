@@ -14,15 +14,7 @@ from collections import deque
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-
-    return data
+    return bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False) 
 
 #build almanac out of input text
 #almanac is in the form of a dictionary
@@ -39,7 +31,6 @@ def parse_input01(fname):
 #where each sub-list has the form [left,right,delta]
 #where if left<= x <= right, you add delta to x, otherwise you leave x unchanged
 def build_dictionaries(data):
-
     seed_vals_strings = data[0][0].split(' ')
     seed_vals_list = []
 
@@ -148,11 +139,7 @@ def compute_final_intervals(input_intervals,current_key,almanac_dict):
 
     return compute_final_intervals(next_intervals,next_key,almanac_dict)
 
-
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     almanac_dict = build_dictionaries(parse_input01(fname))
 
     starting_intervals = []
@@ -162,12 +149,12 @@ def solution01():
         starting_intervals.append([val,val])
 
     ranges_out = compute_final_intervals(starting_intervals,'seed',almanac_dict)
-    print(ranges_out[0][0])
+    
+    if show_result: print(ranges_out[0][0])
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+    return ranges_out[0][0]
 
+def solution02(show_result=True, fname='Input02.txt'):
     almanac_dict = build_dictionaries(parse_input01(fname))
 
     starting_intervals = []
@@ -177,7 +164,10 @@ def solution02():
         starting_intervals.append([starting_val_list[2*i],starting_val_list[2*i] + starting_val_list[2*i+1]-1])
 
     ranges_out = compute_final_intervals(starting_intervals,'seed',almanac_dict)
-    print(ranges_out[0][0])
+    
+    if show_result: print(ranges_out[0][0])
+
+    return ranges_out[0][0]
 
 
 if __name__ == '__main__':

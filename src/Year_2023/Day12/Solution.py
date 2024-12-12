@@ -15,12 +15,6 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
     data = bh.parse_strings(path,fname,delimiters = [' ',','],type_lookup = None, allInt = False, allFloat = False)
 
     spring_str_list = []
@@ -116,29 +110,28 @@ def num_valid_arrangements(spring_str,grouping,memo_dict):
     return memo_dict[key]
 
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     spring_str_list, grouping_list = parse_input01(fname)
     
     total = 0
     for i in range(len(spring_str_list)):
         total+= num_valid_arrangements(spring_str_list[i],grouping_list[i],{})
-    print(total)
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+    if show_result: print(total)
 
+    return total
+
+def solution02(show_result=True, fname='Input02.txt'):
     spring_str_list, grouping_list = parse_input01(fname)
     
     total = 0
     for i in range(len(spring_str_list)):
         spring_str,grouping = expand_problem(spring_str_list[i],grouping_list[i])
         total+= num_valid_arrangements(spring_str,grouping,{})
-    print(total)
 
+    if show_result: print(total)
+
+    return total
 
 if __name__ == '__main__':
     t0 = time.time()

@@ -15,15 +15,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    data = bh.parse_split_by_emptylines(path,fname,delimiters = [''],type_lookup = None, allInt = False, allFloat = False)
-    # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-
-    return data
+    return bh.parse_split_by_emptylines(path,fname,delimiters = [''],type_lookup = None, allInt = False, allFloat = False)
 
 def generate_row_strings(mat_in):
     row_list = []
@@ -63,10 +55,7 @@ def find_mirror(str_list,target_diff_val=0):
             return i+1
     return None
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     total  = 0
@@ -81,12 +70,12 @@ def solution01():
             total += vertical_line_mirror
         if horizontal_line_mirror is not None:
             total += 100*horizontal_line_mirror
-    print(total)
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+    if show_result: print(total)
 
+    return total
+
+def solution02(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     total  = 0
@@ -101,13 +90,15 @@ def solution02():
             total += vertical_line_mirror
         if horizontal_line_mirror is not None:
             total += 100*horizontal_line_mirror
-    print(total)
+    
+    if show_result: print(total)
 
+    return total
 
 if __name__ == '__main__':
     t0 = time.time()
     solution01()
     solution02()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

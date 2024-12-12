@@ -15,15 +15,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-
-    return data
+    return bh.parse_char_grid(path,fname)
 
 north, south, east, west = (-1, 0), ( 1, 0), ( 0, 1), ( 0,-1)
 
@@ -45,8 +37,6 @@ backslash_rule = {north:[west], west:[north],
 beam_rule_dict = {'.':empty_space_rule,
     '|':vertical_splitter_rule, '-':horizontal_splitter_rule,
     '/':fwdslash_rule, '\\':backslash_rule}
-
-
 
 def single_beam_step(grid_in,coord_in,dir_in):
     coord_out = (coord_in[0]+dir_in[0],coord_in[1]+dir_in[1])
@@ -132,7 +122,6 @@ def print_energy_grid(grid_in,energize_mat):
                 grid_out[i][j]='#'
     bh.print_char_matrix(grid_out)
     print()
-
 
 def solution01():
     # fname = 'Input01.txt'

@@ -16,15 +16,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-
-    return data
+    return bh.parse_char_grid(path,fname)
 
 def eval_score(grid_in):
     score = 0
@@ -59,19 +51,17 @@ def execute_cycle(grid_in):
 
     return grid_in
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     slide_north(data)
-    print(eval_score(data))
+    result = eval_score(data)
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+    if show_result: print(result)
 
+    return result
+
+def solution02(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     current_str = str(data)
@@ -94,8 +84,11 @@ def solution02():
     num_cycles = 1000000000-offset
     lookup_index = offset+num_cycles%period
 
-    print(score_lookup[lookup_index])
+    result = score_lookup[lookup_index]
 
+    if show_result: print(result)
+
+    return result
 
 if __name__ == '__main__':
     t0 = time.time()

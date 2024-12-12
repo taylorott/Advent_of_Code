@@ -15,15 +15,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    data = bh.parse_strings(path,fname,delimiters = [' ',','],type_lookup = None, allInt = False, allFloat = False)
-
-    return data
+    return bh.parse_strings(path,fname,delimiters = [' ',','],type_lookup = None, allInt = False, allFloat = False)
 
 def run_hash(str_in):
     current_val = 0
@@ -33,18 +25,17 @@ def run_hash(str_in):
         current_val%=256
     return current_val
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
-    # print(data)
     total = 0
 
     for item in data:
         for my_str in item:
             total+=run_hash(my_str)
-    print(total)
+    
+    if show_result: print(total)
+
+    return total
 
 def parse_string(str_in):
 
@@ -89,10 +80,7 @@ def eval_box_score(box_list):
             total+=(i+1)*(j+1)*current_box[j][1]
     return total
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution02(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     box_list = []
@@ -105,13 +93,16 @@ def solution02():
             execute_command(box_list,my_str)
 
     score_out = eval_box_score(box_list)
-    print(score_out)
+    
+    if show_result: print(score_out)
+
+    return score_out
     
 
 if __name__ == '__main__':
     t0 = time.time()
     solution01()
     solution02()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

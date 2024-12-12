@@ -15,12 +15,6 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
     data = bh.parse_strings(path,fname,delimiters = [',','\(','\)',' ','='],type_lookup = None, allInt = False, allFloat = False)
 
     return data[0][0], data[2:len(data)]
@@ -33,10 +27,7 @@ def build_move_dict(edge_list):
 
     return move_dict
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     move_string, edge_list = parse_input01(fname)
 
     move_dict = build_move_dict(edge_list)
@@ -48,12 +39,11 @@ def solution01():
         current_node = move_dict[current_node][move_char]
         count+=1
 
-    print(count)
+    if show_result: print(count)
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+    return count
 
+def solution02(show_result=True, fname='Input02.txt'):
     move_string, edge_list = parse_input01(fname)
 
     move_dict = build_move_dict(edge_list)
@@ -83,7 +73,9 @@ def solution02():
     for start_state in start_state_list:
         total = lcm(total,period_dict[start_state])
 
-    print(total)
+    if show_result: print(total)
+    
+    return total
                 
 
 if __name__ == '__main__':

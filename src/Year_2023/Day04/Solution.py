@@ -14,12 +14,6 @@ from collections import deque
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
     data = bh.parse_strings(path,fname,delimiters = [' ',':','Card'],type_lookup = None, allInt = False, allFloat = False)
 
     num_cards = len(data)
@@ -46,13 +40,9 @@ def parse_input01(fname):
 
         card_dict[card_num]=[winning_numbers,my_numbers]
 
-
     return card_dict
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     card_dict = parse_input01(fname)
     num_cards = card_dict['num_cards']
 
@@ -70,13 +60,12 @@ def solution01():
         if num_matches>0:
             total+=1<<(num_matches-1)
 
-    print(total)
+    if show_result: print(total)
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+    return total
 
-    
+def solution02(show_result=True, fname='Input02.txt'):
+
     card_dict = parse_input01(fname)
     num_cards = card_dict['num_cards']
 
@@ -98,13 +87,14 @@ def solution02():
             card_quantity_list[i]+=card_quantity_list[card]
         total+=card_quantity_list[card]
 
-    print(total)
+    if show_result: print(total)
 
+    return total
 
 if __name__ == '__main__':
     t0 = time.time()
     solution01()
     solution02()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 
