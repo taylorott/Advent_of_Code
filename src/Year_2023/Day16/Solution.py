@@ -137,6 +137,116 @@ def solution01():
     print(energy_out)
 
 
+def is_in_bounds(coord,grid):
+    return 0<=coord[0] and coord[0]<len(grid) and 0<=coord[1] and coord[1]<len(grid[0])
+
+
+def build_lane(current_coord, current_dir, my_graph, grid_in):
+    while is_in_bounds(current_coord,grid_in):
+        key1 = (current_coord,current_dir)
+        vertex_group = set()
+      
+        while is_in_bounds(current_coord,grid_in) and grid_in[current_coord[0]][current_coord[1]]=='.':
+            vertex_group.add(current_coord)
+            current_coord = (current_coord[0]+current_dir[0],current_coord[1]+current_dir[1])
+
+        if is_in_bounds(current_coord,grid_in): 
+            vertex_group.add(current_coord)
+            c = grid_in[current_coord[0]][current_coord[1]]
+            for next_dir in beam_rule_dict[c][current_dir]:
+                next_coord = (current_coord[0]+next_dir[0],current_coord[1]+next_dir[1])
+                key2 = (next_coord,next_dir)
+                my_graph.add_edge(key1,key2)
+            current_coord = (current_coord[0]+current_dir[0],current_coord[1]+current_dir[1])
+        else:
+            key2 = (current_coord,current_dir)
+            my_graph.add_edge(key1,key2)
+
+        my_graph.vertex_dict[key1]=vertex_group
+
+def build_graph(grid_in):
+    my_graph = Digraph()
+
+    for i in range(len(grid_in)):
+        build_lane((i,0), east, my_graph, grid_in)
+        build_lane((i,len(grid_in[0])-1), west, my_graph, grid_in)
+    for j in range(len(grid_in[0])):
+        build_lane((0,j), south, my_graph, grid_in)
+        build_lane((len(grid_in)-1,j), north, my_graph, grid_in)
+
+    return my_graph
+
+def can_contract(v1,my_graph):
+    
+    if len(my_graph.meta_forward_dict[v1])!=1: return False
+
+    v2 = my_graph.meta_forward_list[v1][0]
+    return len(my_graph.meta_reverse_dict[v2])==1
+
+def energize_recursive(v,my_graph,my_table):
+    if v in my_table: return
+
+    temp_vert1 = v
+    v_stack = [v]
+
+    while can_contract(temp_vert1,my_graph):
+        temp_vert1 = my_graph.meta_forward_list[temp_vert1][0]
+        v_stack.append(temp_vert1)
+
+
+    vertex_group = set()
+
+    for v_temp in v_stack:
+        for q in my_graph.assigned_lookup[v_temp]:
+            if my_graph.vertex_dict[q] is not None:
+                vertex_group = vertex_group.union(my_graph.vertex_dict[q])
+
+
+
+    for v2 in my_graph.meta_forward_dict[v_stack[-1]]:
+        energize_recursive(v2,my_graph,my_table)
+        vertex_group = vertex_group.union(my_table[v2])
+
+    my_table[v] = vertex_group
+
+def energize(start_coord,start_dir,my_graph,my_table):
+    start_vert = my_graph.assigned_dict[(start_coord,start_dir)]
+
+    energize_recursive(start_vert,my_graph,my_table)
+
+
+    return len(my_table[start_vert])
+
+
+def solution03():
+    # fname = 'Input01.txt'
+    fname = 'Input02.txt'
+
+    data = parse_input01(fname)
+    my_graph = build_graph(data)
+    my_graph.build_metagraph()
+
+    
+
+    my_table = dict()
+
+
+    v1 = energize((0,0),east,my_graph,my_table)
+
+    v2 = 0
+    for i in range(len(data)):
+        v2 = max(v2,energize((i,0),east,my_graph,my_table))
+        v2 = max(v2,energize((i,len(data[0])-1),west,my_graph,my_table))
+
+    for j in range(len(data[0])):
+        v2 = max(v2,energize((0,j),south,my_graph,my_table))
+        v2 = max(v2,energize((len(data)-1,j),north,my_graph,my_table))
+
+    print(v1)
+    print(v2)
+    
+
+
 def solution02():
     # fname = 'Input01.txt'
     fname = 'Input02.txt'
@@ -170,7 +280,8 @@ def solution02():
 if __name__ == '__main__':
     t0 = time.time()
     solution01()
-    solution02()
+    # solution02()
+    solution03()
     print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

@@ -503,8 +503,8 @@ class Digraph(object):
             if self.assigned_dict[u]==-1:
                 self.component_size_list.append(0)
                 
-                self.meta_forward_dict.append({})
-                self.meta_reverse_dict.append({})
+                self.meta_forward_dict.append(set())
+                self.meta_reverse_dict.append(set())
                 self.meta_forward_list.append([])
                 self.meta_reverse_list.append([])
             
@@ -533,10 +533,10 @@ class Digraph(object):
                 
                 prev_component = self.assigned_dict[v] 
                 if prev_component!=root and prev_component not in self.meta_reverse_dict[root]:
-                    self.meta_reverse_dict[root][prev_component]=None
+                    self.meta_reverse_dict[root].add(prev_component)
                     self.meta_reverse_list[root].append(prev_component)
                     
-                    self.meta_forward_dict[prev_component][root]=None
+                    self.meta_forward_dict[prev_component].add(root)
                     self.meta_forward_list[prev_component].append(root)
 
     #computes distance from start_vert to target_vert on the graph using dijkstra's algorithm

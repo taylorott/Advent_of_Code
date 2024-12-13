@@ -18,9 +18,6 @@ path = currentdir
 up, down, left, right = (-1,0), (1,0), (0,-1), (0,1)
 traversal_dict = {up:[left,right],down:[left,right],left:[up,down],right:[up,down]}
 
-def in_bounds(i,j,grid):
-    return 0<=i and i<len(grid) and 0<=j and j<len(grid[0])
-
 def parse_input01(fname):
     return bh.parse_char_grid(path,fname)
 
@@ -32,7 +29,8 @@ def dfs_region(i,j,c,grid, area_set, boundary_set):
 
     for delta in traversal_dict:
         i_adj,j_adj = i+delta[0], j+delta[1]
-        if in_bounds(i_adj,j_adj,grid) and grid[i_adj][j_adj]==c:
+        in_bounds = 0<=i_adj and i_adj<len(grid) and 0<=j_adj and j_adj<len(grid[0])
+        if in_bounds and grid[i_adj][j_adj]==c:
             dfs_region(i_adj,j_adj,c,grid,area_set, boundary_set)
         elif (i_adj,j_adj) not in area_set:
             boundary_set.add((i_adj,j_adj,delta))
@@ -45,7 +43,7 @@ def compute_boundary_score(boundary_set):
             total, bdry_normal=total+1, coord[2]
 
             for delta in traversal_dict[bdry_normal]:
-                a = 1
+                a = 0
                 while (coord[0]+a*delta[0],coord[1]+a*delta[1],bdry_normal) in boundary_set:
                     visited_set.add((coord[0]+a*delta[0],coord[1]+a*delta[1],bdry_normal))
                     a+=1
@@ -63,10 +61,7 @@ def solution(show_result=True, fname='Input02.txt'):
                 boundary_score = compute_boundary_score(boundary_set)
                 total1+=len(area_set)*len(boundary_set)
                 total2+=len(area_set)*boundary_score
-
-    if show_result:
-        print(total1)
-        print(total2)
+    if show_result: print(total1,'\n',total2)
 
     return total1, total2
 
