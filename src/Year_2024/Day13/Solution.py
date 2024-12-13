@@ -16,40 +16,25 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    return bh.parse_split_by_emptylines(path,fname,delimiters = [' ',':','\+','=',','],type_lookup = None, allInt = False, allFloat = False)
+    delimeters = [' ',':','\+','=',',','Button','Prize','X','Y','A','B']
+    return bh.parse_split_by_emptylines(path,fname,delimiters = delimeters,type_lookup = None, allInt = True, allFloat = False)
 
-def test_block(block, p2_flag=False):
-    a, c = int(block[0][3]), int(block[0][5])
-    b, d = int(block[1][3]), int(block[1][5])
-     
-    e, f = int(block[2][2]), int(block[2][4])
+def test_block(T, p2_flag=False):
+    a,c,b,d,e,f=T[0][0],T[0][1],T[1][0],T[1][1],T[2][0],T[2][1]
 
-    if p2_flag:
-        e+=10000000000000
-        f+=10000000000000
-
-    M = np.array([[a,b],[c,d]])
-    Y = np.array([e,f])
-    X = np.linalg.solve(M,Y)
-
-    q1, q2 = round(X[0]), round(X[1])
-
-    if q1*a+q2*b == e and q1*c+q2*d == f: return 3*q1+q2
-
-    return 0
+    if p2_flag: e,f=e+10000000000000, f+10000000000000   
+    
+    q1, q2 = (d*e-b*f)//(a*d-b*c), (-c*e+a*f)//(a*d-b*c)
+    
+    return (q1*a+q2*b == e and q1*c+q2*d == f) * (3*q1+q2)
 
 def solution(show_result=True, fname='Input02.txt'):
-    data = parse_input01(fname)
-
-    total1 = 0
-    total2 = 0
-    for block in data:
-        total1+=test_block(block)
-        total2+=test_block(block, True)
-  
-    if show_result:
-        print(total1)
-        print(total2)
+    data, total1, total2 = parse_input01(fname), 0, 0
+    
+    for block in data: total1, total2=total1+test_block(block), total2+test_block(block, True)
+    
+    if show_result: print(str(total1)+'\n'+str(total2))      
+    
     return total1, total2
 
 if __name__ == '__main__':
