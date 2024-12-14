@@ -25,7 +25,7 @@ from Year_2024.Day10 import Solution as Day10
 from Year_2024.Day11 import Solution as Day11
 from Year_2024.Day12 import Solution as Day12
 from Year_2024.Day13 import Solution as Day13
-# from Year_2024.Day14 import Solution as Day14
+from Year_2024.Day14 import Solution as Day14
 # from Year_2024.Day15 import Solution as Day15
 # from Year_2024.Day16 import Solution as Day16
 # from Year_2024.Day17 import Solution as Day17
@@ -261,9 +261,16 @@ def Day13_test():
     assert v1==32041, day_label+", Part 1 Failed, Input: "+fname
     assert v2==95843948914827, day_label+", Part 2 Failed, Input: "+fname
 
-# def Day14_test():
-#     current_day = Day14
-#     day_label = 'Day14'
+def Day14_test():
+    current_day = Day14
+    day_label = 'Day14'
+
+    fname = 'Input02.txt'
+    v1 = current_day.solution01(show_result=False, fname=fname)
+    v2 = current_day.solution02(show_result=False, fname=fname)
+
+    assert v1==225810288, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==6752, day_label+", Part 2 Failed, Input: "+fname
 
 # def Day15_test():
 #     current_day = Day15
@@ -323,7 +330,7 @@ def run_all_tests():
     Day11_test()
     Day12_test()
     Day13_test()
-    # Day14_test()
+    Day14_test()
     # Day15_test()
     # Day16_test()
     # Day17_test()
