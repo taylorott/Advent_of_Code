@@ -38,6 +38,9 @@ beam_rule_dict = {'.':empty_space_rule,
     '|':vertical_splitter_rule, '-':horizontal_splitter_rule,
     '/':fwdslash_rule, '\\':backslash_rule}
 
+direction_char_dict = {north:'^', south:'v',
+    east:'>', west:'<'}
+
 def single_beam_step(grid_in,coord_in,dir_in):
     coord_out = (coord_in[0]+dir_in[0],coord_in[1]+dir_in[1])
 
@@ -49,7 +52,6 @@ def single_beam_step(grid_in,coord_in,dir_in):
         dir_out_list = beam_rule_dict[next_char][dir_in]
 
     return coord_out, dir_out_list, in_bounds
-
 
 def run_sim(grid_in,energize_mat,beam_set,update_list):
     while len(update_list)>0:
@@ -82,10 +84,7 @@ def compute_energy(grid_in,start_item):
             if energize_mat[i][j]>0:
                 total+=1
     return total, energize_mat, beam_set
-
-direction_char_dict = {north:'^', south:'v',
-    east:'>', west:'<'}
-    
+ 
 def print_beam_grid(grid_in,energize_mat,beam_set):
     grid_out = []
     for i in range(len(grid_in)):
@@ -123,10 +122,7 @@ def print_energy_grid(grid_in,energize_mat):
     bh.print_char_matrix(grid_out)
     print()
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     start_item = ((0,-1),east)
@@ -134,12 +130,12 @@ def solution01():
 
     # print_beam_grid(data,energize_mat,beam_set)
     # print_energy_grid(data,energize_mat)
-    print(energy_out)
-
+    if show_result: print(energy_out)
+        
+    return energy_out
 
 def is_in_bounds(coord,grid):
     return 0<=coord[0] and coord[0]<len(grid) and 0<=coord[1] and coord[1]<len(grid[0])
-
 
 def build_lane(current_coord, current_dir, my_graph, grid_in):
     while is_in_bounds(current_coord,grid_in):
@@ -176,81 +172,60 @@ def build_graph(grid_in):
 
     return my_graph
 
+#returns true if and only if v1 has one "child", and that child's only parent is v1
 def can_contract(v1,my_graph):
-    
     if len(my_graph.meta_forward_dict[v1])!=1: return False
 
     v2 = my_graph.meta_forward_list[v1][0]
     return len(my_graph.meta_reverse_dict[v2])==1
 
-def energize_recursive(v,my_graph,my_table):
-    if v in my_table: return
+def energize(v,my_graph,my_table):
+    if v in my_table: return len(my_table[v])
 
-    temp_vert1 = v
-    v_stack = [v]
+    temp_vert, v_stack, vertex_group = v, [v], set()
 
-    while can_contract(temp_vert1,my_graph):
-        temp_vert1 = my_graph.meta_forward_list[temp_vert1][0]
-        v_stack.append(temp_vert1)
-
-
-    vertex_group = set()
+    while can_contract(temp_vert,my_graph):
+        temp_vert = my_graph.meta_forward_list[temp_vert][0]
+        v_stack.append(temp_vert)
 
     for v_temp in v_stack:
         for q in my_graph.assigned_lookup[v_temp]:
             if my_graph.vertex_dict[q] is not None:
                 vertex_group = vertex_group.union(my_graph.vertex_dict[q])
 
-
-
     for v2 in my_graph.meta_forward_dict[v_stack[-1]]:
-        energize_recursive(v2,my_graph,my_table)
+        energize(v2,my_graph,my_table)
         vertex_group = vertex_group.union(my_table[v2])
 
     my_table[v] = vertex_group
 
-def energize(start_coord,start_dir,my_graph,my_table):
-    start_vert = my_graph.assigned_dict[(start_coord,start_dir)]
-
-    energize_recursive(start_vert,my_graph,my_table)
+    return len(my_table[v])
 
 
-    return len(my_table[start_vert])
-
-
-def solution03():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution02b(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
     my_graph = build_graph(data)
     my_graph.build_metagraph()
 
-    
-
     my_table = dict()
 
-
-    v1 = energize((0,0),east,my_graph,my_table)
+    v1 = energize(my_graph.assigned_dict[((0,0),east)],my_graph,my_table)
 
     v2 = 0
     for i in range(len(data)):
-        v2 = max(v2,energize((i,0),east,my_graph,my_table))
-        v2 = max(v2,energize((i,len(data[0])-1),west,my_graph,my_table))
+        v2 = max(v2,energize(my_graph.assigned_dict[((i,0),east)],my_graph,my_table))
+        v2 = max(v2,energize(my_graph.assigned_dict[((i,len(data[0])-1),west)],my_graph,my_table))
 
     for j in range(len(data[0])):
-        v2 = max(v2,energize((0,j),south,my_graph,my_table))
-        v2 = max(v2,energize((len(data)-1,j),north,my_graph,my_table))
+        v2 = max(v2,energize(my_graph.assigned_dict[((0,j),south)],my_graph,my_table))
+        v2 = max(v2,energize(my_graph.assigned_dict[((len(data)-1,j),north)],my_graph,my_table))
 
-    print(v1)
-    print(v2)
-    
+    if show_result: print(str(v1)+'\n'+str(v2))
+
+    return v1, v2
 
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution02a(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     max_energy = 0
@@ -279,9 +254,9 @@ def solution02():
 
 if __name__ == '__main__':
     t0 = time.time()
-    solution01()
-    # solution02()
-    solution03()
+    # solution01()
+    # solution02a()
+    solution02b()
     print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

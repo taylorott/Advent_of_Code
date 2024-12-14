@@ -182,24 +182,23 @@ class Graph(object):
 
         while not myHeap.isempty():
             current_dist, current_vert =myHeap.pop()
+            dist_dict[current_vert]=current_dist
+
+
 
             if current_vert==target_vert:
-                path_stack = [target_vert]
-                while predecessor_dict[path_stack[-1]] is not None:
-                    path_stack.append(predecessor_dict[path_stack[-1]])
+                path_out = [target_vert]
+                while predecessor_dict[path_out[-1]] is not None:
+                    path_out.append(predecessor_dict[path_out[-1]])
 
-                path_out = []
-                while len(path_stack)>0:
-                    path_out.append(path_stack.pop(-1))
+                path_out.reverse()
 
                 output_dict['path_length'] = current_dist
                 output_dict['path'] = path_out
 
                 return output_dict
                 
-            dist_dict[current_vert]=current_dist
-
-            for neighbor_vert in self.adjacency_set[current_vert]:
+            for neighbor_vert in self.adjacency_list[current_vert]:
                 if neighbor_vert not in dist_dict:
 
                     edge_weight = self.edge_dict[current_vert][neighbor_vert]
@@ -214,7 +213,7 @@ class Graph(object):
                         marked_dict[neighbor_vert]=True
                         predecessor_dict[neighbor_vert]=current_vert
 
-                    elif neighbor_dist<myHeap.index_dict[neighbor_vert]:
+                    elif neighbor_dist<myHeap.lookup_key_by_val(neighbor_vert):
                         myHeap.decrement_key(neighbor_dist,neighbor_vert)
                         predecessor_dict[neighbor_vert]=current_vert
 
@@ -576,23 +575,20 @@ class Digraph(object):
 
         while not myHeap.isempty():
             current_dist, current_vert =myHeap.pop()
+            dist_dict[current_vert]=current_dist
 
             if current_vert==target_vert:
-                path_stack = [target_vert]
-                while predecessor_dict[path_stack[-1]] is not None:
-                    path_stack.append(predecessor_dict[path_stack[-1]])
+                path_out = [target_vert]
+                while predecessor_dict[path_out[-1]] is not None:
+                    path_out.append(predecessor_dict[path_out[-1]])
 
-                path_out = []
-                while len(path_stack)>0:
-                    path_out.append(path_stack.pop(-1))
+                path_out.reverse()
 
                 output_dict['path_length'] = current_dist
                 output_dict['path'] = path_out
 
                 return output_dict
                 
-            dist_dict[current_vert]=current_dist
-
             for neighbor_vert in self.forward_adjacency[current_vert]:
                 if neighbor_vert not in dist_dict:
 
@@ -608,7 +604,7 @@ class Digraph(object):
                         marked_dict[neighbor_vert]=True
                         predecessor_dict[neighbor_vert]=current_vert
 
-                    elif neighbor_dist<myHeap.index_dict[neighbor_vert]:
+                    elif neighbor_dist<myHeap.lookup_key_by_val(neighbor_vert):
                         myHeap.decrement_key(neighbor_dist,neighbor_vert)
                         predecessor_dict[neighbor_vert]=current_vert
 
@@ -823,6 +819,11 @@ class AugmentedHeap(object):
                 self.key_list[current_index]=key
                 self.heapify_up(current_index)
             
+    def lookup_key_by_val(self,val):
+        if self.useIndex_dict and val in self.index_dict:
+            return self.key_list[self.index_dict[val]]
+        return None
+
     def update_key(self,key,val):
         if self.useIndex_dict:
             current_index = self.index_dict[val]

@@ -15,7 +15,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    return np.array(bh.parse_strings(path,fname,delimiters = [' '],type_lookup = None, allInt = True, allFloat = False))
+    return np.array(bh.parse_extract_ints(path,fname))
 
 def test_all_zero(array_in):
     return (array_in != 0).sum()==0

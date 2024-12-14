@@ -18,10 +18,10 @@ def parse_input01(fname):
     data = None
     
     # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
+    data = bh.parse_digit_grid(path,fname)
     # data = bh.parse_char_grid(path,fname)
     # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    data = bh.parse_strings(path,fname,delimiters = [''],type_lookup = None, allInt = True, allFloat = False)
+    # data = bh.parse_strings(path,fname,delimiters = [''],type_lookup = None, allInt = True, allFloat = False)
 
     return data
 
@@ -68,36 +68,37 @@ def build_graph(grid_in,start_coord,end_coord,crucible_type):
 
     return myGraph
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     start_coord, end_coord = (0,0), (len(data)-1,len(data[0])-1)
 
     myGraph = build_graph(data,start_coord,end_coord,regular_crucible)
 
-    print(myGraph.compute_dist_dijkstra(start_coord,end_coord)['path_length'])
+    result = myGraph.compute_dist_dijkstra(start_coord,end_coord)['path_length']
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+    if show_result: print(result)
 
+    return result
+
+def solution02(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     start_coord, end_coord = (0,0), (len(data)-1,len(data[0])-1)
 
     myGraph = build_graph(data,start_coord,end_coord,ultra_crucible)
 
-    print(myGraph.compute_dist_dijkstra(start_coord,end_coord)['path_length'])
-   
+    result = myGraph.compute_dist_dijkstra(start_coord,end_coord)['path_length']
 
+    if show_result: print(result)
+
+    return result
+   
 
 if __name__ == '__main__':
     t0 = time.time()
-    solution01()
-    solution02()
+    solution01('Input01.txt')
+    # solution02()
     print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

@@ -331,11 +331,36 @@ def Day15_test():
 def Day16_test():
     current_day = Day16
     day_label = 'Day16'
+            
+    fname = 'Input01.txt'
+    v1, v2 = current_day.solution02b(show_result=False, fname=fname)
+
+    assert v1==46, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==51, day_label+", Part 2 Failed, Input: "+fname
+
+    fname = 'Input02.txt'
+    v1, v2 = current_day.solution02b(show_result=False, fname=fname)
+
+    assert v1==8125, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==8489, day_label+", Part 2 Failed, Input: "+fname
 
 def Day17_test():
     current_day = Day17
     day_label = 'Day17'
+            
+    fname = 'Input01.txt'
+    v1 = current_day.solution01(show_result=False, fname=fname)
+    v2 = current_day.solution02(show_result=False, fname=fname)
 
+    assert v1==102, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==94, day_label+", Part 2 Failed, Input: "+fname
+
+    fname = 'Input02.txt'
+    v1 = current_day.solution01(show_result=False, fname=fname)
+    v2 = current_day.solution02(show_result=False, fname=fname)
+
+    assert v1==851, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==982, day_label+", Part 2 Failed, Input: "+fname
 def Day18_test():
     current_day = Day18
     day_label = 'Day18'
