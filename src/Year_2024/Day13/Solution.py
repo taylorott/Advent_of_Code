@@ -16,8 +16,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    delimeters = [' ',':','\+','=',',','Button','Prize','X','Y','A','B']
-    return bh.parse_split_by_emptylines(path,fname,delimiters = delimeters,type_lookup = None, allInt = True, allFloat = False)
+    return bh.parse_extract_ints_split_by_emptylines(path,fname)
 
 def test_block(T, p2_flag=False):
     a,c,b,d,e,f=T[0][0],T[0][1],T[1][0],T[1][1],T[2][0],T[2][1]

@@ -16,7 +16,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    return bh.parse_strings(path,fname,delimiters = ['p','=','v',',',' '],type_lookup = None, allInt = True, allFloat = False)
+    return bh.parse_extract_ints(path,fname)
 
 def update(robot_list,w=101,h=103):
     for robot in robot_list:

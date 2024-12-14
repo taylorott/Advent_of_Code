@@ -16,7 +16,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    return bh.parse_strings(path,fname,delimiters = [':',' '],type_lookup = None, allInt = True, allFloat = False)
+    return bh.parse_extract_ints(path,fname)
 
 def is_correct_recursive(val,subtotal,num_list,i,p2_flag=False):
     if i==len(num_list):

@@ -15,7 +15,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    return bh.parse_split_by_emptylines(path,fname,delimiters = [' '],type_lookup = None, allInt = True, allFloat = False)
+    return bh.parse_extract_ints_split_by_emptylines(path,fname)
 
 def solution01(show_result=True, fname='Input01.txt'):
     data = parse_input01(fname)

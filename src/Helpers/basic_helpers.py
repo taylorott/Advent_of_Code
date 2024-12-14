@@ -89,6 +89,60 @@ def block_to_grid(block_in,allInt=False):
         list_out.append(row)
     return list_out
 
+#extracts integers from a file (list of lists)
+def parse_extract_ints(path,fname):
+    load_name = os.path.join(path,fname)
+
+    with open(load_name) as f:
+        block = []
+        for line in f.readlines():
+            block.append(extract_ints_from_string(line.strip('\n')))
+
+        return block
+
+    return None
+
+#extracts integers from a file, with additional separation when there is a blank line
+def parse_extract_ints_split_by_emptylines(path,fname):
+    load_name = os.path.join(path,fname)
+
+    list_out = []
+    with open(load_name) as f:
+        new_item = []
+        for line in f.readlines():
+            temp = line.strip('\n')
+
+            if temp == '' and len(new_item)>0:
+                list_out.append(new_item)
+                new_item = []
+
+            elif temp!= '':
+                new_item.append(extract_ints_from_string(temp))
+
+        if len(new_item)>0:
+            list_out.append(new_item)
+
+        return list_out
+    return None
+
+#extracts a list of integers from a string
+def extract_ints_from_string(str_in):
+    list_out = []
+
+    count1 = 0
+    while count1<len(str_in):
+        test1 = '0'<=str_in[count1] and str_in[count1]<='9'
+        test2 = count1+1<len(str_in) and str_in[count1]=='-' and '0'<=str_in[count1+1] and str_in[count1+1]<='9' 
+        if test1 or test2:
+            count2 = count1+1
+            while count2<len(str_in) and ('0'<=str_in[count2] and str_in[count2]<='9'):
+                count2+=1
+            list_out.append(int(str_in[count1:count2]))
+            count1 = count2
+        else:
+            count1+=1
+
+    return list_out
 
 #parses a file that needs specific post-processing to interpret
 def parse_strings(path,fname,delimiters = None,type_lookup = None, allInt = False, allFloat = False):

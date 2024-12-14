@@ -16,7 +16,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    return bh.parse_strings(path,fname,delimiters = [' '],type_lookup = None, allInt = True, allFloat = False)[0]
+    return bh.parse_extract_ints(path,fname)[0]
 
 def update(table_in):
     table_out = dict()
