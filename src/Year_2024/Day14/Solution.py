@@ -16,15 +16,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    data = bh.parse_strings(path,fname,delimiters = ['p','=','v',',',' '],type_lookup = None, allInt = True, allFloat = False)
-
-    return data
+    return bh.parse_strings(path,fname,delimiters = ['p','=','v',',',' '],type_lookup = None, allInt = True, allFloat = False)
 
 def update(robot_list,w=101,h=103):
     for robot in robot_list:
@@ -86,31 +78,33 @@ def vertical_line_detection(robot_list):
     return l
 
 def solution01(show_result=True, fname='Input02.txt'):
-    data = parse_input01(fname)
+    robot_list = parse_input01(fname)
 
     w, h = 101, 103
 
     n = 100
     for i in range(100):
-        update(data,w,h)
+        update(robot_list,w,h)
 
-    result = count_robot_list(data,w,h)
+    result = count_robot_list(robot_list,w,h)
 
     if show_result: print(result)
     
     return result
 
 def solution02(show_result=True, fname='Input02.txt'):
-    data = parse_input01(fname)
+    robot_list = parse_input01(fname)
 
     w, h = 101, 103
 
     count = 0
-    while vertical_line_detection(data)<8:
-        update(data,w,h)
+    while vertical_line_detection(robot_list)<8:
+        update(robot_list,w,h)
         count+=1
 
-    if show_result:print(count)
+    if show_result:
+        print_robot_list(robot_list,w=101,h=103)
+        print(count)
 
     return count
     
