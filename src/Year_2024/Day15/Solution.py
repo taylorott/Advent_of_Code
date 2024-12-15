@@ -26,11 +26,11 @@ def build_grid(grid):
 
     for i in range(len(grid)):
         for j in range(len(grid[0])):
-            c, key = grid[i][j], (i,j)
+            c, coord = grid[i][j], (i,j)
 
-            if c!='.' and c!='@': state_dict[key]=c
+            if c!='.' and c!='@': state_dict[coord]=c
 
-            if c=='@': robot_coord = key
+            if c=='@': robot_coord = coord
 
     return state_dict, robot_coord
 
@@ -71,8 +71,8 @@ def update_state(move_char,state_dict,robot_coord):
 
 def compute_score(state_dict):
     total = 0
-    for key in state_dict:
-        if state_dict[key]=='O' or state_dict[key]=='[': total+=100*key[0]+key[1]
+    for coord in state_dict:
+        if state_dict[coord]=='O' or state_dict[coord]=='[': total+=100*coord[0]+coord[1]
             
     return total
 
