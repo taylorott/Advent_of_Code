@@ -22,19 +22,15 @@ def parse_input01(fname):
     return  bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
 
 def build_grid(grid):
-    state_dict = {}
+    state_dict, robot_coord = {}, None
 
-    robot_coord = None
     for i in range(len(grid)):
         for j in range(len(grid[0])):
-            c = grid[i][j]
+            c, key = grid[i][j], (i,j)
 
-            key = (i,j)
-            if c!='.' and c!='@':
-                state_dict[key]=c
+            if c!='.' and c!='@': state_dict[key]=c
 
-            if c=='@':
-                robot_coord = key
+            if c=='@': robot_coord = key
 
     return state_dict, robot_coord
 
@@ -60,19 +56,16 @@ def update_state(move_char,state_dict,robot_coord):
 
     visited_set = set()
 
-    next_coord = (robot_coord[0]+move_dir[0],robot_coord[1]+move_dir[1])
+    next_coord = coord_addition(robot_coord,move_dir)
 
     can_move = get_children_recursive(next_coord, move_dir, state_dict, visited_set)
 
     if not can_move: return robot_coord 
 
     temp_dict = dict()
-    for coord in visited_set:
-        temp_dict[coord] = state_dict.pop(coord)
+    for coord in visited_set: temp_dict[coord] = state_dict.pop(coord)
 
-    for coord in visited_set:
-        temp_next = (coord[0]+move_dir[0],coord[1]+move_dir[1])
-        state_dict[temp_next] = temp_dict[coord]
+    for coord in visited_set: state_dict[coord_addition(coord,move_dir)] = temp_dict[coord]
 
     return next_coord
 
@@ -116,5 +109,3 @@ if __name__ == '__main__':
     t0 = time.time()
     solution()
     print('runtime in seconds: ','%.3f' % (time.time()-t0))
-    
-
