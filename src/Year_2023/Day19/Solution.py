@@ -15,13 +15,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
     data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
 
     rule_list = data[0]
 
@@ -177,10 +171,7 @@ def run_nondeterministic_operation(workflow_dict,part_dict,rule_label):
 
     return total
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     rule_list, part_list = parse_input01(fname)
     workflow_dict = build_workflow_dict(rule_list)
 
@@ -191,12 +182,12 @@ def solution01():
         if result=='A':
             for key in part_dict:
                 total+=part_dict[key]
-    print(total)
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+    if show_result: print(total)
 
+    return total
+
+def solution02(show_result=True, fname='Input02.txt'):
     rule_list, part_list = parse_input01(fname)
     workflow_dict = build_workflow_dict(rule_list)
 
@@ -204,7 +195,9 @@ def solution02():
 
     total = run_nondeterministic_operation(workflow_dict,part_dict,'in')
 
-    print(total)
+    if show_result: print(total)
+
+    return total
 
 if __name__ == '__main__':
     t0 = time.time()

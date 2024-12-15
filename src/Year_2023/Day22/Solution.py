@@ -15,21 +15,11 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    data = bh.parse_strings(path,fname,delimiters = [',','~'],type_lookup = None, allInt = True, allFloat = False)
-
-    return data
+    return bh.parse_extract_ints(path,fname)
 
 def lower_brick(height_dict,brick_graph,brick):
+    i, j, count = brick[0], brick[1], 0
 
-    i = brick[0]
-    j = brick[1]
-    count = 0
     num_cubes = abs(brick[0]-brick[3])+abs(brick[1]-brick[4])+1
     supporting_height = 0
     supporting_block_set = set()
@@ -134,9 +124,8 @@ def find_supported_bricks(brick_graph,starting_brick):
     return total
 
 
-def solution():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+def solution(show_result=True, fname='Input02.txt'):
+
 
     brick_list = parse_input01(fname)
     for i in range(len(brick_list)):
@@ -145,24 +134,25 @@ def solution():
     brick_graph = construct_brick_graph(brick_list)
 
     #part 1
-    total = 0
+    total1 = 0
     for i in range(len(brick_list)):
         if i not in brick_graph.forward_adjacency:
-            total+=1
+            total1+=1
         else:
             can_remove = True
             for j in brick_graph.forward_adjacency[i]:
                 if j in brick_graph.reverse_adjacency and len(brick_graph.reverse_adjacency[j])==1:
                     can_remove = False   
             if can_remove:
-                total+=1
-    print(total) 
-
+                total1+=1
     #part 2
-    total = 0
+    total2 = 0
     for i in range(len(brick_list)):
-        total+=find_supported_bricks(brick_graph,i)
-    print(total)
+        total2+=find_supported_bricks(brick_graph,i)
+
+    if show_result: print(str(total1)+'\n'+str(total2))
+
+    return total1, total2
 
 if __name__ == '__main__':
     t0 = time.time()

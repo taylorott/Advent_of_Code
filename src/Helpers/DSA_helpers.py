@@ -75,20 +75,20 @@ class LinkedList(object):
 
 class Graph(object):
     def __init__(self):
-        self.adjacency_set = {}
-        self.vertex_dict = {}
+        self.adjacency_set = dict()
+        self.vertex_dict = dict()
         self.vertex_set = set()
         self.numVertices = 0
         self.numEdges = 0
-        self.edge_dict = {}
-        self.degree = {}
+        self.edge_dict = dict()
+        self.degree = dict()
 
     def add_edge(self,v1,v2,w=None):
         if v1 not in self.vertex_dict:
             self.vertex_dict[v1] = None
             self.vertex_set.add(v1)
             self.adjacency_set[v1] = set()
-            self.edge_dict[v1] = {}
+            self.edge_dict[v1] = dict()
             self.degree[v1] = 0
             self.numVertices+=1
 

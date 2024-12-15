@@ -15,12 +15,6 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
     data = bh.parse_strings(path,fname,delimiters = [' '],type_lookup = None, allInt = False, allFloat = False)
     for item in data:
         item[1]=int(item[1])
@@ -112,14 +106,10 @@ def build_trench(command_list):
         val = index_lookup_dict[key]
         coord_lookup_dict[val] = key
 
-
-
     trench_dict = {}
     for i in range(len(row_list)):
         for j in range(len(col_list)):
             trench_dict[(i,j)]='I'
-
-
 
     for i in range(len(coord_list)-1):
         command = command_list[i]
@@ -170,7 +160,6 @@ def compute_square_area(trench_dict, coord_lookup_dict, top_left):
         top_right_coord = coord_lookup_dict[top_right]
         w = top_right_coord[1]-top_left_coord[1]-1
 
-
     area = 0
 
     if top_left_char!='O':
@@ -195,39 +184,62 @@ def compute_total_area(trench_dict, coord_lookup_dict):
 
     return area
 
-
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     trench_dict, coord_lookup_dict = build_trench(data)
     area = compute_total_area(trench_dict, coord_lookup_dict)
-    print(area)
 
+    if show_result: print(area)
 
+    return area
 
-
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution02a(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     command_list = decode_command_list(data)
     trench_dict, coord_lookup_dict = build_trench(command_list)
     
     area = compute_total_area(trench_dict, coord_lookup_dict)
-    print(area)
+    
+    if show_result: print(area)
 
+    return area
 
+def compute_area_lasso(command_list):
+    coord, coord_list, num_sides = (0,0), [], len(command_list)
+    winding_number, total, corner1, corner2, corner_area = 0, 0, 0, 0, 0
 
+    for i1 in range(num_sides):
+        i2, l = (i1+1)%num_sides, command_list[i1][1]
+        direction1, direction2 = direction_dict[command_list[i1][0]], direction_dict[command_list[i2][0]]
+        total+=.5*l
+        coord = (coord[0]+l*direction1[0],coord[1]+l*direction1[1])
+        coord_list.append(coord)
+        winding_number+=(direction1[0]*direction2[1]-direction1[1]*direction2[0])/4
+
+    total+=abs(winding_number)
+
+    for i1 in range(num_sides):
+        i2 = (i1+1)%num_sides
+        total+=winding_number*(coord_list[i1][0]*coord_list[i2][1]-coord_list[i2][0]*coord_list[i1][1])/2
+
+    return round(total)
+
+def solution02b(show_result=True, fname='Input02.txt'):
+    data = parse_input01(fname)
+    v1 = compute_area_lasso(data)
+    v2 = compute_area_lasso(decode_command_list(data))
+
+    if show_result: print(str(v1)+'\n'+str(v2))
+
+    return v1, v2
 
 if __name__ == '__main__':
     t0 = time.time()
-    solution01()
-    solution02()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    # solution01()
+    # solution02a()
+    solution02b()
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

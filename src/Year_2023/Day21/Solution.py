@@ -15,25 +15,14 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-
-    return data
+    return bh.parse_char_grid(path,fname)
 
 def adjacency_criteria(grid_in,coord1,coord2):
     char1 = grid_in[coord1[0]][coord1[1]]
     char2 = grid_in[coord2[0]][coord2[1]]
     return char1!='#' and char2!='#'
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     myGraph = Graph()
@@ -52,9 +41,10 @@ def solution01():
     for item in dist_dict:
         if dist_dict[item]%2==0 and dist_dict[item]<=64:
             total+=1
-    print(total)
+            
+    if show_result: print(total)
 
-
+    return total
 
 def count_extra_periodic_plots_type1(num_steps,base_dist_1,base_dist_2):
 
@@ -75,15 +65,12 @@ def count_extra_periodic_plots_type1(num_steps,base_dist_1,base_dist_2):
     if steps_remaining%2==1 and period%2==1:
         return (q+1)//2
 
-
-
 #counts how many (0<=a,0<=b) exist such that
 # d+a*h+b*w<=steps_remaining
 # a*h+b*w<=steps_remaining-d
 #
 # d+a*h+b*w congruent to steps_remaining (mod 2)
 # a*h+b*w congruent to steps_remaining-d (mod 2)
-
 def step_counting_helper(steps_remaining,d,h,w):
     steps_remaining-=d
 
@@ -122,11 +109,7 @@ def step_counting_helper(steps_remaining,d,h,w):
 
             return subtotal1 + subtotal2
 
-
-
-
 def count_extra_periodic_plots_type2(grid_in, num_steps,corner_base_dist,corner_dist_dict,h,w):
-    
     total = 0
 
     steps_remaining=num_steps-corner_base_dist
@@ -143,7 +126,6 @@ def count_extra_periodic_plots_type2(grid_in, num_steps,corner_base_dist,corner_
     return total
 
 def test_on_large_repeat_graph(data,num_steps):
-
     h = len(data)
     w = len(data[0])    
 
@@ -197,10 +179,7 @@ def test_on_large_repeat_graph(data,num_steps):
     print(total,total_corner,total_base)
 
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution02(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     num_steps = 26501365
@@ -243,20 +222,13 @@ def solution02():
 
     total = 0
 
-
-
     total+=count_extra_periodic_plots_type2(data, num_steps,NW_base_dist,NW_dist_dict,h,w)
     total+=count_extra_periodic_plots_type2(data, num_steps,NE_base_dist,NE_dist_dict,h,w)
     total+=count_extra_periodic_plots_type2(data, num_steps,SW_base_dist,SW_dist_dict,h,w)
     total+=count_extra_periodic_plots_type2(data, num_steps,SE_base_dist,SE_dist_dict,h,w)
 
-
-
-
     repeat_factor = 41
 
-
-    
     wide_grid = []
 
     for i in range(h):
@@ -278,8 +250,6 @@ def solution02():
 
     for i in range(repeat_factor):
         tall_grid+=data
-
-
 
     start_coord_tall = (coord_start[0]+h*(repeat_factor//2),coord_start[1])
 
@@ -310,13 +280,9 @@ def solution02():
                     total-=1
                     subtotal_base+=1
 
-
     for i in range(h):
         for j in range(w):
             if (i,j) in base_dist_dict:
-
-
-
                 coord_N = (i+h,j)
                 coord_NN = (i,j)
                 coord_S = (i+(repeat_factor-2)*h,j)
@@ -333,8 +299,9 @@ def solution02():
                 total+=count_extra_periodic_plots_type1(num_steps,wide_dist_dict[coord_E],wide_dist_dict[coord_EE])
                 total+=count_extra_periodic_plots_type1(num_steps,wide_dist_dict[coord_W],wide_dist_dict[coord_WW])    
 
-    print(total)
+    if show_result: print(total)
 
+    return total
 
 
 
@@ -343,6 +310,6 @@ if __name__ == '__main__':
     t0 = time.time()
     solution01()
     solution02()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

@@ -16,16 +16,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    data = bh.parse_strings(path,fname,delimiters = [':',' '],type_lookup = None, allInt = False, allFloat = False)
-
-    return data
-
+    return bh.parse_strings(path,fname,delimiters = [':',' '],type_lookup = None, allInt = False, allFloat = False)
 
 def compute_dist_BFS(myGraph,start_vert,target_vert,used_edge_set):
     output_dict = {}
@@ -91,10 +82,7 @@ def compute_connection_strength(myGraph,start_vert,target_vert):
 
     return True
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     myGraph = Graph()
@@ -116,8 +104,7 @@ def solution01():
             v1 = vertex_lookup[item[i]]
             myGraph.add_edge(v0,v1)
 
-    size1 = 1
-    size2 = 0
+    size1,size2 = 1, 0
 
     for i in range(1,num_vertices):
         is_connected = compute_connection_strength(myGraph,start_vert=0,target_vert=i)
@@ -127,12 +114,15 @@ def solution01():
         else:
             size2+=1
 
-    print(size1*size2)
+    result = size1*size2
 
+    if show_result: print(result)
+
+    return result
 
 if __name__ == '__main__':
     t0 = time.time()
-    solution01()
+    solution()
     print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

@@ -15,15 +15,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    data = bh.parse_strings(path,fname,delimiters = [' ',',','@'],type_lookup = None, allInt = True, allFloat = False)
-
-    return data
+    return bh.parse_extract_ints(path,fname)
 
 def find_intersection_2D(stone0,stone1):
     px0 = stone0[0]
@@ -64,10 +56,7 @@ def inside_min_max_2D(pos,min_val,max_val):
     y_test = min_val<=pos[1] and pos[1]<=max_val
     return x_test and y_test
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     total = 0
@@ -84,7 +73,9 @@ def solution01():
             if pos is not None and inside_min_max_2D(pos,min_val,max_val):
                 total+=1
 
-    print(total)
+    if show_result: print(total)
+
+    return total
 
 def compute_error(data, pos,vel,t_list):
     pos = np.array(pos)
@@ -112,10 +103,7 @@ def compute_error(data, pos,vel,t_list):
 
     return Y,Jacobian
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution02a(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     t_list = np.array([0]*len(data))
@@ -146,12 +134,12 @@ def solution02():
         vel = np.array(X_new[len(data)+3:])
 
     result = round(pos[0]+pos[1]+pos[2])
-    print(result)
 
-def solution03():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
+    if show_result: print(result)
 
+    return result
+
+def solution02b(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
 
     M = np.zeros((0,6))
@@ -185,13 +173,16 @@ def solution03():
     result = np.linalg.solve(np.dot(M.T,M),np.dot(M.T,Y))
 
     pos_sum = round(np.sum(result[:3]))
-    print(pos_sum)
+
+    if show_result: print(pos_sum)
+
+    return pos_sum
 
 if __name__ == '__main__':
     t0 = time.time()
     solution01()
-    solution02()
-    solution03()
+    solution02a()
+    solution02b()
     print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

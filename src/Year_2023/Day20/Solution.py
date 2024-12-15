@@ -15,15 +15,7 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    data = bh.parse_strings(path,fname,delimiters = [' ',','],type_lookup = None, allInt = False, allFloat = False)
-
-    return data
+    return bh.parse_strings(path,fname,delimiters = [' ',','],type_lookup = None, allInt = False, allFloat = False)
 
 def build_module_dictionaries(data):
     forward_adjacency_dict = {}
@@ -183,16 +175,15 @@ def run1000times(forward_adjacency_dict, type_dict):
     return low_total*high_total
  
 
-def solution01():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution01(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
     forward_adjacency_dict, reverse_adjacency_dict, type_dict = build_module_dictionaries(data)
     
-    
     total = run1000times(forward_adjacency_dict, type_dict)
-    print(total)
+    
+    if show_result: print(total)
+
+    return total
 
 def find_period(forward_adjacency_dict, reverse_adjacency_dict, type_dict, 
                 input_sequence,input_period,observe_list,destination_module_list):
@@ -310,32 +301,30 @@ def find_rx_steps(forward_adjacency_dict, reverse_adjacency_dict, type_dict, myG
             for destination_module_name in destination_module_list:
                 meta_queue.append(myGraph.assigned_dict[destination_module_name])
 
-
     total = 1
 
     for key in period_dict:
         total = lcm(total,period_dict[key])
 
-    print(total)
+    return total
 
 
 
-def solution02():
-    # fname = 'Input01.txt'
-    fname = 'Input02.txt'
-
+def solution02(show_result=True, fname='Input02.txt'):
     data = parse_input01(fname)
     forward_adjacency_dict, reverse_adjacency_dict, type_dict = build_module_dictionaries(data)
     myGraph, input_dict, output_dict = buildGraph(forward_adjacency_dict, reverse_adjacency_dict)
-    find_rx_steps(forward_adjacency_dict, reverse_adjacency_dict, type_dict, myGraph, input_dict, output_dict)
+    result = find_rx_steps(forward_adjacency_dict, reverse_adjacency_dict, type_dict, myGraph, input_dict, output_dict)
     
-    
+    if show_result: print(result)
+
+    return result    
 
 
 if __name__ == '__main__':
     t0 = time.time()
     solution01()
     solution02()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 

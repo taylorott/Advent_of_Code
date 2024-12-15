@@ -4,6 +4,7 @@ import os,sys,inspect
 import numpy as np
 from re import split
 from copy import deepcopy
+from functools import cmp_to_key
 
 #parses a file that is just a single column of numbers
 #returns as a list
@@ -382,6 +383,9 @@ def print_char_matrix(mat_in,transpose = False,reverse_vert=False,reverse_horz=F
             for i in i_list:
                 line+=mat_in[i][j]
             print(line)
+
+def lexicographic_sort(list_in):
+    return sorted(list_in, key=cmp_to_key(lambda x,y: lexicographic_comparison(x,y)))
 
 def lexicographic_comparison(key1,key2):
     for i in range(min(len(key1),len(key2))):
