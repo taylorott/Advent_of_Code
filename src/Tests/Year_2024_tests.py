@@ -26,7 +26,7 @@ from Year_2024.Day11 import Solution as Day11
 from Year_2024.Day12 import Solution as Day12
 from Year_2024.Day13 import Solution as Day13
 from Year_2024.Day14 import Solution as Day14
-# from Year_2024.Day15 import Solution as Day15
+from Year_2024.Day15 import Solution as Day15
 # from Year_2024.Day16 import Solution as Day16
 # from Year_2024.Day17 import Solution as Day17
 # from Year_2024.Day18 import Solution as Day18
@@ -272,9 +272,21 @@ def Day14_test():
     assert v1==225810288, day_label+", Part 1 Failed, Input: "+fname
     assert v2==6752, day_label+", Part 2 Failed, Input: "+fname
 
-# def Day15_test():
-#     current_day = Day15
-#     day_label = 'Day15'
+def Day15_test():
+    current_day = Day15
+    day_label = 'Day15'
+    
+    fname = 'Input01.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
+
+    assert v1==10092, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==9021, day_label+", Part 2 Failed, Input: "+fname
+
+    fname = 'Input02.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
+
+    assert v1==1538871, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==1543338, day_label+", Part 2 Failed, Input: "+fname
 
 # def Day16_test():
 #     current_day = Day16
@@ -317,31 +329,155 @@ def Day14_test():
 #     day_label = 'Day25'
 
 def run_all_tests():
+    t0 = time.time()
+    print('Day01 Test:')
     Day01_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
+    
+    t0 = time.time()
+    print('Day02 Test:')
     Day02_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
+
+    t0 = time.time()
+    print('Day03 Test:')
     Day03_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
+
+    t0 = time.time()
+    print('Day04 Test:')
     Day04_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
+
+    t0 = time.time()
+    print('Day05 Test:')
     Day05_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
+
+    t0 = time.time()
+    print('Day06 Test:')
     Day06_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
+
+    t0 = time.time()
+    print('Day07 Test:')
     Day07_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
+
+    t0 = time.time()
+    print('Day08 Test:')
     Day08_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
+
+    t0 = time.time()
+    print('Day09 Test:')
     Day09_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
+
+    t0 = time.time()
+    print('Day10 Test:')
     Day10_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
+
+    t0 = time.time()
+    print('Day11 Test:')
     Day11_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
+    
+    t0 = time.time()
+    print('Day12 Test:')
     Day12_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
+    
+    t0 = time.time()
+    print('Day13 Test:')
     Day13_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
+
+    t0 = time.time()
+    print('Day14 Test:')
     Day14_test()
-    # Day15_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
+
+    t0 = time.time()
+    print('Day15 Test:')
+    Day15_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
+
+    # t0 = time.time()
+    # print('Day16 Test:')
     # Day16_test()
+    # print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    # print('')
+
+    # t0 = time.time()
+    # print('Day17 Test:')
     # Day17_test()
+    # print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    # print('')
+
+    # t0 = time.time()
+    # print('Day18 Test:')
     # Day18_test()
+    # print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    # print('')
+
+    # t0 = time.time()
+    # print('Day19 Test:')
     # Day19_test()
+    # print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    # print('')
+
+    # t0 = time.time()
+    # print('Day20 Test:')
     # Day20_test()
+    # print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    # print('')
+
+    # t0 = time.time()
+    # print('Day21 Test:')
     # Day21_test()
+    # print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    # print('')
+
+    # t0 = time.time()
+    # print('Day22 Test:')
     # Day22_test()
+    # print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    # print('')
+
+    # t0 = time.time()
+    # print('Day23 Test:')
     # Day23_test()
+    # print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    # print('')
+
+    # t0 = time.time()
+    # print('Day24 Test:')
     # Day24_test()
+    # print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    # print('')
+
+    # t0 = time.time()
+    # print('Day25 Test:')
     # Day25_test()
+    # print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    # print('')
 
 if __name__ == '__main__':
     t0 = time.time()

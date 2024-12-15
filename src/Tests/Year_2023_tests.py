@@ -484,7 +484,6 @@ def Day25_test():
 
     assert v1==591890, day_label+", Part 1 Failed, Input: "+fname
 
-
 def run_all_tests():
     t0 = time.time()
     print('Day01 Test:')
