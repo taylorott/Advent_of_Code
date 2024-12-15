@@ -16,6 +16,8 @@ from functools import cmp_to_key
 path = currentdir
 
 move_dict = {'^':(-1,0),'>':(0,1),'<':(0,-1),'v':(1,0)}
+double_map = {'#':'##','.':'..','O':'[]','@':'@.'}
+
 def parse_input01(fname):
     return  bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
 
@@ -53,7 +55,7 @@ def get_children_recursive(current_coord, move_dir, state_dict, visited_set):
 
     return result
     
-def update_state2(move_char,state_dict,robot_coord):
+def update_state(move_char,state_dict,robot_coord):
     move_dir = move_dict[move_char]
 
     visited_set = set()
@@ -77,32 +79,23 @@ def update_state2(move_char,state_dict,robot_coord):
 def compute_score(state_dict):
     total = 0
     for key in state_dict:
-        if state_dict[key]=='O' or state_dict[key]=='[':
-            total+=100*key[0]+key[1]
-
-    return total     
+        if state_dict[key]=='O' or state_dict[key]=='[': total+=100*key[0]+key[1]
+            
+    return total
 
 def double_grid(grid_in):
     grid_out = []
-
     for item in grid_in:
         str_temp = ''
-        for c in item:
-            if c=='#':
-                str_temp+='##'
-            if c=='.':
-                str_temp+='..'
-            if c=='O':
-                str_temp+='[]'
-            if c=='@':
-                str_temp+='@.'
+        for c in item: str_temp+=double_map[c]
+
         grid_out.append(str_temp)
     return grid_out
 
 def run_all_commands(robot_coord, state_dict, command_list):
     for item in command_list:
         for move_char in item:
-            robot_coord = update_state2(move_char,state_dict,robot_coord)
+            robot_coord = update_state(move_char,state_dict,robot_coord)
 
     return compute_score(state_dict)
 
