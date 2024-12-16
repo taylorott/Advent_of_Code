@@ -2,6 +2,7 @@
 import os,sys,inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 sys.path.insert(0,os.path.dirname(os.path.dirname(currentdir)))
+path = currentdir
 
 import time
 import numpy as np
@@ -12,8 +13,6 @@ from Helpers.DSA_helpers import Graph, Digraph, frequency_table, AugmentedHeap, 
 from math import gcd, lcm
 from collections import deque
 from functools import cmp_to_key
-
-path = currentdir
 
 up,down ,left, right = (-1,0), (1,0), (0,-1), (0,1)
 rotate_dict = {up:[left,right],down:[left,right],left:[up,down],right:[up,down]}
@@ -38,7 +37,7 @@ def parse_input01(fname):
 
     return valid_set, start_tile, end_tile
 
-def build_graph(valid_set):
+def build_graph(valid_set, end_tile):
     forwardGraph, reverseGraph = Digraph(), Digraph()
 
     for coord in valid_set:
@@ -54,29 +53,25 @@ def build_graph(valid_set):
                 forwardGraph.add_edge(key1,key2,1000)
                 reverseGraph.add_edge(key2,key1,1000)
 
+    for dir_end in rotate_dict:
+        forwardGraph.add_edge((end_tile,dir_end),end_tile,0)
+        reverseGraph.add_edge(end_tile,(end_tile,dir_end),0)
+
     return forwardGraph, reverseGraph
 
 def solution(show_result=True, fname='Input02.txt'):
     valid_set, start_tile, end_tile = parse_input01(fname)
-    forwardGraph, reverseGraph = build_graph(valid_set)
+    forwardGraph, reverseGraph = build_graph(valid_set, end_tile)
 
     start_key, min_score, sit_set = (start_tile,right), None, set()
 
-    forward_dist_dict, reverse_dist_dict = forwardGraph.compute_dist_dijkstra(start_key)['dist_dict'], dict()
- 
-    for end_dir in rotate_dict:
-        end_key = (end_tile,end_dir)
-        temp_dict = reverseGraph.compute_dist_dijkstra(end_key)['dist_dict']
+    forward_dist_dict  = forwardGraph.compute_dist_dijkstra(start_key)['dist_dict']
+    reverse_dist_dict  = reverseGraph.compute_dist_dijkstra(end_tile)['dist_dict']
 
-        if min_score is None or forward_dist_dict[end_key]<min_score: min_score = forward_dist_dict[end_key]
-
-        for mid_key in temp_dict:
-            if mid_key in reverse_dist_dict: reverse_dist_dict[mid_key] = min(reverse_dist_dict[mid_key], temp_dict[mid_key])
-
-            else: reverse_dist_dict[mid_key] = temp_dict[mid_key]
+    min_score = forward_dist_dict[end_tile]
 
     for mid_key in forward_dist_dict:
-        if forward_dist_dict[mid_key]+reverse_dist_dict[mid_key]==min_score: sit_set.add(mid_key[0])
+        if mid_key!=end_tile and forward_dist_dict[mid_key]+reverse_dist_dict[mid_key]==min_score: sit_set.add(mid_key[0])
 
     v1, v2 = min_score, len(sit_set)
 
