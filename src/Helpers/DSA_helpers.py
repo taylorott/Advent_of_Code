@@ -557,7 +557,7 @@ class Digraph(object):
     #target_vert to None, or don't use it as an input, in this case, 'path' and 'path_length'
     #will not be in output dictionary, but the dist_dict and predecessor_dict will be complete
     #the same also happens if no path exists from start_vert to target_vert
-    def compute_dist_dijkstra(self,start_vert,target_vert=None):
+    def compute_dist_dijkstra(self,start_vert,target_vert=None,reverse=False):
         output_dict = {}
 
         if start_vert not in self.vertex_dict:
@@ -572,6 +572,11 @@ class Digraph(object):
         marked_dict = {}
         predecessor_dict = {start_vert:None}
         output_dict['predecessor_dict'] = predecessor_dict
+
+        adjacency_dict = self.forward_adjacency
+
+        if reverse: adjacency_dict = self.reverse_adjacency
+
 
         while not myHeap.isempty():
             current_dist, current_vert =myHeap.pop()
@@ -589,10 +594,13 @@ class Digraph(object):
 
                 return output_dict
                 
-            for neighbor_vert in self.forward_adjacency[current_vert]:
+            for neighbor_vert in adjacency_dict[current_vert]:
                 if neighbor_vert not in dist_dict:
 
-                    edge_weight = self.edge_dict[current_vert][neighbor_vert]
+                    if reverse:
+                        edge_weight = self.edge_dict[neighbor_vert][current_vert]
+                    else:
+                        edge_weight = self.edge_dict[current_vert][neighbor_vert]
 
                     if edge_weight is None:
                         edge_weight = 1
