@@ -40,13 +40,9 @@ def build_graph(valid_set, end_tile):
     for coord in valid_set:
         for dir1 in rotate_dict:
             key1, next_coord = (coord,dir1), coord_addition(coord,dir1)
+            if next_coord in valid_set: gridGraph.add_edge(key1,(next_coord,dir1),1)
 
-            if next_coord in valid_set:
-                key2 = (next_coord,dir1)
-                gridGraph.add_edge(key1,key2,1)
-            for dir2 in rotate_dict[dir1]:
-                key2 = (coord,dir2)
-                gridGraph.add_edge(key1,key2,1000)
+            for dir2 in rotate_dict[dir1]: gridGraph.add_edge(key1,(coord,dir2),1000)    
 
     for dir_end in rotate_dict:
         gridGraph.add_edge((end_tile,dir_end),end_tile,0)
