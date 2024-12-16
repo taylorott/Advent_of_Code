@@ -28,12 +28,9 @@ def parse_input01(fname):
         for j in range(len(data[0])):
             c = data[i][j]
             key = (i,j)
-            if c!='#':
-                valid_set.add(key)
-            if c=='S':
-                 start_tile = key   
-            if c=='E':
-                 end_tile = key   
+            if c!='#': valid_set.add(key)
+            if c=='S': start_tile = key   
+            if c=='E': end_tile = key   
 
     return valid_set, start_tile, end_tile
 
