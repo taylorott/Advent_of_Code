@@ -14,7 +14,7 @@ from math import gcd, lcm
 from collections import deque
 from functools import cmp_to_key
 
-up,down ,left, right = (-1,0), (1,0), (0,-1), (0,1)
+up, down, left, right = (-1,0), (1,0), (0,-1), (0,1)
 rotate_dict = {up:[left,right],down:[left,right],left:[up,down],right:[up,down]}
 
 def coord_addition(coord1,coord2): return (coord1[0]+coord2[0],coord1[1]+coord2[1])
