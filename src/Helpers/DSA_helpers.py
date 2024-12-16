@@ -577,7 +577,6 @@ class Digraph(object):
 
         if reverse: adjacency_dict = self.reverse_adjacency
 
-
         while not myHeap.isempty():
             current_dist, current_vert =myHeap.pop()
             dist_dict[current_vert]=current_dist
@@ -597,6 +596,7 @@ class Digraph(object):
             for neighbor_vert in adjacency_dict[current_vert]:
                 if neighbor_vert not in dist_dict:
 
+                    edge_weight = None
                     if reverse:
                         edge_weight = self.edge_dict[neighbor_vert][current_vert]
                     else:
