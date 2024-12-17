@@ -35,35 +35,28 @@ def parse_input01(fname):
     return valid_set, start_tile, end_tile
 
 def build_graph(valid_set, end_tile):
-    forwardGraph, reverseGraph = Digraph(), Digraph()
+    gridGraph = Digraph()
 
     for coord in valid_set:
         for dir1 in rotate_dict:
             key1, next_coord = (coord,dir1), coord_addition(coord,dir1)
+            if next_coord in valid_set: gridGraph.add_edge(key1,(next_coord,dir1),1)
 
-            if next_coord in valid_set:
-                key2 = (next_coord,dir1)
-                forwardGraph.add_edge(key1,key2,1)
-                reverseGraph.add_edge(key2,key1,1)
-            for dir2 in rotate_dict[dir1]:
-                key2 = (coord,dir2)
-                forwardGraph.add_edge(key1,key2,1000)
-                reverseGraph.add_edge(key2,key1,1000)
+            for dir2 in rotate_dict[dir1]: gridGraph.add_edge(key1,(coord,dir2),1000)    
 
     for dir_end in rotate_dict:
-        forwardGraph.add_edge((end_tile,dir_end),end_tile,0)
-        reverseGraph.add_edge(end_tile,(end_tile,dir_end),0)
+        gridGraph.add_edge((end_tile,dir_end),end_tile,0)
 
-    return forwardGraph, reverseGraph
+    return gridGraph
 
 def solution(show_result=True, fname='Input02.txt'):
     valid_set, start_tile, end_tile = parse_input01(fname)
-    forwardGraph, reverseGraph = build_graph(valid_set, end_tile)
+    gridGraph = build_graph(valid_set, end_tile)
 
-    start_key, min_score, sit_set = (start_tile,right), None, set()
+    start_key, sit_set = (start_tile,right), set()
 
-    forward_dist_dict  = forwardGraph.compute_dist_dijkstra(start_key)['dist_dict']
-    reverse_dist_dict  = reverseGraph.compute_dist_dijkstra(end_tile)['dist_dict']
+    forward_dist_dict  = gridGraph.compute_dist_dijkstra(start_key)['dist_dict']
+    reverse_dist_dict  = gridGraph.compute_dist_dijkstra(end_tile, reverse=True)['dist_dict']
 
     min_score = forward_dist_dict[end_tile]
 
