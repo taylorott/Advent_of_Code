@@ -32,7 +32,7 @@ from Year_2024.Day16 import Solution as Day16
 from Year_2024.Day18 import Solution as Day18
 from Year_2024.Day19 import Solution as Day19
 from Year_2024.Day20 import Solution as Day20
-# from Year_2024.Day21 import Solution as Day21
+from Year_2024.Day21 import Solution as Day21
 # from Year_2024.Day22 import Solution as Day22
 # from Year_2024.Day23 import Solution as Day23
 # from Year_2024.Day24 import Solution as Day24
@@ -350,9 +350,20 @@ def Day20_test():
     assert v1==1286, day_label+", Part 1 Failed, Input: "+fname
     assert v2==989316, day_label+", Part 2 Failed, Input: "+fname
 
-# def Day21_test():
-#     current_day = Day21
-#     day_label = 'Day21'
+def Day21_test():
+    current_day = Day21
+    day_label = 'Day21'
+
+    fname = 'Input01.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
+
+    assert v1==126384, day_label+", Part 1 Failed, Input: "+fname
+
+    fname = 'Input02.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
+
+    assert v1==246990, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==306335137543664, day_label+", Part 2 Failed, Input: "+fname
 
 # def Day22_test():
 #     current_day = Day22
@@ -491,11 +502,11 @@ def run_all_tests():
     print('test runtime in seconds: ','%.3f' % (time.time()-t0))
     print('')
 
-    # t0 = time.time()
-    # print('Day21 Test:')
-    # Day21_test()
-    # print('test runtime in seconds: ','%.3f' % (time.time()-t0))
-    # print('')
+    t0 = time.time()
+    print('Day21 Test:')
+    Day21_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
 
     # t0 = time.time()
     # print('Day22 Test:')
