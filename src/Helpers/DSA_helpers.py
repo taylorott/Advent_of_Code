@@ -1,5 +1,52 @@
 from collections import deque 
 
+
+
+class UnionFind(object):
+    def __init__(self):
+        self.leader_dict = dict()
+        self.size_dict = dict()
+
+    def add_key(self,key):
+        self.leader_dict[key] = None
+        self.size_dict[key] = 1
+
+    def find(self,key):
+        if key not in self.leader_dict: return None
+
+        next_key = self.leader_dict[key]
+        
+        if next_key is None: return key
+
+        next_key = self.find(next_key)
+        self.leader_dict[key] = next_key
+
+        return next_key
+
+    def union(self,key1,key2):
+        if key1 not in self.leader_dict or key2 not in self.leader_dict: return None
+
+        key1, key2 = self.find(key1), self.find(key2)
+        s1, s2 = size_dict[key1], size_dict[key2]
+
+        if key1==key2: return None
+
+        if s1>=s2:
+            self.leader_dict[key2] = key1
+            self.size_dict[key1]+=s2
+            self.size_dict.pop(key2)
+        else:
+            self.leader_dict[key1] = key2
+            self.size_dict[key2]+=s1
+            self.size_dict.pop(key1)
+
+    def get_size(self,key):
+        if key not in self.leader_dict: return None
+
+        return self.size_dict[self.find(key)]
+
+
+
 class LinkedList(object):
     def __init__(self,val=None):
         self.next = None

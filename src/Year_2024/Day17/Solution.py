@@ -16,17 +16,8 @@ from functools import cmp_to_key
 path = currentdir
 
 def parse_input01(fname):
-    data = None
-    
-    # data = bh.parse_num_column(path,fname)
-    # data = bh.parse_digit_grid(path,fname)
-    # data = bh.parse_char_grid(path,fname)
-    # data = bh.parse_split_by_emptylines(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    # data = bh.parse_strings(path,fname,delimiters = [],type_lookup = None, allInt = False, allFloat = False)
-    # data = bh.parse_extract_ints_split_by_emptylines(path,fname)
-    data = bh.parse_extract_ints(path,fname)
+    return bh.parse_extract_ints(path,fname)
 
-    return data
 
 def get_operand(instructions, instruction_pointer, state_list):
     operand = instructions[instruction_pointer+1]
