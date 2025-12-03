@@ -14,7 +14,7 @@ from collections import deque
 
 from Year_2025.Day01 import Solution as Day01
 from Year_2025.Day02 import Solution as Day02
-# from Year_2025.Day03 import Solution as Day03
+from Year_2025.Day03 import Solution as Day03
 # from Year_2025.Day04 import Solution as Day04
 # from Year_2025.Day05 import Solution as Day05
 # from Year_2025.Day06 import Solution as Day06
@@ -80,6 +80,20 @@ def Day02_test():
 def Day03_test():
     current_day = Day03
     day_label = 'Day03'
+
+    fname = 'Input01.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
+    v1_true, v2_true = 357, 3121910778619
+
+    assert v1==v1_true, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==v2_true, day_label+", Part 2 Failed, Input: "+fname
+
+    fname = 'Input02.txt'
+    v1, v2 = current_day.solution(show_result=False, fname=fname)
+    v1_true, v2_true = 17427, 173161749617495
+
+    assert v1==v1_true, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==v2_true, day_label+", Part 2 Failed, Input: "+fname
 
 def Day04_test():
     current_day = Day04
@@ -183,11 +197,11 @@ def run_all_tests():
     print('test runtime in seconds: ','%.3f' % (time.time()-t0))
     print('')
 
-    # t0 = time.time()
-    # print('Day03 Test:')
-    # Day03_test()
-    # print('test runtime in seconds: ','%.3f' % (time.time()-t0))
-    # print('')
+    t0 = time.time()
+    print('Day03 Test:')
+    Day03_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
 
     # t0 = time.time()
     # print('Day04 Test:')
