@@ -27,7 +27,7 @@ class UnionFind(object):
         if key1 not in self.leader_dict or key2 not in self.leader_dict: return None
 
         key1, key2 = self.find(key1), self.find(key2)
-        s1, s2 = size_dict[key1], size_dict[key2]
+        s1, s2 = self.size_dict[key1], self.size_dict[key2]
 
         if key1==key2: return None
 
