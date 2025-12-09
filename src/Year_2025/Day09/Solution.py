@@ -32,24 +32,6 @@ def compute_area_transformed_coords(coord1,coord2,x_lookup,y_lookup):
 def transform_coord(coord,x_lookup,y_lookup):
     return (x_lookup[coord[0]],y_lookup[coord[1]])
 
-def compute_winding(coord_list):
-    n = len(coord_list)
-    total = 0
-    for i in range(n):
-        j = (i+1)%n
-        k = (i+2)%n
-
-        dx1 = coord_list[j][0]-coord_list[i][0]
-        dy1 = coord_list[j][1]-coord_list[i][1]
-
-        dx2 = coord_list[k][0]-coord_list[j][0]
-        dy2 = coord_list[k][1]-coord_list[j][1]
-
-
-        total+=np.sign(dx1*dy2-dy1*dx2)
-
-    return round(total/4)
-
 def construct_coord_lookups(coord_list):
     x_set, y_set = set(), set()
     
@@ -77,40 +59,31 @@ def construct_coord_lookups(coord_list):
     return x_forward, x_reverse, y_forward, y_reverse, coord_list_transformed
 
 delta_list = [(1,0),(-1,0),(0,1),(0,-1)]
-
-def flood_fill(start_coord,fill_set):
-    todo_list = [start_coord]
+def flood_fill(grid):
+    w = len(grid)
+    h = len(grid[0])
+    todo_list = [(0,0)]
 
     while len(todo_list)>0:       
         coord = todo_list.pop()
-        fill_set.add(coord)
-
+        grid[coord[0]][coord[1]]=False
+        
         for delta in delta_list:
             next_coord = (coord[0]+delta[0],coord[1]+delta[1])
 
-            if next_coord not in fill_set:
+            if (0<=next_coord[0] and 
+                next_coord[0]<w  and 
+                0<=next_coord[1] and
+                next_coord[1]<h  and
+                grid[next_coord[0]][next_coord[1]] is None):
+
                 todo_list.append(next_coord)
 
-def run_flood_fill(coord_list,fill_set):
-    winding = compute_winding(coord_list)
+    for i in range(w):
+        for j in range(h):
+            if grid[i][j] is None:
+                grid[i][j] = True
 
-    n = len(coord_list)
-    for i in range(n):
-        j = (i+1)%n
-        k = (i+2)%n
-
-        dx1 = coord_list[j][0]-coord_list[i][0]
-        dy1 = coord_list[j][1]-coord_list[i][1]
-        dx2 = coord_list[k][0]-coord_list[j][0]
-        dy2 = coord_list[k][1]-coord_list[j][1]
-
-        turn = np.sign(dx1*dy2-dy1*dx2)
-
-        if turn == winding:
-            x = coord_list[j][0]+np.sign(dx2)-np.sign(dx1)
-            y = coord_list[j][1]+np.sign(dy2)-np.sign(dy1)
-
-            flood_fill((x,y),fill_set)
 
 def directional_increment(coord,coord_target):
     x = coord[0]+np.sign(coord_target[0]-coord[0])
@@ -137,48 +110,92 @@ def solution02(show_result=True, fname='Input02.txt'):
 
     n = len(data)
 
+    w = len(x_forward)
+    h = len(y_forward)
+
     fill_set = set()
+    grid = []
+    bottom_dict = []
+
+    for i in range(w):
+        grid.append([None]*h)
+        bottom_dict.append([None]*h)
 
     for i in range(n):
         coord = coord_list_transformed[i]
         coord_target = coord_list_transformed[(i+1)%n]
 
         fill_set.add(coord)
+        grid[coord[0]][coord[1]]=True
         while coord!=coord_target:
             coord = directional_increment(coord,coord_target)
+            grid[coord[0]][coord[1]]=True
             fill_set.add(coord)
 
-    run_flood_fill(coord_list_transformed,fill_set)
+    flood_fill(grid)
 
-    bottom_dict = dict()
     for i in range(len(x_forward)):
         bottom_most_coord = None
         for j in range(len(y_forward)):
-            if (i,j) in fill_set:
+            
+            if grid[i][j]:
                 if bottom_most_coord is None:
                     bottom_most_coord = j
-                bottom_dict[(i,j)] = bottom_most_coord
+                bottom_dict[i][j] = bottom_most_coord
             else:
                 bottom_most_coord = None
-                bottom_dict[(i,j)] = np.inf
+                bottom_dict[i][j] = np.inf
+
+    coords_sorted = sorted(coord_list_transformed, key=lambda item: item[0]*h+item[1])
 
     area = 0
-    for i in range(len(coord_list_transformed)):
-        coord1 = coord_list_transformed[i]
-        for j in range(i+1,len(coord_list_transformed)):
-            coord2 = coord_list_transformed[j]
+    for i in range(len(coords_sorted)):
+        coord1 = coords_sorted[i]
+        x1 = coord1[0]
+        y1 = coord1[1]
 
-            y_bottom = min(coord1[1],coord2[1])
-            y_top = max(coord1[1],coord2[1])
+        x = x1
 
-            is_full = True
-            for x in range(min(coord1[0],coord2[0]),max(coord1[0],coord2[0])+1):
-                if bottom_dict[(x,y_top)]>y_bottom:
-                    is_full = False
-                    break
+        max_bottom = bottom_dict[x1][y1]
+        for j in range(len(coords_sorted)):
+            coord2 = coords_sorted[j]
+            x2 = coord2[0]
+            y2 = coord2[1]
 
-            if is_full:
-                area = max(area,compute_area_transformed_coords(coord1,coord2,x_forward,y_forward))
+            if x2<x1:
+                continue
+
+            if x2>=x1:
+                while x<x2:
+                    x+=1
+                    max_bottom = max(max_bottom,bottom_dict[x][y1])
+
+                if max_bottom<=y2 and y2<=y1:
+                    area = max(area,compute_area_transformed_coords(coord1,coord2,x_forward,y_forward))
+
+    for i in range(len(coords_sorted)-1,-1,-1):
+        coord1 = coords_sorted[i]
+        x1 = coord1[0]
+        y1 = coord1[1]
+
+        x = x1
+
+        max_bottom = bottom_dict[x1][y1]
+        for j in range(len(coords_sorted)-1,-1,-1):
+            coord2 = coords_sorted[j]
+            x2 = coord2[0]
+            y2 = coord2[1]
+
+            if x2>x1:
+                continue
+
+            if x2<=x1:
+                while x>x2:
+                    x-=1
+                    max_bottom = max(max_bottom,bottom_dict[x][y1])
+
+                if max_bottom<=y2 and y2<=y1:
+                    area = max(area,compute_area_transformed_coords(coord1,coord2,x_forward,y_forward))
 
     if show_result:
         print(area)
@@ -189,6 +206,6 @@ if __name__ == '__main__':
     t0 = time.time()
     solution01()
     solution02()
-    # print('runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('runtime in seconds: ','%.3f' % (time.time()-t0))
     
 
