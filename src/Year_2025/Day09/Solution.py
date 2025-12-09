@@ -151,51 +151,41 @@ def solution02(show_result=True, fname='Input02.txt'):
     area = 0
     for i in range(len(coords_sorted)):
         coord1 = coords_sorted[i]
-        x1 = coord1[0]
-        y1 = coord1[1]
-
-        x = x1
+        x1, y1, x = coord1[0], coord1[1], coord1[0]
 
         max_bottom = bottom_dict[x1][y1]
         for j in range(len(coords_sorted)):
             coord2 = coords_sorted[j]
-            x2 = coord2[0]
-            y2 = coord2[1]
+            x2, y2 = coord2[0], coord2[1]
 
             if x2<x1:
                 continue
 
-            if x2>=x1:
-                while x<x2:
-                    x+=1
-                    max_bottom = max(max_bottom,bottom_dict[x][y1])
+            while x<x2:
+                x+=1
+                max_bottom = max(max_bottom,bottom_dict[x][y1])
 
-                if max_bottom<=y2 and y2<=y1:
-                    area = max(area,compute_area_transformed_coords(coord1,coord2,x_forward,y_forward))
+            if max_bottom<=y2 and y2<=y1:
+                area = max(area,compute_area_transformed_coords(coord1,coord2,x_forward,y_forward))
 
     for i in range(len(coords_sorted)-1,-1,-1):
         coord1 = coords_sorted[i]
-        x1 = coord1[0]
-        y1 = coord1[1]
-
-        x = x1
+        x1, y1, x = coord1[0], coord1[1], coord1[0]
 
         max_bottom = bottom_dict[x1][y1]
         for j in range(len(coords_sorted)-1,-1,-1):
             coord2 = coords_sorted[j]
-            x2 = coord2[0]
-            y2 = coord2[1]
+            x2, y2 = coord2[0], coord2[1]
 
             if x2>x1:
                 continue
 
-            if x2<=x1:
-                while x>x2:
-                    x-=1
-                    max_bottom = max(max_bottom,bottom_dict[x][y1])
+            while x>x2:
+                x-=1
+                max_bottom = max(max_bottom,bottom_dict[x][y1])
 
-                if max_bottom<=y2 and y2<=y1:
-                    area = max(area,compute_area_transformed_coords(coord1,coord2,x_forward,y_forward))
+            if max_bottom<=y2 and y2<=y1:
+                area = max(area,compute_area_transformed_coords(coord1,coord2,x_forward,y_forward))
 
     if show_result:
         print(area)
