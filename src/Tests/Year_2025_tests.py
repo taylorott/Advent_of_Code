@@ -22,7 +22,7 @@ from Year_2025.Day07 import Solution as Day07
 from Year_2025.Day08 import Solution as Day08
 from Year_2025.Day09 import Solution as Day09
 from Year_2025.Day10 import Solution as Day10
-# from Year_2025.Day11 import Solution as Day11
+from Year_2025.Day11 import Solution as Day11
 # from Year_2025.Day12 import Solution as Day12
 
 path = currentdir
@@ -227,6 +227,26 @@ def Day11_test():
     current_day = Day11
     day_label = 'Day11'
 
+
+    fname = 'Input01.txt'
+    v1 = current_day.solution01(show_result=False, fname=fname)
+
+    fname = 'Input03.txt'
+    v2 = current_day.solution02(show_result=False, fname=fname)
+
+    v1_true, v2_true = 5, 2
+
+    assert v1==v1_true, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==v2_true, day_label+", Part 2 Failed, Input: "+fname
+
+    fname = 'Input02.txt'
+    v1 = current_day.solution01(show_result=False, fname=fname)
+    v2 = current_day.solution02(show_result=False, fname=fname)
+    v1_true, v2_true = 668, 294310962265680
+
+    assert v1==v1_true, day_label+", Part 1 Failed, Input: "+fname
+    assert v2==v2_true, day_label+", Part 2 Failed, Input: "+fname
+
 def Day12_test():
     current_day = Day12
     day_label = 'Day12'
@@ -293,11 +313,11 @@ def run_all_tests():
     print('test runtime in seconds: ','%.3f' % (time.time()-t0))
     print('')
 
-    # t0 = time.time()
-    # print('Day11 Test:')
-    # Day11_test()
-    # print('test runtime in seconds: ','%.3f' % (time.time()-t0))
-    # print('')
+    t0 = time.time()
+    print('Day11 Test:')
+    Day11_test()
+    print('test runtime in seconds: ','%.3f' % (time.time()-t0))
+    print('')
     
     # t0 = time.time()
     # print('Day12 Test:')
