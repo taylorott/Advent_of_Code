@@ -23,7 +23,7 @@ from Year_2025.Day08 import Solution as Day08
 from Year_2025.Day09 import Solution as Day09
 from Year_2025.Day10 import Solution as Day10
 from Year_2025.Day11 import Solution as Day11
-# from Year_2025.Day12 import Solution as Day12
+from Year_2025.Day12 import Solution as Day12
 
 path = currentdir
 
@@ -250,6 +250,18 @@ def Day11_test():
 def Day12_test():
     current_day = Day12
     day_label = 'Day12'
+
+    fname = 'Input01.txt'
+    v1 = current_day.solution(show_result=False, fname=fname)
+    v1_true = 2
+
+    assert v1==v1_true, day_label+", Part 1 Failed, Input: "+fname
+
+    fname = 'Input02.txt'
+    v1 = current_day.solution(show_result=False, fname=fname)
+    v1_true = 463
+
+    assert v1==v1_true, day_label+", Part 1 Failed, Input: "+fname
 
 
 def run_all_tests():

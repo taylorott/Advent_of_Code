@@ -407,6 +407,18 @@ def manhattan_distance(coord1,coord2):
         dist+=abs(coord2[i]-coord1[i])
     return dist
 
+def reflect_grid(grid_in,dim):
+    result = deepcopy(grid_in)
+
+    if dim == 0:
+        result.reverse()
+
+    if dim == 1:
+        for item in result:
+            item.reverse()
+
+    return result
+
 #Rotates grid counterclockwise rotation_num number of times
 #assuming the grid is a list of lists
 #first index goes from top to bottom
